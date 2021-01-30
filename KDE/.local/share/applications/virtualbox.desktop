@@ -1,0 +1,29 @@
+[Desktop Action Manager]
+Exec=VirtualBox
+Name=Open VM Manager
+
+[Desktop Entry]
+Actions=Manager;
+Categories=Emulator;System;
+Comment=Запуск нескольких виртуальных машин на одном компьютере
+DocPath=file:///usr/share/doc/virtualbox/UserManual.pdf
+Encoding=UTF-8
+Exec=VirtualBox %U
+GenericName[ru_RU]=Виртуальная машина
+GenericName=Virtual Machine
+Icon=virt-manager
+Keywords[ru_RU]=виртуализация;
+Keywords=virtualization;
+MimeType=application/x-virtualbox-vbox;application/x-virtualbox-vbox-extpack;application/x-virtualbox-ovf;application/x-virtualbox-ova;
+Name=VirtualBox
+NoDisplay=false
+Path[$e]=
+StartupNotify=true
+StartupWMClass=VirtualBox Manager
+Terminal=0
+TerminalOptions=
+TryExec=VirtualBox
+Type=Application
+Version=1.0
+X-KDE-SubstituteUID=false
+X-KDE-Username=

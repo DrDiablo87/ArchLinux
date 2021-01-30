@@ -1,0 +1,3 @@
+incoming.telemetry.mozilla.org:HSTS	0	18624	1624909396854,1,0,2
+raw.githubusercontent.com:HSTS	0	18624	1640677444668,1,0,2
+cdn.jsdelivr.net:HSTS	0	18624	1640677323898,1,1,2

@@ -1,0 +1,10 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created using Karbon, part of Calligra: http://www.calligra.org/karbon -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="38.4pt" height="38.4pt">
+<defs/>
+<g id="layer0">
+  <circle id="shape0" transform="translate(3.5, 34.5)" r="2.00000000000pt" cx="2.00000000000pt" cy="2.00000000000pt" fill="#1793d1"/>
+  <path id="shape1" transform="translate(0.2, 0.5)" fill="#000000" d="M23.8 0C10.7 0 0 10.5 0 23.5C0 27.5 1 31.3 2.8 34.6C3.4 33.7 4.3 33.1 5.4 33C3.9 30.1 3 26.9 3 23.5C3 12.2 12.3 3 23.8 3C35.3 3 44.6 12.2 44.6 23.5C44.6 34.8 35.3 44 23.8 44C18 44 12.8 41.6 9 37.9C8.6 38.9 7.8 39.6 6.7 39.9C11 44.3 17.1 47.1 23.7 47.1C36.8 47.1 47.5 36.6 47.5 23.6C47.5 10.6 36.9 0 23.8 0Z"/>
+ </g>
+</svg>

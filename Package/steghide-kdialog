@@ -1,0 +1,160 @@
+#! /bin/sh
+
+if [ ${#} -eq 0 ] || [ "${1}" = "-h" ] || [ "${1}" = "--help" ]; then
+	echo
+	echo "Steghide shell script for files and directories."
+	echo
+	echo "\tUSE:     ${0##*/} embed|extract files"
+	echo
+	echo "\texample: ${0##*/} extract /home/user/myfile.jpg"
+	echo
+	exit 0
+fi
+
+
+load_language_en () {
+	msg_alert_steghide_not_found_title="Component not found"
+	msg_alert_steghide_not_found_text="Software steghide not found! Please, install it."
+	msg_alert_action_not_implemented_title="Action not implemented."
+	msg_alert_action_not_implemented_text="The requested action is not implemented."
+
+	msg_embed_file_to_include_title="File to include"
+	msg_embed_title="Steghide - Include file"
+	msg_embed_abort_text="Operation aborted by user."
+	msg_embed_passwd_text="Choose password or leave empty for no password:"
+	msg_embed_confirm_passwd_text="Confirm password."
+	msg_embed_passwd_error_text="Passwords don't match. Ending script."
+	msg_embed_saveFile_title="Save data"
+	msg_embed_finish_ok="Done."
+	msg_embed_finish_error="Steghide failed to complete the operation.\nOne of the most frequent causes is the size of the file to be included which,\nfrom empirical tests, must be about 1/16 of the container file."
+
+	msg_extract_title="Steghide - Extract file"
+	msg_extract_passwd_text="Type password or leave empty for no password:"
+	msg_extract_abort_text="Operation aborted by user."
+	msg_extract_empty_text="This file doesn't contain any embedded file or the password is wrong."
+	msg_extract_overwrite_text="File \"${file_name}\" contain \"${file_to_save}\" but a file with same name already exists. Do you want overwrite?."
+	msg_extract_save_title="Save"
+	msg_extract_finish_ok="The embedded file in \"${file_name}\" was saved as: \"${file_to_save##*/}\""
+	msg_extract_finish_error="Error in extraction operation."
+}
+
+load_language_it () {
+	msg_alert_steghide_not_found_title="Software non trovato"
+	msg_alert_steghide_not_found_text="Il software steghide non è stato trovato! Per favore, installalo."
+	msg_alert_action_not_implemented_title="Azione non implementata."
+	msg_alert_action_not_implemented_text="L'azione richiesta non è implementata."
+
+	msg_embed_file_to_include_title="File da includere"
+	msg_embed_title="Steghide - Inclusione file"
+	msg_embed_abort_text="Operazione annullata dall'utente."
+	msg_embed_passwd_text="Scegli la password o lasciare il campo vuoto se non si vuole una password:"
+	msg_embed_confirm_passwd_text="Riscrivi la password (per sicurezza)"
+	msg_embed_passwd_error_text="Le password inserite non corrispondono."
+	msg_embed_saveFile_title="Salva"
+	msg_embed_finish_ok="Operazione completata."
+	msg_embed_finish_error="Steghide non è riuscito a completare l'operazione.\nUna delle cause più frequenti è la dimensione del file da includere che,\nda test empirici, deve essere circa 1/16 del file contenitore."
+
+	msg_extract_title="Steghide - Estrazione file"
+	msg_extract_passwd_text="Inserisci la password o lasciare il campo vuoto se non se ne vuole una:"
+	msg_extract_abort_text="Operazione annullata dall'utente."
+	msg_extract_empty_text="Questo file non contiene altri file o la password inserita non è corretta."
+	msg_extract_overwrite_text="Il file \"${file_name}\" contiene \"${file_to_save}\" ma un file con lo stesso nome esiste già. Vuoi sovrascriverlo?."
+	msg_extract_save_title="Salva"
+	msg_extract_finish_ok="Il file contenuto in \"${file_name}\" è stato salvato come: \"${file_to_save##*/}\""
+	msg_extract_finish_error="Si è verificato un errore durante l'operazione di estrazione."
+}
+
+load_language () {
+	## Load localized strings AFTER english strings
+	## - if localized strings not found use english for default
+	## - if localized strings are incomplete use english only fot missing strings :-)
+	load_language_en && [ "${lang}" != "en" ] && load_language_${lang}
+}
+
+lang=${LANGUAGE%%:*} && lang=$(echo ${lang} | sed "s/@//")
+type load_language_${lang} 1> /dev/null || lang='en'
+load_language
+
+################################################
+
+kdialog_bin=$(which kdialog)
+[ -z "${kdialog_bin}" ] && echo "kdialog not found!" && exit 1
+
+steghide_bin=$(which steghide)
+[ -z "${steghide_bin}" ] && "${kdialog_bin}" --title "${msg_alert_software_not_found_title}" --icon configure --error "${msg_alert_steghide_not_found_text}" && exit 2
+
+################################################
+
+embed () {
+	file_to_include=$(${kdialog_bin} --title "${msg_embed_file_to_include_title}" --icon document-encrypt --getopenfilename .) ||  \
+		{ ${kdialog_bin} --title "${msg_embed_title}" --passivepopup "${msg_embed_abort_text}" 5; exit; }
+	file_to_include_name="${file_to_include##*/}"
+
+	password=$(${kdialog_bin} --title "${msg_embed_title}" --icon document-encrypt --password "${msg_embed_passwd_text}") ||  \
+		{ ${kdialog_bin} --title "${msg_embed_title}" --passivepopup "${msg_embed_abort_text}" 5; exit; }
+
+	if [ -n "${password}" ]; then
+		password_confirmation=$(${kdialog_bin} --title "${msg_embed_title}" --icon document-encrypt --password "${msg_embed_confirm_passwd_text}") ||  \
+			{ ${kdialog_bin} --title "${msg_embed_title}" --passivepopup "${msg_embed_abort_text}" 5; exit; }
+
+		[ x"${password}" != x"${password_confirmation}" ] && ${kdialog_bin} --title "${msg_embed_title}" --icon document-encrypt --sorry "${msg_embed_passwd_error_text}" && exit
+	fi
+
+	[ -n "${password}" ] && password_option="-p \"${password}\"" || password_option=''
+
+	file_to_save="${file_name%.*} (${file_to_include_name}).${file_name##*.}"
+	[ -f "${file_to_save}" ] && \
+	{
+	file_to_save=$(${kdialog_bin} --title "${msg_embed_saveFile_title}" --icon document-encrypt --getsavefilename "${file_to_save}") ||  \
+		{ ${kdialog_bin} --title "${msg_embed_title}" --passivepopup "${msg_embed_abort_text}" 5; exit; }
+	}
+
+	echo "${password}"
+	${steghide_bin} embed -cf "$1" -ef "${file_to_include}" ${password_option} -sf "${file_to_save}" -v -f -z 9 -e rijndael-256 && \
+	${kdialog_bin} --title "${msg_embed_title}" --passivepopup "${msg_embed_finish_ok}" 5 || \
+	${kdialog_bin} --title "${msg_embed_title}" --icon document-encrypt --error "${msg_embed_finish_error}"
+}
+
+extract () {
+	password=$(${kdialog_bin} --title "${msg_extract_title}" --icon document-decrypt --password "${msg_extract_passwd_text}") ||  \
+		{ ${kdialog_bin} --title "${msg_extract_title}" --passivepopup "${msg_extract_abort_text}" 5; exit; }
+
+
+	[ -n "${password}" ] && password_option="-p \"${password}\"" || password_option=''
+
+	#testing if the file realy contain another file and if so, getting its name
+	file_to_save=$(${steghide_bin} info "$1" ${password_option} | grep embedded | sed "s/ *embedded *file *\"\(.*\)\":.*/\1/")
+
+	## Reload language strings with current variables
+	load_language
+
+	[ "${#file_to_save}" = "0" ] && ${kdialog_bin} --title "${msg_extract_title}" --icon document-decrypt --sorry "${msg_extract_empty_text}" && exit
+
+	if [ -f "${work_dir}/${file_to_save}" ]; then
+		${kdialog_bin} --title "${msg_extract_title}" --icon document-decrypt --warningyesno "${msg_extract_overwrite_text}"
+		[ $? != 0 ] && file_to_save=$(${kdialog_bin} --title "${msg_extract_save_title}" --icon document-decrypt --getsavefilename "${file_to_save%.*}.${file_to_save##*.}") ||  \
+			{ ${kdialog_bin} --title "${msg_extract_title}" --passivepopup "${msg_extract_abort_text}" 5; exit; }
+	fi
+
+	${steghide_bin} extract -sf "$1" -xf "${file_to_save}" ${password_option} -f -v && \
+		${kdialog_bin} --title "${msg_extract_title}" --passivepopup "${msg_extract_finish_ok}" 5 || \
+		${kdialog_bin} --title "${msg_extract_title}" --error "${msg_extract_finish_error}"
+}
+
+#### main
+
+action="${1}"
+type ${action} 1> /dev/null || ${kdialog_bin} --title "${msg_alert_action_not_implemented_title}" --error "${msg_alert_action_not_implemented_text}"
+shift
+
+while [ $# -ne 0 ]; do
+	work_dir="${1%/*}"; [ ! -d "${work_dir}" ] && work_dir="$(pwd)"
+	file_name="${1##*/}"
+	base_file_name="${file_name%.*}"
+
+	## Reload language strings with current variables
+	load_language
+
+	"${action}" "${@}" && exit 0
+	shift
+done

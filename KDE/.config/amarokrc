@@ -1,0 +1,109 @@
+[Collection]
+Monitor Changes=false
+Scan Recursively=false
+Use Charset Detector=true
+Write Back Cover=true
+
+[Collection Browser]
+TreeCategory=3,1
+View Mode=NormalCollections
+
+[Collection Transcoding Preference]
+Encoder=INVALID
+TrackSelection=0
+
+[ConfigDialog]
+Height 778=518
+Width 1438=834
+
+[Context]
+enabledApplets=org.kde.amarok.analyzer,org.kde.amarok.currenttrack
+org.kde.amarok.analyzer_collapsed=false
+org.kde.amarok.analyzer_contentHeight=300
+org.kde.amarok.currenttrack_contentHeight=300
+
+[Context][Analyzer]
+sampleSize=4096
+windowFunction=1
+
+[File Browser]
+Current Directory=file:///home/wwqe
+
+[General]
+Browser Path=root list
+First Run=false
+HiddenOnExit=false
+
+[General Options]
+AnimateAppletCollapse=true
+PlayFirstRunJingle=false
+
+[MainWindow]
+Height 778=721
+State=AAAA/wAAAAD9AAAAAQAAAAAAAAWeAAACc/wBAAAAA/sAAAAkAE0AZQBkAGkAYQAgAFMAbwB1AHIAYwBlAHMAIABkAG8AYwBrAQAAAAAAAAFWAAAAzAEAAAP7AAAAGABDAG8AbgB0AGUAeAB0ACAAZABvAGMAawEAAAFXAAADAAAAAZQBAAAD+wAAABoAUABsAGEAeQBsAGkAcwB0ACAAZABvAGMAawEAAARYAAABRgAAAMwBAAADAAAAAAAAAnMAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAACAAAAAgAAABYATQBhAGkAbgBUAG8AbwBsAGIAYQByAQAAAAD/////AAAAAAAAAAAAAAAYAFMAbABpAG0AIABUAG8AbwBsAGIAYQByAAAAAAD/////AAAAAAAAAAA=
+ToolBarsMovable=Disabled
+Width 1438=1438
+Window-Maximized 778x1438=true
+
+[Notification Messages]
+hideOnCloseInfo=false
+
+[OSD]
+Osd Enabled=false
+
+[Playback]
+Fadeout Length=1500
+
+[Playlist Search]
+MatchAlbum=true
+MatchArtist=true
+MatchTrack=true
+ShowOnlyMatches=false
+
+[Playlist Sorting]
+SortPath=
+
+[Plugins]
+amarok_collection-audiocdcollectionEnabled=false
+amarok_collection-daapcollectionEnabled=false
+amarok_collection-ipodcollectionEnabled=false
+amarok_collection-mtpcollectionEnabled=false
+amarok_collection-mysqlcollectionEnabled=false
+amarok_collection-playdarcollectionEnabled=false
+amarok_collection-umscollectionEnabled=false
+amarok_collection-upnpcollectionEnabled=false
+amarok_importer-amarokEnabled=false
+amarok_importer-bansheeEnabled=false
+amarok_importer-clementineEnabled=false
+amarok_importer-fastforwardEnabled=false
+amarok_importer-itunesEnabled=false
+amarok_importer-rhythmboxEnabled=false
+amarok_service_ampacheEnabled=false
+amarok_service_gpodderEnabled=false
+amarok_service_lastfmEnabled=false
+amarok_service_magnatunestoreEnabled=false
+amarok_service_opmldirectoryEnabled=false
+
+[Podcast View]
+Merged View=false
+
+[Podcasts]
+AutoUpdate Interval=30
+Maximum Simultaneous Downloads=4
+Maximum Simultaneous Updates=4
+
+[Saved Playlists View]
+Merged View=false
+
+[ScriptManager]
+Enable Scripts=true
+
+[Session]
+Resume Playback=true
+
+[StatSyncing]
+checkedFields=rating,firstplay,lastplay,playcount,label
+excludedLabels=
+providerEnabledStatuses=true
+providerIds=localCollection
+providerNames=Локальная коллекция

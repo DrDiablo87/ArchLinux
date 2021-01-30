@@ -1,0 +1,21 @@
+[Desktop Entry]
+Categories=Qt;KDE;AudioVideo;Audio;Player;Recorder;AudioVideoEditing;
+Comment=Аудиоредактор KDE
+Exec=kwave %F
+GenericName[ru_RU]=Аудиоредактор
+GenericName=Sound Editor
+Icon=kwave
+MimeType=audio/wav;audio/x-wav;audio/basic;audio/x-8svx;audio/x-aifc;audio/x-aiff;audio/x-avr;audio/x-caf;audio/x-ircam;audio/x-nist;audio/x-smp;audio/x-voc;audio/mpeg;audio/x-mp1;audio/x-mp2;audio/x-mp3;application/x-flac;audio/x-flac;audio/ogg;application/ogg;audio/x-ogg;application/x-ogg;audio/x-vorbis+ogg;audio/opus;
+Name=Kwave
+NoDisplay=false
+Path[$e]=
+StartupNotify=true
+Terminal=0
+TerminalOptions=
+TryExec=kwave
+Type=Application
+Version=1.0
+X-DBUS-StartupType=Unique
+X-KDE-SubstituteUID=false
+X-KDE-Username=
+X-SuSE-translate=true
