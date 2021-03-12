@@ -228,7 +228,7 @@ echo -e '
 '
 echo -e '\033[32m'
 pacman -U /home/$username/ArchLinux/Package/arc-kde-git-220180614.r11.g04873ca-1-any.pkg.tar.xz --noconfirm
-cp /home/$username/ArchLinux/Package/amarok.mo /usr/share/locale/ru/LC_MESSAGES/amarok.mo
+#cp /home/$username/ArchLinux/Package/amarok.mo /usr/share/locale/ru/LC_MESSAGES/amarok.mo
 cp /home/$username/ArchLinux/Package/steghide-kdialog /usr/bin/steghide-kdialog
 chmod +x /usr/bin/steghide-kdialog
 pacman -S amarok gst-libav gst-plugins-bad gst-plugins-good gst-plugins-ugly --noconfirm
