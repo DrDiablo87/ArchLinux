@@ -18,7 +18,7 @@ echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 echo 'KEYMAP=ru
 FONT=cyr-sun16' > /etc/vconsole.conf
 
-echo 'MODULES="radeon" 
+echo 'MODULES="" 
 BINARIES="" 
 FILES="" 
 HOOKS="base udev autodetect modconf block filesystems keyboard keymap"' > /etc/mkinitcpio.conf
