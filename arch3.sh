@@ -37,8 +37,7 @@ yay -U --mflags --skipinteg --noconfirm ~/ArchLinux/Package/qelectrotech-1-0.7.0
 yay -S --mflags --skipinteg --noconfirm libreoffice-fresh-ru unoconv
 
 yes | sudo sensors-detect
-yay -S --mflags --skipinteg --noconfirm playonlinux && wget http://install4.zonastat.com/ZonaSetup.exe && sudo rm /usr/share/applications/wine.desktop #&& yay -Rscndd wine --noconfirm
-
+yay -S --mflags --skipinteg --noconfirm playonlinux && wget https://install4.zonastat.com/ZonaSetup.exe && sudo rm /usr/share/applications/wine.desktop #&& yay -Rscndd wine --noconfirm
 yes | yay -Syua && yes | yay -Scc && yes | yay -Rns $(yay -Qtdq)
 cp -Rf ~/ArchLinux/KDE/. ~/
 
