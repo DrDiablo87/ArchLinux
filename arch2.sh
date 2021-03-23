@@ -134,7 +134,7 @@ echo -e '
 echo -e '\033[32m'
 sed -i 's/#MAKEFLAGS="-j'$(nproc)'"/MAKEFLAGS="-j'$(nproc)'"/g' /etc/makepkg.conf
 pacman -S xorg-drivers nvidia xorg-xinit mesa-vdpau lib32-mesa plasma-desktop sddm dolphin kdialog dolphin-plugins kate konsole plasma-nm plasma-pa --noconfirm
-#pacman -S nvidia-settings nvidia-settings xorg-server-devel opencl-nvidia nvidia
+#pacman -S nvidia-settings nvidia-settings xorg-server-devel opencl-nvidia nvidia && wget https://ru.download.nvidia.com/XFree86/Linux-x86_64/390.141/NVIDIA-Linux-x86_64-390.141.run
 pacman -S yay --noconfirm
 pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent okular okteta gwenview qvkbd ksysguard kompare kde-gtk-config arc-gtk-theme plasma-vault plasma-sdk encfs cryfs kscreen sddm-kcm kwalletmanager plasma-wayland-session kinfocenter spectacle ktouch kwave kdenlive ksystemlog kleopatra krfb krdc freerdp kdegraphics-thumbnailers kimageformats kdesdk-thumbnailers ffmpegthumbs raw-thumbnailer breeze-gtk kfind cmake extra-cmake-modules systemdgenie --noconfirm
 pacman -S mc htop ncdu --noconfirm
