@@ -163,23 +163,25 @@
  </Menu>
  <Menu>
   <Name>Science</Name>
-  <Layout>
-   <Merge type="files"/>
-   <Filename>qelectrotech.desktop</Filename>
-   <Filename>org.kde.kalgebra.desktop</Filename>
-   <Filename>org.kde.kalzium.desktop</Filename>
-   <Filename>org.kde.ktouch.desktop</Filename>
-   <Filename>org.kde.kcalc.desktop</Filename>
-  </Layout>
   <Include>
    <Filename>org.kde.kalgebra.desktop</Filename>
    <Filename>org.kde.kalzium.desktop</Filename>
    <Filename>org.kde.ktouch.desktop</Filename>
    <Filename>org.kde.kcalc.desktop</Filename>
+   <Filename>org.fritzing.Fritzing.desktop</Filename>
   </Include>
   <Exclude>
    <Filename>org.kde.kanagram.desktop</Filename>
   </Exclude>
+  <Layout>
+   <Merge type="files"/>
+   <Filename>qelectrotech.desktop</Filename>
+   <Filename>org.fritzing.Fritzing.desktop</Filename>
+   <Filename>org.kde.kalgebra.desktop</Filename>
+   <Filename>org.kde.kalzium.desktop</Filename>
+   <Filename>org.kde.ktouch.desktop</Filename>
+   <Filename>org.kde.kcalc.desktop</Filename>
+  </Layout>
  </Menu>
  <Menu>
   <Name>Office</Name>
@@ -214,15 +216,6 @@
  </Menu>
  <Menu>
   <Name>Development</Name>
-  <Layout>
-   <Merge type="files"/>
-   <Filename>org.qt-project.qtcreator.desktop</Filename>
-   <Filename>assistant.desktop</Filename>
-   <Filename>designer.desktop</Filename>
-   <Filename>linguist.desktop</Filename>
-   <Filename>qdbusviewer.desktop</Filename>
-   <Filename>org.kde.cuttlefish.desktop</Filename>
-  </Layout>
   <Exclude>
    <Filename>cmake-gui.desktop</Filename>
    <Filename>org.kde.plasmaengineexplorer.desktop</Filename>
@@ -230,6 +223,7 @@
    <Filename>org.kde.plasma.lookandfeelexplorer.desktop</Filename>
    <Filename>org.kde.plasma.themeexplorer.desktop</Filename>
    <Filename>org.kde.kompare.desktop</Filename>
+   <Filename>org.fritzing.Fritzing.desktop</Filename>
   </Exclude>
   <Menu>
    <Name>Web Development</Name>
@@ -243,6 +237,15 @@
    <Filename>org.qt-project.qtcreator.desktop</Filename>
    <Filename>org.kde.cuttlefish.desktop</Filename>
   </Include>
+  <Layout>
+   <Merge type="files"/>
+   <Filename>org.qt-project.qtcreator.desktop</Filename>
+   <Filename>assistant.desktop</Filename>
+   <Filename>designer.desktop</Filename>
+   <Filename>linguist.desktop</Filename>
+   <Filename>qdbusviewer.desktop</Filename>
+   <Filename>org.kde.cuttlefish.desktop</Filename>
+  </Layout>
  </Menu>
  <Menu>
   <Name>System</Name>
