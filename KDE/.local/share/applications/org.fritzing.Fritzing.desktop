@@ -1,0 +1,10 @@
+[Desktop Entry]
+Categories=Development;IDE;Electronics;
+Comment=Создавайте схемы и выкладывайте печатные платы
+Exec=XDG_CONFIG_HOME=~/.config/.fritzing env env QT_AUTO_SCREEN_SCALE_FACTOR=0 Fritzing %F
+Icon=fritzing
+Name=Fritzing
+StartupNotify=true
+Terminal=false
+Type=Application
+X-KDE-SubstituteUID=false
