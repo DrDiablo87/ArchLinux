@@ -103,9 +103,9 @@ umount /mnt
 mount -t btrfs /dev/sda2 /mnt
 btrfs subvolume create /mnt/@home
 umount /mnt
-mount -t btrfs -o noatime,nodatasum,compress=lzo,ssd,max_inline=0,subvol=@ /dev/sda2 /mnt
+mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@ /dev/sda2 /mnt
 mkdir /mnt/home /mnt/boot
-mount -t btrfs -o noatime,nodatasum,compress=lzo,ssd,max_inline=0,subvol=@home /dev/sda2 /mnt/home
+mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@home /dev/sda2 /mnt/home
 mount /dev/sda1 /mnt/boot
 
 #Выбор зеркал для загрузки
@@ -149,9 +149,9 @@ umount /mnt
 mount -t btrfs /dev/sda5 /mnt
 btrfs subvolume create /mnt/@home
 umount /mnt
-mount -t btrfs -o noatime,nodatasum,compress=lzo,ssd,max_inline=0,subvol=@ /dev/sda5 /mnt
+mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@ /dev/sda5 /mnt
 mkdir /mnt/home /mnt/boot
-mount -t btrfs -o noatime,nodatasum,compress=lzo,ssd,max_inline=0,subvol=@home /dev/sda5 /mnt/home
+mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@home /dev/sda5 /mnt/home
 mount /dev/sda1 /mnt/boot
 
 #Выбор зеркал для загрузки
