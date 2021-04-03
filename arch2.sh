@@ -315,6 +315,8 @@ cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze-dark/
 cp /usr/share/icons/breeze/preferences/32/preferences-desktop-keyboard.svg /usr/share/icons/breeze/preferences/32/qvkbd.svg
 cp /usr/share/icons/breeze-dark/preferences/32/preferences-desktop-keyboard.svg /usr/share/icons/breeze-dark/preferences/32/qvkbd.svg
 sed -i 's/Icon=kleopatra/Icon=plasmavault/g' /usr/share/kservices5/kleopatra_decryptverifyfiles.desktop /usr/share/kservices5/kleopatra_decryptverifyfolders.desktop /usr/share/kservices5/kleopatra_signencryptfiles.desktop /usr/share/kservices5/kleopatra_signencryptfolders.desktop
+sed -i 's/use-ipv4=yes/use-ipv4=no/g' /etc/avahi/avahi-daemon.conf
+sed -i 's/use-ipv6=yes/use-ipv6=no/g' /etc/avahi/avahi-daemon.conf
 cp /home/$username/ArchLinux/Package/systemdgenie.mo /usr/share/locale/ru/LC_MESSAGES/systemdgenie.mo
 cp /home/$username/ArchLinux/arch3.sh /home/$username/1
 
