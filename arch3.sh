@@ -31,7 +31,6 @@ yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift mega
 yay -U --mflags --skipinteg --noconfirm ~/ArchLinux/Package/mystiq-20.03.23-1-x86_64.pkg.tar.zst
 
 sudo systemctl enable fail2ban.service
-yay -U --mflags --skipinteg --noconfirm ~/ArchLinux/Package/mesen-0.9.9-2-x86_64.pkg.tar.zst
 yay -S --mflags --skipinteg --noconfirm libreoffice-fresh-ru unoconv
 
 yes | sudo sensors-detect
