@@ -204,7 +204,7 @@ knownItems=org.kde.plasma.battery,org.kde.plasma.clipboard,org.kde.plasma.device
 showAllItems=true
 
 [ScreenMapping]
-itemsOnDisabledScreens= ' > ~/.config/plasma-org.kde.plasma.desktop-appletsrc
+#itemsOnDisabledScreens= ' > ~/.config/plasma-org.kde.plasma.desktop-appletsrc
 #=============================================================================================
 echo "[General]
 confirmLogout=true
