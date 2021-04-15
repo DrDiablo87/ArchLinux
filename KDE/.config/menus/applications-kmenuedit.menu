@@ -36,12 +36,6 @@
  </Menu>
  <Menu>
   <Name>Games</Name>
-  <Layout>
-   <Merge type="files"/>
-   <Filename>steam-native.desktop</Filename>
-   <Filename>steam.desktop</Filename>
-   <Filename>gbrainy.desktop</Filename>
-  </Layout>
   <Menu>
    <Name>Kidsgames</Name>
    <Exclude>
@@ -50,7 +44,8 @@
    <Deleted/>
   </Menu>
   <Include>
-   <Filename>gbrainy.desktop</Filename>
+   <Filename>PlayOnLinux.desktop</Filename>
+   <Filename>mednaffe.desktop</Filename>
   </Include>
   <Menu>
    <Name>Logic</Name>
@@ -63,6 +58,7 @@
    <Filename>org.kde.kanagram.desktop</Filename>
    <Filename>org.kde.kmines.desktop</Filename>
    <Filename>org.kde.knetwalk.desktop</Filename>
+   <Filename>gbrainy.desktop</Filename>
   </Exclude>
   <Menu>
    <Name>TacticStrategy</Name>
@@ -84,6 +80,13 @@
    <Name>Board</Name>
    <Deleted/>
   </Menu>
+  <Layout>
+   <Merge type="files"/>
+   <Filename>steam-native.desktop</Filename>
+   <Filename>steam.desktop</Filename>
+   <Filename>PlayOnLinux.desktop</Filename>
+   <Filename>mednaffe.desktop</Filename>
+  </Layout>
  </Menu>
  <Menu>
   <Name>Internet</Name>
@@ -104,6 +107,7 @@
    <Filename>jami-gnome.desktop</Filename>
    <Filename>megasync.desktop</Filename>
    <Filename>wine-Programs-Zona.desktop</Filename>
+   <Filename>Zona.desktop</Filename>
   </Include>
   <Exclude>
    <Filename>bssh.desktop</Filename>
@@ -116,7 +120,6 @@
    <Filename>Airgeddon.desktop</Filename>
    <Filename>Metasploit.desktop</Filename>
    <Filename>firefox.desktop</Filename>
-   <Filename>wine-Programs-Zona.desktop</Filename>
    <Filename>org.qbittorrent.qBittorrent.desktop</Filename>
    <Filename>wireshark.desktop</Filename>
    <Filename>org.kde.krdc.desktop</Filename>
@@ -124,6 +127,7 @@
    <Filename>jami-gnome.desktop</Filename>
    <Filename>netactview.desktop</Filename>
    <Filename>megasync.desktop</Filename>
+   <Filename>Zona.desktop</Filename>
    <Separator/>
    <Merge type="menus"/>
    <Menuname>More</Menuname>
@@ -135,6 +139,7 @@
    <Filename>qv4l2.desktop</Filename>
    <Filename>qvidcap.desktop</Filename>
    <Filename>mediainfo-gui.desktop</Filename>
+   <Filename>Zona.desktop</Filename>
   </Exclude>
   <Include>
    <Filename>mpv.desktop</Filename>
@@ -143,11 +148,9 @@
    <Filename>org.kde.kid3.desktop</Filename>
    <Filename>ffmulticonverter.desktop</Filename>
    <Filename>mystiq.desktop</Filename>
-   <Filename>Zona.desktop</Filename>
   </Include>
   <Layout>
    <Merge type="files"/>
-   <Filename>Zona.desktop</Filename>
    <Filename>org.kde.amarok.desktop</Filename>
    <Filename>mpv.desktop</Filename>
    <Filename>org.kde.kdenlive.desktop</Filename>
@@ -164,23 +167,24 @@
  <Menu>
   <Name>Science</Name>
   <Include>
-   <Filename>org.kde.kalgebra.desktop</Filename>
    <Filename>org.kde.kalzium.desktop</Filename>
-   <Filename>org.kde.ktouch.desktop</Filename>
-   <Filename>org.kde.kcalc.desktop</Filename>
+   <Filename>gbrainy.desktop</Filename>
    <Filename>org.fritzing.Fritzing.desktop</Filename>
+   <Filename>org.kde.kalgebra.desktop</Filename>
+   <Filename>org.kde.kcalc.desktop</Filename>
+   <Filename>org.kde.ktouch.desktop</Filename>
   </Include>
   <Exclude>
    <Filename>org.kde.kanagram.desktop</Filename>
   </Exclude>
   <Layout>
    <Merge type="files"/>
-   <Filename>qelectrotech.desktop</Filename>
    <Filename>org.fritzing.Fritzing.desktop</Filename>
-   <Filename>org.kde.kalgebra.desktop</Filename>
    <Filename>org.kde.kalzium.desktop</Filename>
-   <Filename>org.kde.ktouch.desktop</Filename>
+   <Filename>org.kde.kalgebra.desktop</Filename>
    <Filename>org.kde.kcalc.desktop</Filename>
+   <Filename>org.kde.ktouch.desktop</Filename>
+   <Filename>gbrainy.desktop</Filename>
   </Layout>
  </Menu>
  <Menu>
@@ -234,8 +238,8 @@
    <Deleted/>
   </Menu>
   <Include>
-   <Filename>org.qt-project.qtcreator.desktop</Filename>
    <Filename>org.kde.cuttlefish.desktop</Filename>
+   <Filename>org.qt-project.qtcreator.desktop</Filename>
   </Include>
   <Layout>
    <Merge type="files"/>
@@ -262,7 +266,6 @@
    <Filename>org.kde.systemdgenie.desktop</Filename>
    <Filename>org.bleachbit.BleachBit.desktop</Filename>
    <Filename>timeshift-gtk.desktop</Filename>
-   <Filename>org.kde.ksysguard.desktop</Filename>
    <Filename>org.kde.kmag.desktop</Filename>
    <Filename>org.kde.kcalc.desktop</Filename>
    <Filename>megasync.desktop</Filename>
@@ -288,12 +291,11 @@
    <Filename>org.kde.kleopatra.desktop</Filename>
    <Filename>qvkbd.desktop</Filename>
    <Filename>org.kde.kompare.desktop</Filename>
+   <Filename>org.kde.ksysguard.desktop</Filename>
   </Include>
   <Layout>
    <Merge type="files"/>
-   <Filename>virtualbox.desktop</Filename>
    <Filename>org.kde.dolphin.desktop</Filename>
-   <Filename>org.kde.krusader.desktop</Filename>
    <Filename>org.kde.konsole.desktop</Filename>
    <Filename>org.kde.kleopatra.desktop</Filename>
    <Filename>org.kde.kfind.desktop</Filename>
@@ -301,7 +303,7 @@
    <Filename>org.gnome.DiskUtility.desktop</Filename>
    <Filename>org.kde.kompare.desktop</Filename>
    <Filename>qvkbd.desktop</Filename>
-   <Filename>i-nex.desktop</Filename>
+   <Filename>org.kde.ksysguard.desktop</Filename>
    <Filename>org.kde.kinfocenter.desktop</Filename>
    <Separator/>
    <Merge type="menus"/>
@@ -310,21 +312,6 @@
  </Menu>
  <Menu>
   <Name>Utilities</Name>
-  <Layout>
-   <Merge type="files"/>
-   <Filename>org.bleachbit.BleachBit.desktop</Filename>
-   <Filename>org.kde.systemdgenie.desktop</Filename>
-   <Filename>org.kde.ksystemlog.desktop</Filename>
-   <Filename>org.kde.filelight.desktop</Filename>
-   <Filename>org.kde.okteta.desktop</Filename>
-   <Filename>org.kde.kmag.desktop</Filename>
-   <Filename>org.kde.spectacle.desktop</Filename>
-   <Filename>timeshift-gtk.desktop</Filename>
-   <Filename>org.kde.ksysguard.desktop</Filename>
-   <Separator/>
-   <Merge type="menus"/>
-   <Menuname>More</Menuname>
-  </Layout>
   <Exclude>
    <Filename>org.kde.plasma.emojier.desktop</Filename>
    <Filename>org.kde.kate.desktop</Filename>
@@ -338,6 +325,8 @@
    <Filename>i-nex.desktop</Filename>
    <Filename>org.kde.kinfocenter.desktop</Filename>
    <Filename>org.gnome.DiskUtility.desktop</Filename>
+   <Filename>PlayOnLinux.desktop</Filename>
+   <Filename>org.kde.ksysguard.desktop</Filename>
   </Exclude>
   <Menu>
    <Name>XUtilities</Name>
@@ -345,13 +334,26 @@
   </Menu>
   <Include>
    <Filename>org.kde.systemdgenie.desktop</Filename>
-   <Filename>org.bleachbit.BleachBit.desktop</Filename>
    <Filename>org.kde.kmag.desktop</Filename>
    <Filename>org.kde.okteta.desktop</Filename>
-   <Filename>org.kde.ksysguard.desktop</Filename>
    <Filename>org.kde.ksystemlog.desktop</Filename>
    <Filename>timeshift-gtk.desktop</Filename>
+   <Filename>org.bleachbit.BleachBit.desktop</Filename>
   </Include>
+  <Layout>
+   <Merge type="files"/>
+   <Filename>timeshift-gtk.desktop</Filename>
+   <Filename>org.bleachbit.BleachBit.desktop</Filename>
+   <Filename>org.kde.systemdgenie.desktop</Filename>
+   <Filename>org.kde.ksystemlog.desktop</Filename>
+   <Filename>org.kde.filelight.desktop</Filename>
+   <Filename>org.kde.okteta.desktop</Filename>
+   <Filename>org.kde.kmag.desktop</Filename>
+   <Filename>org.kde.spectacle.desktop</Filename>
+   <Separator/>
+   <Merge type="menus"/>
+   <Menuname>More</Menuname>
+  </Layout>
  </Menu>
  <Menu>
   <Name>Applications</Name>
@@ -459,5 +461,17 @@
   </Menu>
   <Include/>
   <Exclude/>
+ </Menu>
+ <Menu>
+  <Name>Settingsmenu</Name>
+  <Layout>
+   <Merge type="files"/>
+   <Filename>systemsettings.desktop</Filename>
+   <Filename>gufw.desktop</Filename>
+  </Layout>
+  <Exclude/>
+  <Include>
+   <Filename>gufw.desktop</Filename>
+  </Include>
  </Menu>
 </Menu>
