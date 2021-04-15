@@ -52,37 +52,37 @@ Percent=10
 UseSizeLimit=false
 UseTimeLimit=true" > ~/.config/ktrashrc
 #=============================================================================================
-echo '[ActionPlugins][0]
-MidButton;NoModifier=org.kde.paste
-RightButton;NoModifier=org.kde.contextmenu
-wheel:Vertical;NoModifier=org.kde.switchdesktop
+#echo '[ActionPlugins][0]
+#MidButton;NoModifier=org.kde.paste
+#RightButton;NoModifier=org.kde.contextmenu
+#wheel:Vertical;NoModifier=org.kde.switchdesktop
 
-[ActionPlugins][1]
-RightButton;NoModifier=org.kde.contextmenu
+#[ActionPlugins][1]
+#RightButton;NoModifier=org.kde.contextmenu
 
-[Containments][1]
-ItemGeometriesHorizontal=
-activityId=ee7c2ad4-80e7-4fcd-b04a-388a52700590
-formfactor=0
-immutability=1
-lastScreen=0
-location=0
-plugin=org.kde.plasma.folder
-wallpaperplugin=org.kde.image
+#[Containments][1]
+#ItemGeometriesHorizontal=
+#activityId=ee7c2ad4-80e7-4fcd-b04a-388a52700590
+#formfactor=0
+#immutability=1
+#lastScreen=0
+#location=0
+#plugin=org.kde.plasma.folder
+#wallpaperplugin=org.kde.image
 
-[Containments][1][General]
-iconSize=2
+#[Containments][1][General]
+#iconSize=2
 
-[Containments][1][Wallpaper][org.kde.image][General]
-Image=file:///home/'$USER'/.config/LiveWallpaper/screenshot.jpg
+#[Containments][1][Wallpaper][org.kde.image][General]
+#Image=file:///home/'$USER'/.config/LiveWallpaper/screenshot.jpg
 
-[Containments][2]
-activityId=
-formfactor=2
-immutability=1
-lastScreen=0
-location=4
-plugin=org.kde.panel
+#[Containments][2]
+#activityId=
+#formfactor=2
+#immutability=1
+#lastScreen=0
+#location=4
+#plugin=org.kde.panel
 wallpaperplugin=org.kde.image
 
 [Containments][2][Applets][17]
