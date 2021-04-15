@@ -282,6 +282,7 @@ saturation=10 '> /etc/mplayer/mplayer.conf
 cp /home/$username/ArchLinux/LiveWallpaper/* /home/$username/.config/LiveWallpaper
 cp /home/$username/.config/LiveWallpaper/screenshot.jpg /usr/share/sddm/themes/breeze/preview.png
 cp /home/$username/.config/LiveWallpaper/screenshot.jpg /usr/share/sddm/themes/breeze/screenshot.jpg
+cp /home/$username/.config/LiveWallpaper/archlinux-logo-dark.png /usr/share/sddm/themes/breeze/archlinux-logo-dark.png
 rm -r /usr/share/wallpapers/Next/contents/
 
 echo "[General]
