@@ -22,6 +22,7 @@ elif [[ $driver == 3 ]]; then
   echo
 fi
 
+sudo timedatectl set-local-rtc 1 --adjust-system-clock
 #===========================================================================================
 yay -S --mflags --skipinteg --noconfirm profile-sync-daemon && psd -p
 systemctl --user enable psd.service
