@@ -173,6 +173,7 @@ pacman -S networkmanager torsocks tor i2pd --noconfirm
 cp /home/$username/ArchLinux/Package/i2pd.conf /etc/i2pd/i2pd.conf
 
 #Подключаем автозагрузку менеджера входа и интернет
+timedatectl set-ntp yes
 systemctl enable sddm.service NetworkManager.service
 systemctl mask man-db.service man-db.timer 
 systemctl disable avahi-daemon
