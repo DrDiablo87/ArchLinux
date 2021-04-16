@@ -9,6 +9,9 @@ if [[ $driver == 1 ]]; then
   sudo pacman -S gtkmm3 open-vm-tools --noconfirm
   sudo systemctl enable vmtoolsd.service
   sudo systemctl start vmtoolsd.service
+  echo '#!/bin/bash
+  pause 5
+  sudo systemctl restart vmtoolsd.service' > ~/.config/autostart-scripts/restart
   sudo rm ~/.config/autostart-scripts/LiveWallpaperService
   pkill mplayer
 elif [[ $driver == 2 ]]; then
