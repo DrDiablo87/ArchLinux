@@ -40,18 +40,23 @@ echo 'default Arch
 timeout 1
 editor 0' > /boot/loader/loader.conf
 
-if [ -e /dev/sda5 ]; then 
+if [ -e /dev/sda5 ]; then
 echo 'title Arch Linux
 linux /vmlinuz-linux
 initrd /intel-ucode.img
 initrd /initramfs-linux.img
-options root=/dev/sda5 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinuxBtrfs.conf
+options root=/dev/sda5 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinux.conf
+echo 'title Arch Linux
+linux /vmlinuz-linux-zen
+initrd /intel-ucode.img
+initrd /initramfs-linux-zen.img
+options root=/dev/sda5 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinuxZen.conf
 else 
 echo 'title Arch Linux
 linux /vmlinuz-linux
 initrd /intel-ucode.img
 initrd /initramfs-linux.img
-options root=/dev/sda2 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinuxBtrfs.conf
+options root=/dev/sda2 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinux.conf
 fi
 
 #Добавляем пользователя
@@ -133,12 +138,12 @@ echo -e '
 '
 echo -e '\033[32m'
 sed -i 's/#MAKEFLAGS="-j'$(nproc)'"/MAKEFLAGS="-j'$(nproc)'"/g' /etc/makepkg.conf
-pacman -S xorg-drivers nvidia xorg-xinit mesa-vdpau lib32-mesa plasma-desktop sddm dolphin kdialog dolphin-plugins kate konsole plasma-nm plasma-pa --noconfirm
+pacman -S xorg-drivers nvidia xorg-xinit mesa-vdpau lib32-mesa plasma-desktop sddm dolphin kdialog dolphin-plugins kate konsole plasma-nm plasma-pa iptables-nft --noconfirm
 #pacman -S nvidia-settings nvidia-settings xorg-server-devel opencl-nvidia nvidia && wget https://ru.download.nvidia.com/XFree86/Linux-x86_64/390.141/NVIDIA-Linux-x86_64-390.141.run
 pacman -S yay --noconfirm
 pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent okular okteta gwenview qvkbd ksysguard kompare kde-gtk-config arc-gtk-theme plasma-vault plasma-sdk encfs cryfs kscreen sddm-kcm kwalletmanager plasma-wayland-session kinfocenter spectacle ktouch kwave kdenlive ksystemlog kleopatra krfb krdc freerdp kdegraphics-thumbnailers kimageformats kdesdk-thumbnailers ffmpegthumbs raw-thumbnailer breeze-gtk kfind cmake extra-cmake-modules systemdgenie --noconfirm
 pacman -S mc htop ncdu --noconfirm
-pacman -S edk2-ovmf virt-manager qemu ebtables dnsmasq ffmpeg youtube-dl mediainfo-gui qtqr --noconfirm && systemctl enable libvirtd.service
+pacman -S edk2-ovmf virt-manager qemu dnsmasq ffmpeg youtube-dl mediainfo-gui qtqr --noconfirm && systemctl enable libvirtd.service
 sed -i 's|image/\*\,||' /usr/share/kservices5/ServiceMenus/mediainfo-gui.desktop
 pacman -S firefox-i18n-ru firefox-ublock-origin jami-gnome bleachbit krita filelight ntfs-3g gufw mtr exfat-utils cronie gnome-disk-utility f2fs-tools udftools steam net-tools libvirt linux-headers kid3 qtcreator qt5-translations kdeplasma-addons networkmanager-openvpn openresolv kalzium kcalc tree gbrainy kalgebra kmag wireshark-qt openssh --noconfirm
 pacman -S steam-native-runtime ttf-liberation ttf-dejavu xterm --noconfirm
