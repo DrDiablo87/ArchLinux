@@ -28,7 +28,7 @@ echo -e '
 \e[31m==================================================================================== Устанавливаем загрузчик =====================================\e[0m
 '
 echo -e '\033[32m'
-pacman -S efibootmgr git wget reflector intel-ucode iptables-nft --noconfirm  
+pacman -S efibootmgr git wget reflector intel-ucode --noconfirm  
 reflector --verbose -l 5 -p https --sort rate --save /etc/pacman.d/mirrorlist
 #echo "Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
 #Server = http://mirror.yandex.ru/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
