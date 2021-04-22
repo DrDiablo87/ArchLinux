@@ -117,7 +117,7 @@ echo -e '
 \e[31m==================================================================================== Установка основных пакетов ==================================\e[0m
 '
 echo -e '\033[32m'
-pacstrap /mnt base base-devel nano linux linux-firmware
+pacstrap /mnt base base-devel nano linux linux-zen linux-firmware
 
 echo -e '
 
