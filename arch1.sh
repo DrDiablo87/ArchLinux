@@ -78,7 +78,7 @@ echo -e '\033[32m' &&
   echo n;
   echo;
   echo;
-  echo +150M;
+  echo +100M;
   echo t;
   echo 1;
   echo n;
