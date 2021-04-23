@@ -117,6 +117,16 @@ echo -e '
 \e[31m==================================================================================== Установка основных пакетов ==================================\e[0m
 '
 echo -e '\033[32m'
+
+echo 'ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux"
+PRESETS=default
+default_image="/boot/initramfs-linux.img"' > /mnt/etc/mkinitcpio.d/linux.preset
+echo 'ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux-zen"
+PRESETS=default
+default_image="/boot/initramfs-linux-zen.img"' > /mnt/etc/mkinitcpio.d/linux-zen.preset
+
 pacstrap /mnt base base-devel nano linux linux-zen linux-firmware iptables-nft
 
 echo -e '
