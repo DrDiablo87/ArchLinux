@@ -23,15 +23,15 @@ BINARIES=""
 FILES="" 
 HOOKS="base udev autodetect modconf block filesystems keyboard keymap"' > /etc/mkinitcpio.conf
 
-#rm /boot/initramfs-linux-zen-fallback.img /boot/initramfs-linux-fallback.img
-#echo 'ALL_config="/etc/mkinitcpio.conf"
-#ALL_kver="/boot/vmlinuz-linux"
-#PRESETS=default
-#default_image="/boot/initramfs-linux.img"' > /etc/mkinitcpio.d/linux.preset
-#echo 'ALL_config="/etc/mkinitcpio.conf"
-#ALL_kver="/boot/vmlinuz-linux-zen"
-#PRESETS=default
-#default_image="/boot/initramfs-linux-zen.img"' > /etc/mkinitcpio.d/linux-zen.preset
+rm /boot/initramfs-linux-zen-fallback.img /boot/initramfs-linux-fallback.img
+echo 'ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux"
+PRESETS=default
+default_image="/boot/initramfs-linux.img"' > /etc/mkinitcpio.d/linux.preset
+echo 'ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux-zen"
+PRESETS=default
+default_image="/boot/initramfs-linux-zen.img"' > /etc/mkinitcpio.d/linux-zen.preset
 
 echo -e '
 
