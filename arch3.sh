@@ -11,7 +11,7 @@ if [[ $driver == 1 ]]; then
   sudo systemctl start vmtoolsd.service
   echo '#!/bin/bash
   sleep 5
-  sudo systemctl restart vmtoolsd.service' > ~/.config/autostart/restart && sudo chmod +x ~/.config/autostart/restart      #config/autostart-scripts/restart
+  sudo systemctl restart vmtoolsd.service' > ~/.config/autostart-scripts/restart && sudo chmod +x ~/.config/autostart-scripts/restart
   sudo rm ~/.config/autostart-scripts/LiveWallpaperService
   pkill mplayer
 elif [[ $driver == 2 ]]; then
