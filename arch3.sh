@@ -270,5 +270,5 @@ sudo tar -xf ~/ArchLinux/Package/archlive.tar.gz -C ~/
 #tar -xf ~/ArchLinux/Package/archlive.tar.gz -C ~/
 #cp ~/archlive/airootfs/root/.mozilla ~/
 #sudo chown -R root:root ~/archlive
-sudo rm -R ~/1 ~/.config/autostart-scripts/xxx ~/ArchLinux
+sudo rm -R ~/1 ~/.config/autostart-scripts/xxx ~/.config/autostart/xxx ~/ArchLinux
 qdbus org.kde.ksmserver /KSMServer logout 0 1 2  #logout 0 3 3
