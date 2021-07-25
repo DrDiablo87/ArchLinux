@@ -38,7 +38,7 @@ sudo systemctl enable fail2ban.service
 yay -S --mflags --skipinteg --noconfirm libreoffice-fresh-ru unoconv
 
 yes | sudo sensors-detect
-yay -S --mflags --skipinteg --noconfirm playonlinux && wget https://install4.zonastat.com/ZonaSetup.exe && sudo rm /usr/share/applications/wine.desktop #&& yay -Rscndd wine --noconfirm
+yay -S --mflags --skipinteg --noconfirm playonlinux && sudo rm /usr/share/applications/wine.desktop #&& yay -Rscndd wine --noconfirm
 yes | yay -Syua && yes | yay -Scc && yes | yay -Rns $(yay -Qtdq)
 cp -Rf ~/ArchLinux/KDE/. ~/
 
@@ -111,20 +111,6 @@ TerminalOptions=
 Type=Application
 X-KDE-SubstituteUID=true
 X-KDE-Username=root" > ~/.local/share/applications/Metasploit.desktop
-#=============================================================================================
-echo "[Desktop Entry]
-Comment=
-Exec=/usr/share/playonlinux/playonlinux --run "Zona" %F
-Icon= /home/$USER/.PlayOnLinux/icones/full_size/Zona
-Name=Zona
-NoDisplay=false
-Path[$e]=
-StartupNotify=true
-Terminal=0
-TerminalOptions=
-Type=Application
-X-KDE-SubstituteUID=false
-X-KDE-Username=" > ~/.local/share/applications/Zona.desktop
 #=============================================================================================
 echo "[Desktop Entry]
 Categories=GNOME;GTK;Network;Monitor;
