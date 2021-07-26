@@ -164,11 +164,11 @@ plugin=org.kde.systemd-control
 PreloadWeight=24
 
 [Containments][2][Applets][25][Configuration][ConfigDialog]
-DialogHeight=480
+DialogHeight=496
 DialogWidth=640
 
 [Containments][2][Applets][25][Configuration][General]
-services={"userunit":false\\,"service":"livewallpaper"},{"userunit":true\\,"service":"psd"},{"userunit":false\\,"service":"sshd"},{"userunit":false\\,"service":"tor"},{"userunit":false\\,"service":"i2pd"},{"userunit":false\\,"service":"libvirtd"}
+services={"userunit":false\\,"service":"livewallpaper"},{"userunit":true\\,"service":"psd"},{"userunit":false\\,"service":"sshd"},{"userunit":false\\,"service":"tor"},{"userunit":false\\,"service":"i2pd"},{"userunit":false\\,"service":"libvirtd"},{"userunit":false\\,"service":"mixer"}
 
 [Containments][2][Applets][26]
 immutability=1
