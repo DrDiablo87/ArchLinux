@@ -12,14 +12,14 @@ if [[ $driver == 1 ]]; then
   echo '#!/bin/bash
   sleep 5
   sudo systemctl restart vmtoolsd.service' > ~/.config/autostart-scripts/restart && sudo chmod +x ~/.config/autostart-scripts/restart
-  sudo rm ~/.config/autostart-scripts/LiveWallpaperService
+  sudo rm ~/.config/autostart-scripts/LiveWallpaperService ~/.config/autostart-scripts/LiveWallpaperService.desktop
   pkill mplayer
 elif [[ $driver == 2 ]]; then
   sudo pacman -S virtualbox-host-modules-arch virtualbox-guest-utils --noconfirm
   sudo systemctl unmask vboxservice.service virtvboxd.service
   sudo systemctl enable vboxservice.service virtvboxd.service
   sudo systemctl start vboxservice.service virtvboxd.service
-  sudo rm ~/.config/autostart-scripts/LiveWallpaperService
+  sudo rm ~/.config/autostart-scripts/LiveWallpaperService ~/.config/autostart-scripts/LiveWallpaperService.desktop
   pkill mplayer
 elif [[ $driver == 3 ]]; then
   echo
