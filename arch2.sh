@@ -163,7 +163,7 @@ echo -e '
 echo -e '\033[32m'
 mkdir -p /home/$username/.config /home/$username/.local/share/konsole
 
-pacman -S zsh-theme-powerlevel10k awesome-terminal-fonts zsh-syntax-highlighting zsh-autosuggestions neofetch --noconfirm
+pacman -S zsh-theme-powerlevel10k awesome-terminal-fonts zsh-syntax-highlighting zsh-autosuggestions neofetch lsd bat fd --noconfirm
 usermod -s /usr/bin/zsh $username
 usermod -s /usr/bin/zsh root
 cp /home/$username/ArchLinux/Package/.zshrc /home/$username/.zshrc
