@@ -56,6 +56,22 @@ Percent=10
 UseSizeLimit=false
 UseTimeLimit=true" > ~/.config/ktrashrc
 #=============================================================================================
+echo "[Unit]
+Description=mixer
+
+[Service]
+Type=simple
+User=$USER
+ExecStart=/bin/bash -c '~/.config/LiveWallpaper/mixer'
+
+[Install]
+WantedBy=multi-user.target" > ~/mixer.service
+sudo mv ~/mixer.service /etc/systemd/system
+
+echo "#!/bin/bash
+python /usr/share/noisy/noisy.py --config /usr/share/noisy/config.json" > ~/.config/LiveWallpaper/mixer
+sudo chmod +x /home/$username/.config/LiveWallpaper/mixer
+sudo chmod 664 /etc/systemd/system/mixer.service
 
 #=============================================================================================
 echo "[General]
