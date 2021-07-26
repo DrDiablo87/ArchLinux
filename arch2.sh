@@ -285,21 +285,6 @@ sudo systemctl start livewallpaper.service
 " > /home/$username/.config/autostart-scripts/LiveWallpaperService
 chmod +x /home/$username/.config/autostart-scripts/LiveWallpaperService
 
-echo "[Unit]
-Description=mixer
-
-[Service]
-Type=simple
-User=$username
-ExecStart=/bin/bash -c '~/.config/LiveWallpaper/mixer'
-
-[Install]
-WantedBy=multi-user.target" > /etc/systemd/system/mixer
-
-echo "#!/bin/bash
-
-python /usr/share/noisy/noisy.py --config /usr/share/noisy/config.json" > ~/.config/LiveWallpaper/mixer
-
 #=========================================================
 wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=15h4BUSE7AN9n0s_eUMd06LbkYn_9pmQM' -O /home/$username/.config/LiveWallpaper/Galaxy.mp4
 echo '#brightness=-5
