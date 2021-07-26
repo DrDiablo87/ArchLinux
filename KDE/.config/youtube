@@ -1,0 +1,31 @@
+#!/bin/bash
+
+read -p "Ссылка: " a
+
+read -p "1 - 480p, 2 - 720p, 3 - Max, 4 - list480p, 5 - list720p, 6 - mp3: " b
+
+if [[ $b == 1 ]]; then
+  
+  youtube-dl --no-playlist --merge-output-format mkv -f "bestvideo[height<=480][fps<=30]+bestaudio/best[height<=480]" -o "%(title)s.%(ext)s" $a
+  
+elif [[ $b == 2 ]]; then
+  
+  youtube-dl --no-playlist --merge-output-format mkv -f "bestvideo[height<=720][fps<=30]+bestaudio/best[height<=720]" -o "%(title)s.%(ext)s" $a
+  
+elif [[ $b == 3 ]]; then
+  
+  youtube-dl --no-playlist --merge-output-format mkv -o "%(title)s.%(ext)s" $a
+  
+elif [[ $b == 4 ]]; then
+  
+  youtube-dl --skip-unavailable-fragments -i --merge-output-format mkv -f "bestvideo[height<=480][fps<=30]+bestaudio/best[height<=480]" -o "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s" $a
+
+elif [[ $b == 5 ]]; then
+
+  youtube-dl --skip-unavailable-fragments -i --merge-output-format mkv -f "bestvideo[height<=720][fps<=30]+bestaudio/best[height<=720]" -o "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s" $a
+
+elif [[ $b == 6 ]]; then
+
+  youtube-dl -x --audio-format mp3 --audio-quality 320k -o "%(title)s.%(ext)s" $a
+  
+fi
