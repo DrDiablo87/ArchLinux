@@ -51,13 +51,7 @@ alias mkdir='mkdir -p'
 alias rm='sudo rm -rf'
 alias cp='cp -r'
 alias g='git clone'
-
-alias ydl='youtube-dl --no-playlist --merge-output-format mkv -o "%(title)s.%(ext)s"'
-alias ydlm='youtube-dl -x --audio-format mp3 --audio-quality 320k -o "%(title)s.%(ext)s"'
-alias ydl480='youtube-dl --no-playlist --merge-output-format mkv -f "bestvideo[height<=480][fps<=30]+bestaudio/best[height<=480]" -o "%(title)s.%(ext)s"'
-alias ydl720='youtube-dl --no-playlist --merge-output-format mkv -f "bestvideo[height<=720][fps<=30]+bestaudio/best[height<=720]" -o "%(title)s.%(ext)s"'
-alias ydlp480='youtube-dl --skip-unavailable-fragments -i --merge-output-format mkv -f "bestvideo[height<=480][fps<=30]+bestaudio/best[height<=480]" -o "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s"'
-alias ydlp720='youtube-dl --skip-unavailable-fragments -i --merge-output-format mkv -f "bestvideo[height<=720][fps<=30]+bestaudio/best[height<=720]" -o "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s"'
+alias ydl='sh ~/.config/youtube-dl'
 
 neofetch --ascii_colors 0 0  --colors 4 4 1 6 7 2
 echo -ne '\e[1 q'                    # Вид курсора от 1-6
