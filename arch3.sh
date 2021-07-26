@@ -36,7 +36,7 @@ yay -U --mflags --skipinteg --noconfirm ~/ArchLinux/Package/mystiq-20.03.23-1-x8
 
 sudo systemctl enable fail2ban.service
 yay -S --mflags --skipinteg --noconfirm libreoffice-fresh-ru unoconv mc htop ncdu edk2-ovmf virt-manager qemu dnsmasq ffmpeg youtube-dl mediainfo-gui qtqr
-sudo systemctl enable libvirtd.service
+sudo systemctl enable libvirtd.service && sudo gpasswd -a $USER libvirt
 yes | sudo sensors-detect
 yay -S --mflags --skipinteg --noconfirm playonlinux && sudo rm /usr/share/applications/wine.desktop #&& yay -Rscndd wine --noconfirm
 yes | yay -Syua && yes | yay -Scc && yes | yay -Rns $(yay -Qtdq)
