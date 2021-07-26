@@ -12,7 +12,7 @@ if [[ $driver == 1 ]]; then
   echo '#!/bin/bash
   sleep 5
   sudo systemctl restart vmtoolsd.service' > ~/.config/autostart-scripts/restart && sudo chmod +x ~/.config/autostart-scripts/restart
-  sudo rm ~/.config/autostart-scripts/LiveWallpaperService ~/.config/autostart-scripts/LiveWallpaperService.desktop
+  sudo rm ~/.config/autostart-scripts/LiveWallpaperService ~/.config/autostart-scripts/LiveWallpaperService.desktop ~/.config/old-autostart-scripts
   pkill mplayer
 elif [[ $driver == 2 ]]; then
   sudo pacman -S virtualbox-host-modules-arch virtualbox-guest-utils --noconfirm
