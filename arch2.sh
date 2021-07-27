@@ -310,6 +310,13 @@ cp /home/$username/ArchLinux/Package/theme.conf /usr/share/sddm/themes/breeze/th
 cp /home/$username/ArchLinux/Package/Dolphin-Root.desktop /usr/share/kservices5/ServiceMenus/Dolphin-Root.desktop
 cp /home/$username/ArchLinux/Package/steghide.desktop /usr/share/kservices5/ServiceMenus/steghide.desktop
 
+pacman -S clamav --noconfirm
+sed -i 's/LogFile/#LogFile/g' /etc/clamav/clamd.conf
+sed -i 's/UpdateLogFile/#UpdateLogFile/g' /etc/clamav/freshclam.conf
+freshclam
+cp /home/$username/ArchLinux/Package/ClamAV.desktop /usr/share/kservices5/ServiceMenus/ClamAV.desktop
+cp /home/$username/ArchLinux/Package/clamav.svg /usr/share/icons/hicolor/scalable/apps/clamav.svg
+
 #SWAP
 
 #truncate -s 0 /swapfile
