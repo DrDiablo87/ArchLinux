@@ -187,6 +187,7 @@ cp /home/$username/ArchLinux/Package/i2pd.conf /etc/i2pd/i2pd.conf
 mv /etc/systemd/system/torctl-autostart.service /etc/systemd/system/Tor.service
 mv /usr/lib/systemd/system/i2pd.service /usr/lib/systemd/system/I2pd.service
 mv /usr/lib/systemd/system/libvirtd.service /usr/lib/systemd/system/VManager.service
+mv /usr/lib/systemd/system/sshd.service /usr/lib/systemd/system/SSH.service
 
 #Подключаем автозагрузку менеджера входа и интернет
 timedatectl set-ntp yes
