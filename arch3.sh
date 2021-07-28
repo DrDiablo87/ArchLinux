@@ -33,6 +33,8 @@ yay -S --mflags --skipinteg --noconfirm archiso netactview loudmouth hddtemp pla
 yay -S --mflags --skipinteg --noconfirm airgeddon metasploit dhcp hashcat hashcat-utils ipscan crunch mdk4 reaver beef hostapd lighttpd bettercap ettercap sslstrip dsniff bully pixiewps usbutils xorg-xdpyinfo ccze asleap john hostapd-wpe nftables mdk3 hcxtools hcxdumptool
 yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift megasync fritzing mednaffe mednafen
 yay -U --mflags --skipinteg --noconfirm ~/ArchLinux/Package/mystiq-20.03.23-1-x86_64.pkg.tar.zst
+sudo mv /etc/systemd/system/noisy.service /etc/systemd/system/Noisy.service
+sudo mv /usr/share/noisy/examples/systemd/noisy.service /usr/share/noisy/examples/systemd/Noisy.service
 #yay -S --mflags --skipinteg --noconfirm plasma5-applets-resources-monitor 
 
 sudo systemctl enable fail2ban.service
