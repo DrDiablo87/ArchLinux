@@ -184,6 +184,9 @@ echo -e '
 echo -e '\033[32m'
 pacman -S networkmanager torsocks tor i2pd torctl --noconfirm
 cp /home/$username/ArchLinux/Package/i2pd.conf /etc/i2pd/i2pd.conf
+mv /etc/systemd/system/torctl-autostart.service /etc/systemd/system/Tor.service
+mv /usr/lib/systemd/system/i2pd.service /usr/lib/systemd/system/I2pd.service
+mv /usr/lib/systemd/system/libvirtd.service /usr/lib/systemd/system/VManager.service
 
 #Подключаем автозагрузку менеджера входа и интернет
 timedatectl set-ntp yes
@@ -267,8 +270,8 @@ echo "#!/bin/bash
 xwinwrap -ni -fs -s -st -sp -b -nf -- mplayer -fps 25 -framedrop -wid WID -nosound "~/.config/LiveWallpaper/Galaxy.mp4" -loop 0
 " > /home/$username/.config/LiveWallpaper/LiveWallpaper
 chmod +x /home/$username/.config/LiveWallpaper/LiveWallpaper
-touch /etc/systemd/system/livewallpaper.service
-chmod 664 /etc/systemd/system/livewallpaper.service
+touch /etc/systemd/system/Livewallpaper.service
+chmod 664 /etc/systemd/system/Livewallpaper.service
 echo "[Unit]
 Description=LiveWallpaper
 
@@ -278,7 +281,7 @@ User=$username
 ExecStart=/bin/bash -c 'DISPLAY=:0 ~/.config/LiveWallpaper/LiveWallpaper'
 
 [Install]
-WantedBy=multi-user.target " > /etc/systemd/system/livewallpaper.service
+WantedBy=multi-user.target " > /etc/systemd/system/Livewallpaper.service
 
 echo "#!/bin/bash
 sudo systemctl start livewallpaper.service
