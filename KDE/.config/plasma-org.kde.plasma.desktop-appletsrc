@@ -168,7 +168,7 @@ DialogHeight=496
 DialogWidth=640
 
 [Containments][2][Applets][25][Configuration][General]
-services={"userunit":false\\,"service":"livewallpaper"},{"userunit":true\\,"service":"psd"},{"userunit":false\\,"service":"sshd"},{"userunit":false\\,"service":"tor"},{"userunit":false\\,"service":"i2pd"},{"userunit":false\\,"service":"libvirtd"},{"userunit":false\\,"service":"noisy"}
+services={"userunit":false\\,"service":"SSH"},{"userunit":false\\,"service":"Tor"},{"userunit":false\\,"service":"I2pd"},{"userunit":false\\,"service":"Noisy"},{"userunit":true\\,"service":"Firefox"},{"userunit":false\\,"service":"VManager"},{"userunit":false\\,"service":"Livewallpaper"}
 
 [Containments][2][Applets][26]
 immutability=1
