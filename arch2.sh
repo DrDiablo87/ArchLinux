@@ -182,7 +182,7 @@ echo -e '
 \e[31m==================================================================================== Настраиваем службы ==========================================\e[0m
 '
 echo -e '\033[32m'
-pacman -S networkmanager torsocks tor i2pd --noconfirm
+pacman -S networkmanager torsocks tor i2pd torctl --noconfirm
 cp /home/$username/ArchLinux/Package/i2pd.conf /etc/i2pd/i2pd.conf
 
 #Подключаем автозагрузку менеджера входа и интернет
