@@ -27,7 +27,7 @@ fi
 
 #===========================================================================================
 yay -S --mflags --skipinteg --noconfirm profile-sync-daemon && psd -p
-systemctl --user enable psd.service
+#systemctl --user enable psd.service
 sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
 yay -S --mflags --skipinteg --noconfirm archiso netactview loudmouth hddtemp plasma5-applets-systemd plasma5-applets-thermal-monitor plasma5-applets-eventcalendar netdiscover fail2ban plasma5-applets-netspeed ffmulticonverter steghide noisy-py3-git
 yay -S --mflags --skipinteg --noconfirm airgeddon metasploit dhcp hashcat hashcat-utils ipscan crunch mdk4 reaver beef hostapd lighttpd bettercap ettercap sslstrip dsniff bully pixiewps usbutils xorg-xdpyinfo ccze asleap john hostapd-wpe nftables mdk3 hcxtools hcxdumptool
