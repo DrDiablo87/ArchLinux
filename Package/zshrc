@@ -49,6 +49,6 @@ alias mkdir='mkdir -p'
 alias rm='sudo rm -rf'
 alias cp='cp -r'
 alias g='git clone'
-alias ydl='sh ~/.config/youtube-dl'
+alias ydl='sh ~/.config/yt-dlp'
 
 echo -ne '\e[1 q'                    # Вид курсора от 1-6
