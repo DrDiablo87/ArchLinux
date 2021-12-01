@@ -1,0 +1,31 @@
+#!/bin/bash
+
+read -p "Ссылка: " a
+
+read -p "1 - 480p, 2 - 720p, 3 - Max, 4 - list480p, 5 - list720p, 6 - mp3: " b
+
+if [[ $b == 1 ]]; then
+  
+  yt-dlp --no-playlist -f 135+140 -o "%(title)s.%(ext)s"  --sponsorblock-remove all --merge-output-format mkv $a
+  
+elif [[ $b == 2 ]]; then
+  
+  yt-dlp --no-playlist -f 136+140 -o "%(title)s.%(ext)s"  --sponsorblock-remove all --merge-output-format mkv $a
+  
+elif [[ $b == 3 ]]; then
+  
+  yt-dlp --no-playlist -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' -o "%(title)s.%(ext)s" --sponsorblock-remove all --merge-output-format mkv $a
+  
+elif [[ $b == 4 ]]; then
+  
+  yt-dlp -f 135+140 -o "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s" --sponsorblock-remove all --merge-output-format mkv $a
+
+elif [[ $b == 5 ]]; then
+
+  yt-dlp -f 136+140 -o "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s" --sponsorblock-remove all --merge-output-format mkv $a
+
+elif [[ $b == 6 ]]; then
+
+  yt-dlp -x --audio-format mp3 --audio-quality 320k -o "%(title)s.%(ext)s" $a
+  
+fi
