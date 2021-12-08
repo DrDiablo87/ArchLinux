@@ -105,7 +105,7 @@ CheckSpace
 #
 IgnorePkg =
 #
-SigLevel = Never            #Required DatabaseOptional
+SigLevel = Never
 LocalFileSigLevel = Optional
 #
 [core]
