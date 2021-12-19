@@ -38,7 +38,7 @@ sudo mv /usr/share/noisy/examples/systemd/noisy.service /usr/share/noisy/example
 #yay -S --mflags --skipinteg --noconfirm plasma5-applets-resources-monitor 
 
 sudo systemctl enable fail2ban.service
-yay -S --mflags --skipinteg --noconfirm libreoffice-fresh-ru unoconv mc htop ncdu edk2-ovmf virt-manager qemu dnsmasq ffmpeg youtube-dl yt-dlp mediainfo-gui qtqr
+yay -S --mflags --skipinteg --noconfirm libreoffice-fresh-ru unoconv mc htop ncdu edk2-ovmf virt-manager qemu dnsmasq ffmpeg yt-dlp mediainfo-gui qtqr
 sudo systemctl enable libvirtd.service && sudo gpasswd -a $USER libvirt
 yes | sudo sensors-detect
 yay -S --mflags --skipinteg --noconfirm playonlinux && sudo rm /usr/share/applications/wine.desktop #&& yay -Rscndd wine --noconfirm
