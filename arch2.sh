@@ -125,7 +125,9 @@ Server = https://repo.archlinuxcn.org/$arch
 SigLevel = Never
 #
 [blackarch]
-Server = https://www.blackarch.org/blackarch/$repo/os/$arch
+Server = https://mirror.surf/blackarch/$repo/os/$arch
+Server = http://mirror.truenetwork.ru/blackarch/$repo/os/$arch
+Server = http://mirror.yandex.ru/mirrors/blackarch/$repo/os/$arch
 #Include = /etc/pacman.d/blackarch-mirrorlist
 SigLevel = Never' > /etc/pacman.conf
 
