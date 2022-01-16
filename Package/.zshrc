@@ -51,7 +51,7 @@ alias mkdir='mkdir -p'
 alias rm='sudo rm -rf'
 alias cp='cp -r'
 alias g='git clone'
-alias ydl='sh ~/.config/youtube-dl'
+alias ydl='sh ~/.config/yt-dlp'
 
 neofetch --ascii_colors 0 0  --colors 4 4 1 6 7 2
 echo -ne '\e[1 q'                    # Вид курсора от 1-6
