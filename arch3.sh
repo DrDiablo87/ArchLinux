@@ -26,6 +26,7 @@ elif [[ $driver == 3 ]]; then
 fi
 
 #===========================================================================================
+git config --global url."https://".insteadOf git://
 yay -S --mflags --skipinteg --noconfirm profile-sync-daemon && psd -p
 #systemctl --user enable psd.service
 sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
