@@ -155,7 +155,7 @@ pacman -S xorg-drivers nvidia xorg-xinit mesa-vdpau lib32-mesa plasma-desktop sd
 pacman -S yay --noconfirm
 pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent okular okteta gwenview qvkbd ksysguard kompare kde-gtk-config arc-gtk-theme plasma-vault plasma-sdk encfs cryfs kscreen sddm-kcm kwalletmanager plasma-wayland-session kinfocenter spectacle ktouch kwave kdenlive ksystemlog kleopatra krfb krdc freerdp kdegraphics-thumbnailers kimageformats kdesdk-thumbnailers ffmpegthumbs raw-thumbnailer breeze-gtk kfind cmake extra-cmake-modules systemdgenie --noconfirm
 sed -i 's|image/\*\,||' /usr/share/kservices5/ServiceMenus/mediainfo-gui.desktop
-pacman -S firefox-i18n-ru firefox-ublock-origin jami-gnome bleachbit krita filelight ntfs-3g gufw mtr exfat-utils cronie gnome-disk-utility f2fs-tools udftools steam net-tools libvirt linux-headers kid3 qtcreator qt5-translations kdeplasma-addons networkmanager-openvpn openresolv kalzium kcalc tree gbrainy kalgebra kmag wireshark-qt openssh nmap bridge-utils --noconfirm
+pacman -S firefox-i18n-ru firefox-ublock-origin jami-qt bleachbit krita filelight ntfs-3g gufw mtr exfat-utils cronie gnome-disk-utility f2fs-tools udftools steam net-tools libvirt linux-headers kid3 qtcreator qt5-translations kdeplasma-addons networkmanager-openvpn openresolv kalzium kcalc tree gbrainy kalgebra kmag wireshark-qt openssh nmap bridge-utils --noconfirm
 pacman -S steam-native-runtime ttf-liberation ttf-dejavu xterm --noconfirm
 
 echo -e '
