@@ -106,7 +106,7 @@ CheckSpace
 IgnorePkg =
 #
 SigLevel = Never
-LocalFileSigLevel = Optional
+LocalFileSigLevel = Never
 #
 [core]
 Include = /etc/pacman.d/mirrorlist
