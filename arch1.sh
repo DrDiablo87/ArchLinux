@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#loadkeys ru
-#setfont cyr-sun16
+loadkeys ru
+setfont cyr-sun16
 
 #Синхронизация системных часов
 #timedatectl set-ntp true
@@ -127,8 +127,8 @@ echo -e '
 echo -e '\033[32m'
 genfstab -pU /mnt >> /mnt/etc/fstab
 
-#arch-chroot /mnt sh -c "$(curl -fsSL git.io/2.sh)"
-#systemctl reboot
+arch-chroot /mnt sh -c "$(curl -fsSL git.io/2.sh)"
+systemctl reboot
 
 elif [[ $OS == 2 ]]; then
 
