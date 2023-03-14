@@ -5,7 +5,7 @@ setfont cyr-sun16
 
 #Синхронизация системных часов
 timedatectl set-ntp true
-sleep 1
+#sleep 1
 
 clear
 echo -e '\e[1;34m
