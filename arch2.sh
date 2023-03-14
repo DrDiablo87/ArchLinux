@@ -138,8 +138,8 @@ pacman -Syyu --noconfirm
 sed -i 's!#PKGDEST=/home/packages!PKGDEST=~/Package!' /etc/makepkg.conf
                                                  
 echo '127.0.1.1   '$hostname'.localdomain   '$hostname'
-127.0.0.1 localhost
-::1       localhost
+#127.0.0.1 localhost
+#::1       localhost
 127.0.0.1 admulti.com
 127.0.0.1 pt.upzona.net
 127.0.0.1 gag.admulti.com
