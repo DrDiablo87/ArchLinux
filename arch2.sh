@@ -108,6 +108,7 @@ IgnorePkg =
 #
 SigLevel = Never
 LocalFileSigLevel = Never
+ParallelDownloads = 5
 #
 [core]
 Include = /etc/pacman.d/mirrorlist
