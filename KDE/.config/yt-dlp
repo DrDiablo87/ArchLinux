@@ -2,7 +2,7 @@
 
 read -p "Ссылка: " a
 
-read -p "1 - 720p, 2 - 720p, 3 - Max, 4 - list480p, 5 - list720p, 6 - mp3: " b
+read -p "1 - 720p, 2 - 1080p, 3 - Max, 4 - list720p, 5 - list1080p, 6 - mp3: " b
 
 if [[ $b == 1 ]]; then
   
