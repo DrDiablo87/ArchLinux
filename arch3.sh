@@ -31,7 +31,7 @@ yay -S --mflags --skipinteg --noconfirm profile-sync-daemon && psd -p
 #systemctl --user enable psd.service
 sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
 yay -Rns --mflags --skipinteg --noconfirm extra-cmake-modules && yay -S --mflags --skipinteg --noconfirm extra-cmake-modules-git
-yay -S --mflags --skipinteg --noconfirm archiso netactview loudmouth hddtemp plasma5-applets-systemd ki18n-git plasma5-applets-thermal-monitor plasma5-applets-eventcalendar netdiscover fail2ban plasma5-applets-netspeed ffmulticonverter steghide noisy-py3-git cpu-x
+yay -S --mflags --skipinteg --noconfirm archiso netactview loudmouth hddtemp plasma5-applets-systemd ki18n-git plasma5-applets-thermal-monitor plasma5-applets-eventcalendar netdiscover fail2ban plasma5-applets-netspeed ffmulticonverter steghide noisy-py3-git cpu-x system-monitoring-center
 yay -S --mflags --skipinteg --noconfirm airgeddon metasploit dhcp hashcat hashcat-utils ipscan crunch mdk4 reaver beef hostapd lighttpd bettercap ettercap sslstrip dsniff bully pixiewps usbutils xorg-xdpyinfo ccze asleap john hostapd-wpe nftables mdk3 hcxtools hcxdumptool
 yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift megasync fritzing mednaffe mednafen
 yay -U --mflags --skipinteg --noconfirm ~/ArchLinux/Package/mystiq-20.03.23-1-x86_64.pkg.tar.zst
