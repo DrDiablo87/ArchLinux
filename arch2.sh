@@ -278,29 +278,29 @@ echo -e '
 '
 echo -e '\033[32m'
 pacman -S mplayer libva-vdpau-driver libva-mesa-driver libva-intel-driver libvdpau-va-gl lib32-libva-vdpau-driver lib32-mesa-vdpau lib32-libva-mesa-driver --noconfirm
-pacman -U /home/$username/ArchLinux/Package/shantz-xwinwrap-bzr-20090421-3-x86_64.pkg.tar.xz  --noconfirm
-mkdir /home/$username/.config/LiveWallpaper /home/$username/.config/autostart-scripts
-echo "#!/bin/bash
-xwinwrap -ni -fs -s -st -sp -b -nf -- mplayer -fps 25 -framedrop -wid WID -nosound "~/.config/LiveWallpaper/Galaxy.mp4" -loop 0
-" > /home/$username/.config/LiveWallpaper/LiveWallpaper
-chmod +x /home/$username/.config/LiveWallpaper/LiveWallpaper
-touch /etc/systemd/system/Livewallpaper.service
-chmod 664 /etc/systemd/system/Livewallpaper.service
-echo "[Unit]
-Description=LiveWallpaper
+#pacman -U /home/$username/ArchLinux/Package/shantz-xwinwrap-bzr-20090421-3-x86_64.pkg.tar.xz  --noconfirm
+#mkdir /home/$username/.config/LiveWallpaper /home/$username/.config/autostart-scripts
+#echo "#!/bin/bash
+#xwinwrap -ni -fs -s -st -sp -b -nf -- mplayer -fps 25 -framedrop -wid WID -nosound "~/.config/LiveWallpaper/Galaxy.mp4" -loop 0
+#" > /home/$username/.config/LiveWallpaper/LiveWallpaper
+#chmod +x /home/$username/.config/LiveWallpaper/LiveWallpaper
+#touch /etc/systemd/system/Livewallpaper.service
+#chmod 664 /etc/systemd/system/Livewallpaper.service
+#echo "[Unit]
+#Description=LiveWallpaper
 
-[Service]
-Type=simple
-User=$username
-ExecStart=/bin/bash -c 'DISPLAY=:0 ~/.config/LiveWallpaper/LiveWallpaper'
+#[Service]
+#Type=simple
+#User=$username
+#ExecStart=/bin/bash -c 'DISPLAY=:0 ~/.config/LiveWallpaper/LiveWallpaper'
 
-[Install]
-WantedBy=multi-user.target " > /etc/systemd/system/Livewallpaper.service
+#[Install]
+#WantedBy=multi-user.target " > /etc/systemd/system/Livewallpaper.service
 
-echo "#!/bin/bash
-sudo systemctl start livewallpaper.service
-" > /home/$username/.config/autostart-scripts/LiveWallpaperService
-chmod +x /home/$username/.config/autostart-scripts/LiveWallpaperService
+#echo "#!/bin/bash
+#sudo systemctl start livewallpaper.service
+#" > /home/$username/.config/autostart-scripts/LiveWallpaperService
+#chmod +x /home/$username/.config/autostart-scripts/LiveWallpaperService
 
 #=========================================================
 wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=15h4BUSE7AN9n0s_eUMd06LbkYn_9pmQM' -O /home/$username/.config/LiveWallpaper/Galaxy.mp4
