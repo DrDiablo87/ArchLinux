@@ -280,7 +280,7 @@ echo -e '\033[32m'
 pacman -S mplayer libva-vdpau-driver libva-mesa-driver libva-intel-driver libvdpau-va-gl lib32-libva-vdpau-driver lib32-mesa-vdpau lib32-libva-mesa-driver --noconfirm
 #pacman -U /home/$username/ArchLinux/Package/shantz-xwinwrap-bzr-20090421-3-x86_64.pkg.tar.xz  --noconfirm
 mkdir /home/$username/.config/autostart-scripts
-#mkdir /home/$username/.config/LiveWallpaper
+mkdir /home/$username/.config/LiveWallpaper
 #echo "#!/bin/bash
 #xwinwrap -ni -fs -s -st -sp -b -nf -- mplayer -fps 25 -framedrop -wid WID -nosound "~/.config/LiveWallpaper/Galaxy.mp4" -loop 0
 #" > /home/$username/.config/LiveWallpaper/LiveWallpaper
