@@ -169,7 +169,7 @@ DialogWidth=640
 
 [Containments][2][Applets][25][Configuration][General]
 services={"userunit":false\\,"service":"SSH"},{"userunit":false\\,"service":"Tor"},{"userunit":false\\,"service":"I2pd"},{"userunit":false\\,"service":"Noisy"},{"userunit":true\\,"service":"Firefox"},{"userunit":false\\,"service":"VManager"}
-#services={"userunit":false\\,"service":"SSH"},{"userunit":false\\,"service":"Tor"},{"userunit":false\\,"service":"I2pd"},{"userunit":false\\,"service":"Noisy"},{"userunit":true\\,"service":"Firefox"},{"userunit":false\\,"service":"VManager"},{"userunit":false\\,"service":"Livewallpaper"}
+#services={"userunit":false\\,"service":"SSH"},{"userunit":false\\,"service":"Tor"},{"userunit":false\\,"service":"I2pd"},{"userunit":false\\,"service":"Noisy"},{"userunit":true\\,"service":"Firefox"},{"userunit":false\\,"service":"VManager"}
 
 [Containments][2][Applets][26]
 immutability=1
