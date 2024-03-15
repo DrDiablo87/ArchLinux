@@ -164,6 +164,9 @@ sed -i 's/#MAKEFLAGS="-j'$(nproc)'"/MAKEFLAGS="-j'$(nproc)'"/g' /etc/makepkg.con
 ###pacman -S xorg-drivers nvidia xorg-xinit mesa-vdpau lib32-mesa plasma --noconfirm
 #pacman -S nvidia-settings nvidia-settings xorg-server-devel opencl-nvidia nvidia && wget https://ru.download.nvidia.com/XFree86/Linux-x86_64/390.141/NVIDIA-Linux-x86_64-390.141.run
 pacman -S yay plasma xorg sddm --noconfirm
+systemctl enable sddm
+systemctl enable NetworkManager
+
 pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent okular okteta gwenview kompare kde-gtk-config arc-gtk-theme plasma-vault plasma-sdk encfs cryfs kscreen sddm-kcm kwalletmanager kinfocenter spectacle ktouch kwave kdenlive ksystemlog kleopatra krfb krdc freerdp kdegraphics-thumbnailers kdesdk-thumbnailers ffmpegthumbs kdesdk-thumbnailers breeze-gtk kfind cmake extra-cmake-modules systemdgenie --noconfirm
 sed -i 's|image/\*\,||' /usr/share/kservices5/ServiceMenus/mediainfo-gui.desktop
 pacman -S firefox-i18n-ru firefox-ublock-origin jami-qt bleachbit krita filelight ntfs-3g gufw mtr exfat-utils cronie gnome-disk-utility f2fs-tools udftools steam net-tools libvirt linux-headers kid3 qtcreator qt5-translations kdeplasma-addons networkmanager-openvpn openresolv kalzium kcalc tree gbrainy kalgebra kmag wireshark-qt openssh nmap bridge-utils --noconfirm
