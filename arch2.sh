@@ -163,7 +163,8 @@ sed -i 's/#MAKEFLAGS="-j'$(nproc)'"/MAKEFLAGS="-j'$(nproc)'"/g' /etc/makepkg.con
 
 ###pacman -S xorg-drivers nvidia xorg-xinit mesa-vdpau lib32-mesa plasma --noconfirm
 #pacman -S nvidia-settings nvidia-settings xorg-server-devel opencl-nvidia nvidia && wget https://ru.download.nvidia.com/XFree86/Linux-x86_64/390.141/NVIDIA-Linux-x86_64-390.141.run
-pacman -S yay plasma xorg sddm --noconfirm
+pacman -S plasma-meta xorg sddm sddm-kcm networkmanager --noconfirm
+pacman -S yay --noconfirm
 systemctl enable sddm
 systemctl enable NetworkManager
 
