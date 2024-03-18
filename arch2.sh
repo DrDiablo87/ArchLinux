@@ -128,15 +128,18 @@ Server = https://repo.archlinuxcn.org/$arch
 SigLevel = Never
 #
 [blackarch]
-Server = https://repository.su/blackarch/
-Server = http://mirror.truenetwork.ru/blackarch/
-Server = http://mirror.yandex.ru/mirrors/blackarch/
-Server = https://mirror.serverion.com/blackarch/
-#Include = /etc/pacman.d/blackarch-mirrorlist
+Server = http://mirror.yandex.ru/mirrors/blackarch/$repo/os/$arch
+Server = https://mirror.cyberbits.eu/blackarch/$repo/os/$arch
+Server = https://mirror.tillo.ch/ftp/blackarch/$repo/os/$arch
+Server = https://www.blackarch.org/blackarch/$repo/os/$arch
+Server = https://blackarch.unixpeople.org/$repo/os/$arch
+Server = https://www.mirrorservice.org/sites/blackarch.org/blackarch/$repo/os/$arch
+Server = https://ftp.halifax.rwth-aachen.de/blackarch/$repo/os/$arch
+Server = https://mirror.undisclose.de/blackarch/$repo/os/$arch
 SigLevel = Never' > /etc/pacman.conf
 
 #curl -s "https://blackarch.org/blackarch-mirrorlist" -o "/etc/pacman.d/blackarch-mirrorlist"
-cp /home/$username/ArchLinux/Package/blackarch-mirrorlist /etc/pacman.d/blackarch-mirrorlist
+#cp /home/$username/ArchLinux/Package/blackarch-mirrorlist /etc/pacman.d/blackarch-mirrorlist
 pacman -Syyu --noconfirm
 sed -i 's!#PKGDEST=/home/packages!PKGDEST=~/Package!' /etc/makepkg.conf
                                                  
