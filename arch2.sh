@@ -55,18 +55,18 @@ editor 0' > /boot/loader/loader.conf
 if [ -e /dev/sda5 ]; then
 echo 'title Arch Linux
 linux /vmlinuz-linux
-initrd /intel-ucode.img
+initrd /amd-ucode.img
 initrd /initramfs-linux.img
 options root=/dev/sda5 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinux.conf
 else 
 echo 'title Arch Linux
 linux /vmlinuz-linux
-initrd /intel-ucode.img
+initrd /amd-ucode.img
 initrd /initramfs-linux.img
 options root=/dev/sda2 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinux.conf
 echo 'title Arch Linux Zen
 linux /vmlinuz-linux-zen
-initrd /intel-ucode.img
+initrd /amd-ucode.img
 initrd /initramfs-linux-zen.img
 options root=/dev/sda2 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinuxZen.conf
 fi
@@ -162,7 +162,7 @@ sed -i 's/#MAKEFLAGS="-j'$(nproc)'"/MAKEFLAGS="-j'$(nproc)'"/g' /etc/makepkg.con
 #NVIDIA
 #pacman -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 #AMD
-#pacman -S --needed lib32-mesa mesa xf86-video-amdgpu vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader libva-mesa-driver lib32-libva-mesa-driver mesa-vdpau lib32-mesa-vdpau --noconfirm
+pacman -S --needed lib32-mesa mesa xf86-video-amdgpu vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader libva-mesa-driver lib32-libva-mesa-driver mesa-vdpau lib32-mesa-vdpau --noconfirm
 #INTEL
 #pacman -S --needed lib32-mesa vulkan-intel lib32-vulkan-intel vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 
@@ -247,7 +247,7 @@ Numlock=on ' > /etc/sddm.conf.d/autologin.conf
 
 echo '[Autologin]
 Relogin=false
-Session=plasma
+Session=plasma.desktop
 User='$username'
 
 [General]
