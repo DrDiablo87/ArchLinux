@@ -41,6 +41,7 @@ echo -e '
 echo -e '\033[32m'
 pacman -S efibootmgr git wget reflector intel-ucode --noconfirm  
 reflector --verbose -l 5 -p https --sort rate --save /etc/pacman.d/mirrorlist
+pacman -Syu --noconfirm
 #echo "Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
 #Server = http://mirror.yandex.ru/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
 
@@ -127,9 +128,10 @@ Server = https://repo.archlinuxcn.org/$arch
 SigLevel = Never
 #
 [blackarch]
-Server = https://mirror.surf/blackarch/$repo/os/$arch
-Server = http://mirror.truenetwork.ru/blackarch/$repo/os/$arch
-Server = http://mirror.yandex.ru/mirrors/blackarch/$repo/os/$arch
+Server = https://repository.su/blackarch/
+Server = http://mirror.truenetwork.ru/blackarch/
+Server = http://mirror.yandex.ru/mirrors/blackarch/
+Server = https://mirror.serverion.com/blackarch/
 #Include = /etc/pacman.d/blackarch-mirrorlist
 SigLevel = Never' > /etc/pacman.conf
 
