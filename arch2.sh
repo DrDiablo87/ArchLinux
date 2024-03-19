@@ -45,7 +45,7 @@ pacman -Syu --noconfirm
 #echo "Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
 #Server = http://mirror.yandex.ru/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
 
-tourch || exit $?                 # завершение скрипта при возникновении ошибки, а она в этой комманде есть
+#tourch || exit $?                 # завершение скрипта при возникновении ошибки, а она в этой комманде есть
 
 bootctl install
 echo 'default Arch
