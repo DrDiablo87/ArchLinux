@@ -74,9 +74,6 @@ fi
 #Добавляем пользователя
 useradd -m -g users -G audio,games,video,storage,wheel -s /bin/bash $username
 
-tourch || exit $?                 # завершение скрипта при возникновении ошибки, а она в этой комманде есть
-
-
 echo -e '
 
 \e[31m==================================================================================== Создаем root пароль =========================================\e[0m
@@ -144,6 +141,9 @@ SigLevel = Never' > /etc/pacman.conf
 #curl -s "https://blackarch.org/blackarch-mirrorlist" -o "/etc/pacman.d/blackarch-mirrorlist"
 #cp /home/$username/ArchLinux/Package/blackarch-mirrorlist /etc/pacman.d/blackarch-mirrorlist
 pacman -Syyu --noconfirm
+
+tourch || exit $?                 # завершение скрипта при возникновении ошибки, а она в этой комманде есть
+
 sed -i 's!#PKGDEST=/home/packages!PKGDEST=~/Package!' /etc/makepkg.conf
                                                  
 echo '127.0.1.1   '$hostname'.localdomain   '$hostname'
