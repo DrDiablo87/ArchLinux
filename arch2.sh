@@ -143,6 +143,7 @@ SigLevel = Never' > /etc/pacman.conf
 pacman -Syyu --noconfirm
 
 tourch || exit $?                 # завершение скрипта при возникновении ошибки, а она в этой комманде есть
+tourch $?
 
 sed -i 's!#PKGDEST=/home/packages!PKGDEST=~/Package!' /etc/makepkg.conf
                                                  
