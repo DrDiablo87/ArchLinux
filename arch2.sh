@@ -142,9 +142,6 @@ SigLevel = Never' > /etc/pacman.conf
 #cp /home/$username/ArchLinux/Package/blackarch-mirrorlist /etc/pacman.d/blackarch-mirrorlist
 pacman -Syyu --noconfirm
 
-tourch || exit $?                 # завершение скрипта при возникновении ошибки, а она в этой комманде есть
-tourch $?
-
 sed -i 's!#PKGDEST=/home/packages!PKGDEST=~/Package!' /etc/makepkg.conf
                                                  
 echo '127.0.1.1   '$hostname'.localdomain   '$hostname'
@@ -156,6 +153,8 @@ echo '127.0.1.1   '$hostname'.localdomain   '$hostname'
 127.0.0.1 go.video.admulti.com' >> /etc/hosts
 
 echo 'include "/usr/share/nano/*.nanorc"' > /etc/nanorc                      #Раскраска nano
+
+tourch || exit $?                 # завершение скрипта при возникновении ошибки, а она в этой комманде есть
 
 echo -e '
 
