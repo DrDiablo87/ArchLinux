@@ -45,7 +45,7 @@ pacman -Syu --noconfirm
 #echo "Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
 #Server = http://mirror.yandex.ru/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
 
-tourch || exit $?                 # завершение скрипта при возникновении ошибки, а она в этой комманде есть
+#tourch || exit $?                 # завершение скрипта при возникновении ошибки, а она в этой комманде есть
 
 bootctl install
 echo 'default Arch
@@ -73,6 +73,9 @@ fi
 
 #Добавляем пользователя
 useradd -m -g users -G audio,games,video,storage,wheel -s /bin/bash $username
+
+tourch || exit $?                 # завершение скрипта при возникновении ошибки, а она в этой комманде есть
+
 
 echo -e '
 
