@@ -166,7 +166,7 @@ pacman -S --needed lib32-mesa mesa xf86-video-amdgpu vulkan-radeon lib32-vulkan-
 #INTEL
 #pacman -S --needed lib32-mesa vulkan-intel lib32-vulkan-intel vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 
-pacman -S systemd xorg-drivers nvidia xorg-xinit mesa-vdpau lib32-mesa --noconfirm
+pacman -S xorg-drivers nvidia xorg-xinit mesa-vdpau lib32-mesa --noconfirm
 #pacman -S nvidia-settings nvidia-settings xorg-server-devel opencl-nvidia nvidia && wget https://ru.download.nvidia.com/XFree86/Linux-x86_64/390.141/NVIDIA-Linux-x86_64-390.141.run
 pacman -S plasma-workspace xorg sddm sddm-kcm networkmanager --noconfirm
 pacman -S yay --noconfirm
