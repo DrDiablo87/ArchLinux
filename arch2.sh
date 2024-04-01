@@ -181,3 +181,23 @@ pacman -S firefox-i18n-ru firefox-ublock-origin jami-qt bleachbit krita fileligh
 pacman -S steam-native-runtime ttf-liberation ttf-dejavu xterm --noconfirm
 
 echo -e '
+
+\e[31m==================================================================================== Ставим и настрайваем ZSH ====================================\e[0m
+'
+echo -e '\033[32m'
+mkdir -p /home/$username/.config /home/$username/.local/share/konsole
+
+pacman -S zsh-theme-powerlevel10k awesome-terminal-fonts zsh-syntax-highlighting zsh-autosuggestions neofetch lsd bat fd --noconfirm
+usermod -s /usr/bin/zsh $username
+usermod -s /usr/bin/zsh root
+cp /home/$username/ArchLinux/Package/.zshrc /home/$username/.zshrc
+cp /home/$username/ArchLinux/Package/zshrc /etc/zsh/zshrc
+mkdir /home/$username/.config/neofetch
+cp /home/$username/ArchLinux/Package/config.conf /home/$username/.config/neofetch/config.conf
+cp /home/$username/ArchLinux/Package/ArcDark.colorscheme /home/$username/.local/share/konsole/ArcDark.colorscheme
+cp /home/$username/ArchLinux/Package/'Profile 1.profile' /home/$username/.local/share/konsole/'Profile 1.profile'
+cp /home/$username/ArchLinux/Package/konsolerc /home/$username/.config/konsolerc
+cp /home/$username/ArchLinux/Package/ArcDark.colorscheme /root/share/konsole/ArcDark.colorscheme
+cp /home/$username/ArchLinux/Package/'Profile 1.profile' /root/share/konsole/'Profile 1.profile'
+cp /home/$username/ArchLinux/Package/konsolerc /root/.config/konsolerc
+
