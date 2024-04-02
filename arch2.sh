@@ -269,7 +269,7 @@ systemctl mask lvm2-lvmetad.service
 systemctl mask lvm2-activation.service
 systemctl mask lvm2-activation-early.service
 #
-systemctl mask systemd-journald.socket
+#systemctl mask systemd-journald.socket
 #
 systemctl mask systemd-journald-audit.socket
 systemctl mask systemd-journald-dev-log.socket
