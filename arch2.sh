@@ -7,6 +7,8 @@ echo $hostname > /etc/hostname
 ln -svf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
 hwclock --systohc
 
+loadkeys ru
+setfont cyr-sun16
 #Добавляем русскую локаль системы
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen 
@@ -16,9 +18,8 @@ locale-gen
 
 #Указываем язык системы
 echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
-echo 'KEYMAP=ru
-FONT=cyr-sun16' > /etc/vconsole.conf
-loadkeys ru
+echo "KEYMAP=ru" > /etc/vconsole.conf
+echo "FONT=cyr-sun16" >> /etc/vconsole.conf
 
 echo 'MODULES="" 
 BINARIES="" 
