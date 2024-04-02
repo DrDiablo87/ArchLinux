@@ -10,8 +10,8 @@ hwclock --systohc
 loadkeys ru
 setfont cyr-sun16
 #Добавляем русскую локаль системы
-echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
-echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen 
+echo "en_US.UTF-8 UTF-8
+ru_RU.UTF-8 UTF-8" > /etc/locale.gen 
 
 #Обновим текущую локаль системы
 locale-gen
