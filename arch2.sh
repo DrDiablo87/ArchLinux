@@ -270,9 +270,9 @@ systemctl mask lvm2-activation.service
 systemctl mask lvm2-activation-early.service
 #
 #systemctl mask systemd-journald.socket
-##systemctl mask systemd-journald.service
-#systemctl mask systemd-journald-audit.socket
-#systemctl mask systemd-journald-dev-log.socket
+systemctl mask systemd-journald-audit.socket
+systemctl mask systemd-journald-dev-log.socket
+#
 systemctl enable fstrim.service
 systemctl enable fstrim.timer
 systemctl mask systemd-tmpfiles-setup.service    # предотвращение создания проблемного снапшота
