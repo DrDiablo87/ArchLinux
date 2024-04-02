@@ -273,10 +273,10 @@ systemctl mask systemd-journald.socket
 ##systemctl mask systemd-journald.service
 systemctl mask systemd-journald-audit.socket
 systemctl mask systemd-journald-dev-log.socket
-#systemctl enable fstrim.service
-#systemctl enable fstrim.timer
+systemctl enable fstrim.service
+systemctl enable fstrim.timer
 systemctl mask systemd-tmpfiles-setup.service    # предотвращение создания проблемного снапшота
-btrfs subvolume delete /var/lib/machines         # удаление проблемного снапшота
+#btrfs subvolume delete /var/lib/machines         # удаление проблемного снапшота
 usermod -a -G wireshark $username
 
 
