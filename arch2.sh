@@ -208,7 +208,7 @@ echo -e '
 mkdir /etc/sddm.conf.d                           # Автологин
 echo '[Autologin]
 User='$username'
-Session=plasma.desktop
+Session=plasma
 Numlock=on ' > /etc/sddm.conf.d/autologin.conf
 
 echo '[Autologin]
