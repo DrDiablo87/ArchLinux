@@ -214,7 +214,8 @@ Numlock=on ' > /etc/sddm.conf.d/autologin.conf
 
 echo '[Autologin]
 Relogin=false
-Session=plasma
+Session=plasmawayland
+#Session=plasma
 User='$username'
 
 [General]
