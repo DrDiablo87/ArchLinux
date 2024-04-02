@@ -187,8 +187,8 @@ echo -e '
 \e[31m==================================================================================== Ставим и настрайваем ZSH ====================================\e[0m
 '
 echo -e '\033[32m'
-mkdir -p /home/$username/.config /home/$username/.local/share/konsole
 
+mkdir -p /home/$username/.config /home/$username/.local/share/konsole
 pacman -S zsh-theme-powerlevel10k awesome-terminal-fonts zsh-syntax-highlighting zsh-autosuggestions neofetch lsd bat fd --noconfirm
 usermod -s /usr/bin/zsh $username
 usermod -s /usr/bin/zsh root
@@ -206,7 +206,7 @@ chown -R $username:users /home/$username
 
 echo -e '
 
-#=======================================================================================================================================================================================================+++++++
+#==============================================================================================================================================================
 '
 #Настраиваем тему
 mkdir /etc/sddm.conf.d                           # Автологин
@@ -244,3 +244,20 @@ Use=true
 VariantList=,' > /home/$username/.config/kxkbrc
 
 chown -R $username:users /home/$username
+
+pacman -S networkmanager torsocks tor i2pd torctl --noconfirm
+cp /home/$username/ArchLinux/Package/i2pd.conf /etc/i2pd/i2pd.conf
+mv /etc/systemd/system/torctl-autostart.service /etc/systemd/system/Tor.service
+mv /usr/lib/systemd/system/i2pd.service /usr/lib/systemd/system/I2pd.service
+mv /usr/lib/systemd/system/libvirtd.service /usr/lib/systemd/system/VManager.service
+mv /usr/lib/systemd/system/sshd.service /usr/lib/systemd/system/SSH.service
+
+
+
+
+
+
+
+
+
+
