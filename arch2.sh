@@ -252,16 +252,16 @@ mv /usr/lib/systemd/system/i2pd.service /usr/lib/systemd/system/I2pd.service
 mv /usr/lib/systemd/system/libvirtd.service /usr/lib/systemd/system/VManager.service
 mv /usr/lib/systemd/system/sshd.service /usr/lib/systemd/system/SSH.service
 
-timedatectl set-ntp yes
-systemctl enable sddm.service NetworkManager.service
-systemctl mask man-db.service man-db.timer 
-systemctl disable avahi-daemon
-systemctl mask avahi-daemon
-systemctl mask avahi-daemon.service
-systemctl mask avahi-daemon.socket
-systemctl mask ModemManager.service
-systemctl mask lvm2-monitor.socket
-systemctl mask lvm2-monitor.service
+#timedatectl set-ntp yes
+#systemctl enable sddm.service NetworkManager.service
+#systemctl mask man-db.service man-db.timer 
+#systemctl disable avahi-daemon
+#systemctl mask avahi-daemon
+#systemctl mask avahi-daemon.service
+#systemctl mask avahi-daemon.socket
+#systemctl mask ModemManager.service
+#systemctl mask lvm2-monitor.socket
+#systemctl mask lvm2-monitor.service
 systemctl mask lvm2-lvmpolld.socket
 systemctl mask lvm2-lvmpolld.service
 systemctl mask lvm2-lvmetad.socket
