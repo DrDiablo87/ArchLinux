@@ -235,4 +235,12 @@ CursorTheme=breeze_cursors
 MaximumUid=60000
 MinimumUid=1000 ' > /etc/sddm.conf.d/kde_settings.conf
 
+echo '[Layout]
+DisplayNames=,
+LayoutList=us,ru
+Options=grp:alt_shift_toggle
+ResetOldOptions=true
+Use=true
+VariantList=,' > /home/$username/.config/kxkbrc
+
 chown -R $username:users /home/$username
