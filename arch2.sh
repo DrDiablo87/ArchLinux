@@ -268,13 +268,14 @@ systemctl mask lvm2-lvmetad.socket
 systemctl mask lvm2-lvmetad.service
 systemctl mask lvm2-activation.service
 systemctl mask lvm2-activation-early.service
-#systemctl mask systemd-journald.socket
+#
+systemctl mask systemd-journald.socket
 ##systemctl mask systemd-journald.service
-#systemctl mask systemd-journald-audit.socket
-#systemctl mask systemd-journald-dev-log.socket
+systemctl mask systemd-journald-audit.socket
+systemctl mask systemd-journald-dev-log.socket
 #systemctl enable fstrim.service
 #systemctl enable fstrim.timer
-#systemctl mask systemd-tmpfiles-setup.service    # предотвращение создания проблемного снапшота
+systemctl mask systemd-tmpfiles-setup.service    # предотвращение создания проблемного снапшота
 btrfs subvolume delete /var/lib/machines         # удаление проблемного снапшота
 usermod -a -G wireshark $username
 
