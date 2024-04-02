@@ -18,6 +18,7 @@ locale-gen
 echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 echo 'KEYMAP=ru
 FONT=cyr-sun16' > /etc/vconsole.conf
+loadkeys ru
 
 echo 'MODULES="" 
 BINARIES="" 
