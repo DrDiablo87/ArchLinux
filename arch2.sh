@@ -229,4 +229,5 @@ MaximumUid=60000
 MinimumUid=1000 ' > /etc/sddm.conf
 
 
-
+chown www -R /home/www
+chown www:users /home/www
