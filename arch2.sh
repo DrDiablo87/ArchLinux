@@ -230,4 +230,4 @@ MinimumUid=1000 ' > /etc/sddm.conf
 
 
 chown www -R /home/www
-chown www:users /home/www
+chown -R www:users /home/www
