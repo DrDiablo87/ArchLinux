@@ -200,6 +200,7 @@ cp /home/$username/ArchLinux/Package/konsolerc /home/$username/.config/konsolerc
 cp /home/$username/ArchLinux/Package/ArcDark.colorscheme /root/share/konsole/ArcDark.colorscheme
 cp /home/$username/ArchLinux/Package/'Profile 1.profile' /root/share/konsole/'Profile 1.profile'
 cp /home/$username/ArchLinux/Package/konsolerc /root/.config/konsolerc
+chown -R $username:users /home/$username
 
 echo -e '
 
@@ -229,4 +230,4 @@ MaximumUid=60000
 MinimumUid=1000 ' > /etc/sddm.conf
 
 
-chown -R '$username':users /home/'$username'
+chown -R $username:users /home/$username
