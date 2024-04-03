@@ -179,9 +179,9 @@ pacman -S yay --noconfirm
 systemctl enable sddm.service
 systemctl enable NetworkManager.service
 
-pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent okular okteta gwenview kompare kde-gtk-config arc-gtk-theme plasma-vault plasma-sdk encfs cryfs kscreen sddm-kcm kwalletmanager kinfocenter spectacle ktouch kwave kdenlive ksystemlog kleopatra krfb krdc freerdp kdegraphics-thumbnailers kdesdk-thumbnailers ffmpegthumbs kdesdk-thumbnailers breeze-gtk kfind cmake extra-cmake-modules systemdgenie --noconfirm
+pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent okular okteta gwenview kompare kde-gtk-config plasma-sdk encfs cryfs kscreen sddm-kcm kwalletmanager kinfocenter spectacle ktouch kwave kdenlive ksystemlog kleopatra krfb krdc freerdp kdegraphics-thumbnailers kdesdk-thumbnailers ffmpegthumbs kdesdk-thumbnailers breeze-gtk kfind cmake extra-cmake-modules systemdgenie --noconfirm
 sed -i 's|image/\*\,||' /usr/share/kservices5/ServiceMenus/mediainfo-gui.desktop
-pacman -S firefox-i18n-ru firefox-ublock-origin jami-qt bleachbit krita filelight ntfs-3g gufw mtr exfat-utils cronie gnome-disk-utility f2fs-tools udftools steam net-tools libvirt linux-headers kid3 qtcreator qt5-translations kdeplasma-addons networkmanager-openvpn openresolv kalzium kcalc tree gbrainy kalgebra kmag wireshark-qt openssh nmap bridge-utils --noconfirm
+pacman -S firefox-i18n-ru firefox-ublock-origin filelight ntfs-3g gufw mtr exfat-utils cronie gnome-disk-utility f2fs-tools udftools steam net-tools libvirt linux-headers qt5-translations kdeplasma-addons networkmanager-openvpn openresolv kcalc tree kmag openssh bridge-utils --noconfirm
 pacman -S steam-native-runtime ttf-liberation ttf-dejavu xterm --noconfirm
 
 echo -e '
@@ -314,19 +314,6 @@ background=screenshot.jpg
 type=image " > /usr/share/sddm/themes/breeze/theme.conf.user
 
 cp /home/$username/ArchLinux/Package/theme.conf /usr/share/sddm/themes/breeze/theme.conf
-
-#Настройка Dolphin
-
-cp /home/$username/ArchLinux/Package/Dolphin-Root.desktop /usr/share/kservices5/ServiceMenus/Dolphin-Root.desktop
-cp /home/$username/ArchLinux/Package/steghide.desktop /usr/share/kservices5/ServiceMenus/steghide.desktop
-
-pacman -S clamav --noconfirm
-echo 'PidFile /run/clamav/freshclam.pid
-DatabaseMirror https://packages.microsoft.com/clamav/
-NotifyClamd /etc/clamav/clamd.conf' > /etc/clamav/freshclam.conf
-freshclam
-cp /home/$username/ArchLinux/Package/ClamAV.desktop /usr/share/kservices5/ServiceMenus/ClamAV.desktop
-cp /home/$username/ArchLinux/Package/clamav.svg /usr/share/icons/hicolor/scalable/apps/clamav.svg
 
 #SWAP
 
