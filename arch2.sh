@@ -340,6 +340,7 @@ sed -i 's/use-ipv6=yes/use-ipv6=no/g' /etc/avahi/avahi-daemon.conf
 cp /home/$username/ArchLinux/Package/systemdgenie.mo /usr/share/locale/ru/LC_MESSAGES/systemdgenie.mo
 cp /home/$username/ArchLinux/arch3.sh /home/$username/1
 
+mkdir /home/$username/.config/autostart-scripts
 echo "#!/bin/bash
 sleep 10
 konsole -e sh ./1" > /home/$username/.config/autostart-scripts/xxx
