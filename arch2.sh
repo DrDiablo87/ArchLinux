@@ -145,9 +145,9 @@ SigLevel = Never' > /etc/pacman.conf
 pacman -Syyu --noconfirm
 
 sed -i 's!#PKGDEST=/home/packages!PKGDEST=~/Package!' /etc/makepkg.conf
-echo 'MAKEFLAGS="-j2"
+echo 'MAKEFLAGS="-j'$(nproc)'"
 BILDDIR=/temp/makepkg' >> /etc/makepkg.conf
-                                                 
+   '$(nproc)'                                              
 echo '127.0.1.1   '$hostname'.localdomain   '$hostname'
 #127.0.0.1 localhost
 #::1       localhost
@@ -163,7 +163,7 @@ echo -e '
 \e[31m==================================================================================== Ставим KDE ==================================================\e[0m
 '
 echo -e '\033[32m'
-sed -i 's/#MAKEFLAGS="-j'$(nproc)'"/MAKEFLAGS="-j'$(nproc)'"/g' /etc/makepkg.conf
+#sed -i 's/#MAKEFLAGS="-j'$(nproc)'"/MAKEFLAGS="-j'$(nproc)'"/g' /etc/makepkg.conf
 #NVIDIA
 #pacman -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 #AMD
@@ -179,10 +179,10 @@ pacman -S yay --noconfirm
 systemctl enable sddm.service
 systemctl enable NetworkManager.service
 
-pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent okular okteta gwenview kompare kde-gtk-config plasma-sdk encfs cryfs kscreen sddm-kcm kwalletmanager kinfocenter spectacle ktouch kwave kdenlive ksystemlog kleopatra krfb krdc freerdp kdegraphics-thumbnailers kdesdk-thumbnailers ffmpegthumbs kdesdk-thumbnailers breeze-gtk kfind cmake extra-cmake-modules systemdgenie --noconfirm
+pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent gwenview kompare kde-gtk-config plasma-sdk encfs cryfs kscreen sddm-kcm kwalletmanager kinfocenter spectacle ktouch kwave kdenlive kleopatra krfb krdc freerdp kdegraphics-thumbnailers kdesdk-thumbnailers ffmpegthumbs kdesdk-thumbnailers breeze-gtk kfind cmake extra-cmake-modules systemdgenie --noconfirm
 sed -i 's|image/\*\,||' /usr/share/kservices5/ServiceMenus/mediainfo-gui.desktop
-pacman -S firefox-i18n-ru firefox-ublock-origin filelight ntfs-3g gufw mtr exfat-utils cronie gnome-disk-utility f2fs-tools udftools steam net-tools libvirt linux-headers qt5-translations kdeplasma-addons networkmanager-openvpn openresolv kcalc tree kmag openssh bridge-utils --noconfirm
-pacman -S steam-native-runtime ttf-liberation ttf-dejavu xterm --noconfirm
+pacman -S firefox-i18n-ru firefox-ublock-origin filelight ntfs-3g gufw mtr exfat-utils cronie gnome-disk-utility f2fs-tools udftools net-tools libvirt linux-headers qt5-translations kdeplasma-addons networkmanager-openvpn openresolv kcalc tree kmag openssh bridge-utils --noconfirm
+pacman -S steam steam-native-runtime ttf-liberation ttf-dejavu xterm --noconfirm
 
 echo -e '
 
@@ -285,10 +285,7 @@ echo -e '
 \e[31m==================================================================================== Установка и настройка MPV ===================================\e[0m
 '
 echo -e '\033[32m'
-pacman -U /home/$username/ArchLinux/Package/arc-kde-git-220180614.r11.g04873ca-1-any.pkg.tar.xz --noconfirm
-#cp /home/$username/ArchLinux/Package/amarok.mo /usr/share/locale/ru/LC_MESSAGES/amarok.mo
-cp /home/$username/ArchLinux/Package/steghide-kdialog /usr/bin/steghide-kdialog
-chmod +x /usr/bin/steghide-kdialog
+
 pacman -S amarok taglib1 gst-libav gst-plugins-bad gst-plugins-good gst-plugins-ugly --noconfirm
 
 pacman -S mpv --noconfirm
@@ -307,13 +304,6 @@ echo -e '\033[32m'
 cp /home/$username/.config/LiveWallpaper/screenshot.jpg /usr/share/sddm/themes/breeze/preview.png
 cp /home/$username/.config/LiveWallpaper/screenshot.jpg /usr/share/sddm/themes/breeze/screenshot.jpg
 cp /home/$username/.config/LiveWallpaper/archlinux-logo-dark.png /usr/share/sddm/themes/breeze/archlinux-logo-dark.png
-rm -r /usr/share/wallpapers/Next/contents/
-
-echo "[General]
-background=screenshot.jpg
-type=image " > /usr/share/sddm/themes/breeze/theme.conf.user
-
-cp /home/$username/ArchLinux/Package/theme.conf /usr/share/sddm/themes/breeze/theme.conf
 
 #SWAP
 
@@ -326,10 +316,6 @@ cp /home/$username/ArchLinux/Package/theme.conf /usr/share/sddm/themes/breeze/th
 #echo /swapfile none swap sw 0 0 | sudo tee -a /etc/fstab
 #echo 'vm.swappiness=10' > /etc/sysctl.d/99-sysctl.conf
 
-rm -r /usr/share/plasma/desktoptheme/Arc-Dark/icons
-cp -r /usr/share/plasma/desktoptheme/default/icons /usr/share/plasma/desktoptheme/Arc-Dark
-rm -r /usr/share/plasma/desktoptheme/Arc-Dark/widgets
-cp -r /usr/share/plasma/desktoptheme/default/widgets /usr/share/plasma/desktoptheme/Arc-Dark
 cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze/apps/48/kleopatra.svg  
 cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze-dark/apps/48/kleopatra.svg
 cp /usr/share/icons/breeze/preferences/32/preferences-desktop-keyboard.svg /usr/share/icons/breeze/preferences/32/qvkbd.svg
@@ -338,13 +324,6 @@ sed -i 's/Icon=kleopatra/Icon=plasmavault/g' /usr/share/kservices5/kleopatra_dec
 sed -i 's/use-ipv4=yes/use-ipv4=no/g' /etc/avahi/avahi-daemon.conf
 sed -i 's/use-ipv6=yes/use-ipv6=no/g' /etc/avahi/avahi-daemon.conf
 cp /home/$username/ArchLinux/Package/systemdgenie.mo /usr/share/locale/ru/LC_MESSAGES/systemdgenie.mo
-cp /home/$username/ArchLinux/arch3.sh /home/$username/1
-
-mkdir /home/$username/.config/autostart-scripts
-echo "#!/bin/bash
-sleep 10
-konsole -e sh ./1" > /home/$username/.config/autostart-scripts/xxx
-chmod +x /home/$username/.config/autostart-scripts/xxx
 
 echo "
 tmpfs						/var/log	tmpfs	defaults,noatime 0 0
