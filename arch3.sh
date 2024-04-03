@@ -31,7 +31,7 @@ yay -S --mflags --skipinteg --noconfirm profile-sync-daemon && psd -p
 #systemctl --user enable psd.service
 sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
 yay -Rns --mflags --skipinteg --noconfirm extra-cmake-modules && yay -S --mflags --skipinteg --noconfirm extra-cmake-modules-git
-yay -S --mflags --skipinteg --noconfirm archiso netactview loudmouth hddtemp ki18n-git plasma6-applets-thermal-monitor-git netdiscover fail2ban plasma6-applets-netspeed ffmulticonverter steghide noisy-py3-git cpu-x
+yay -S --mflags --skipinteg --noconfirm archiso netactview loudmouth hddtemp ki18n-git plasma6-applets-thermal-monitor-git netdiscover fail2ban plasma6-applets-netspeed ffmulticonverter steghide noisy-py3-git cpu-x qvkbd
 yay -S --mflags --skipinteg --noconfirm airgeddon metasploit dhcp hashcat hashcat-utils ipscan crunch mdk4 reaver beef hostapd lighttpd bettercap ettercap sslstrip dsniff bully pixiewps usbutils xorg-xdpyinfo ccze asleap john hostapd-wpe nftables mdk3 hcxtools hcxdumptool 
 #yay -S --mflags --skipinteg --noconfirm lact
 yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift megasync fritzing mednaffe mednafen
