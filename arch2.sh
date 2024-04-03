@@ -145,6 +145,8 @@ SigLevel = Never' > /etc/pacman.conf
 pacman -Syyu --noconfirm
 
 sed -i 's!#PKGDEST=/home/packages!PKGDEST=~/Package!' /etc/makepkg.conf
+echo 'MAKEFLAGS="-j2"
+BILDDIR=/temp/makepkg' >> /etc/makepkg.conf
                                                  
 echo '127.0.1.1   '$hostname'.localdomain   '$hostname'
 #127.0.0.1 localhost
@@ -165,7 +167,7 @@ sed -i 's/#MAKEFLAGS="-j'$(nproc)'"/MAKEFLAGS="-j'$(nproc)'"/g' /etc/makepkg.con
 #NVIDIA
 #pacman -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 #AMD
-pacman -S --needed lib32-mesa mesa xf86-video-amdgpu vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader libva-mesa-driver lib32-libva-mesa-driver mesa-vdpau lib32-mesa-vdpau --noconfirm
+pacman -S --needed lib32-mesa mesa xf86-video-amdgpu vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader libva-mesa-driver lib32-libva-mesa-driver mesa-vdpau lib32-mesa-vdpau corectrl --noconfirm
 #INTEL
 #pacman -S --needed lib32-mesa vulkan-intel lib32-vulkan-intel vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 
@@ -287,7 +289,7 @@ pacman -U /home/$username/ArchLinux/Package/arc-kde-git-220180614.r11.g04873ca-1
 #cp /home/$username/ArchLinux/Package/amarok.mo /usr/share/locale/ru/LC_MESSAGES/amarok.mo
 cp /home/$username/ArchLinux/Package/steghide-kdialog /usr/bin/steghide-kdialog
 chmod +x /usr/bin/steghide-kdialog
-pacman -S amarok gst-libav gst-plugins-bad gst-plugins-good gst-plugins-ugly --noconfirm
+pacman -S amarok taglib1 gst-libav gst-plugins-bad gst-plugins-good gst-plugins-ugly --noconfirm
 
 pacman -S mpv --noconfirm
 cp /home/$username/ArchLinux/Package/mpv.desktop /usr/share/applications/mpv.desktop
@@ -301,41 +303,7 @@ echo -e '
 \e[31m==================================================================================== Установка и настройка Live Wallpaper ========================\e[0m
 '
 echo -e '\033[32m'
-pacman -S mplayer libva-vdpau-driver libva-mesa-driver libva-intel-driver libvdpau-va-gl lib32-libva-vdpau-driver lib32-mesa-vdpau lib32-libva-mesa-driver --noconfirm
-#pacman -U /home/$username/ArchLinux/Package/shantz-xwinwrap-bzr-20090421-3-x86_64.pkg.tar.xz  --noconfirm
-mkdir /home/$username/.config/autostart-scripts
-mkdir /home/$username/.config/LiveWallpaper
-#echo "#!/bin/bash
-#xwinwrap -ni -fs -s -st -sp -b -nf -- mplayer -fps 25 -framedrop -wid WID -nosound "~/.config/LiveWallpaper/Galaxy.mp4" -loop 0
-#" > /home/$username/.config/LiveWallpaper/LiveWallpaper
-#chmod +x /home/$username/.config/LiveWallpaper/LiveWallpaper
-#touch /etc/systemd/system/Livewallpaper.service
-#chmod 664 /etc/systemd/system/Livewallpaper.service
-#echo "[Unit]
-#Description=LiveWallpaper
 
-#[Service]
-#Type=simple
-#User=$username
-#ExecStart=/bin/bash -c 'DISPLAY=:0 ~/.config/LiveWallpaper/LiveWallpaper'
-
-#[Install]
-#WantedBy=multi-user.target " > /etc/systemd/system/Livewallpaper.service
-
-#echo "#!/bin/bash
-#sudo systemctl start livewallpaper.service
-#" > /home/$username/.config/autostart-scripts/LiveWallpaperService
-#chmod +x /home/$username/.config/autostart-scripts/LiveWallpaperService
-
-#=========================================================
-wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=15h4BUSE7AN9n0s_eUMd06LbkYn_9pmQM' -O /home/$username/.config/LiveWallpaper/Galaxy.mp4
-echo '#brightness=-5
-#vo=vdpau,
-#vc=ffh264vdpau,ffmpeg12vdpau,ffodivxvdpau,ffwmv3vdpau,ffvc1vdpau,ffhevcvdpau
-brightness=-10
-contrast=10
-saturation=10 '> /etc/mplayer/mplayer.conf
-cp /home/$username/ArchLinux/LiveWallpaper/* /home/$username/.config/LiveWallpaper
 cp /home/$username/.config/LiveWallpaper/screenshot.jpg /usr/share/sddm/themes/breeze/preview.png
 cp /home/$username/.config/LiveWallpaper/screenshot.jpg /usr/share/sddm/themes/breeze/screenshot.jpg
 cp /home/$username/.config/LiveWallpaper/archlinux-logo-dark.png /usr/share/sddm/themes/breeze/archlinux-logo-dark.png
@@ -409,3 +377,5 @@ cp -Rf /home/$username/ArchLinux/KDE/. /root
 
 
 
+pacman -S gtkmm3 open-vm-tools --noconfirm
+systemctl enable vmtoolsd.service
