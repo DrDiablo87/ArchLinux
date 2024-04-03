@@ -31,8 +31,7 @@ yay -S --mflags --skipinteg --noconfirm profile-sync-daemon && psd -p
 #systemctl --user enable psd.service
 sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
 yay -Rns --mflags --skipinteg --noconfirm extra-cmake-modules && yay -S --mflags --skipinteg --noconfirm extra-cmake-modules-git
-yay -S --mflags --skipinteg --noconfirm archiso netactview loudmouth hddtemp ki18n-git plasma6-applets-thermal-monitor-git netdiscover fail2ban plasma6-applets-netspeed ffmulticonverter steghide noisy-py3-git cpu-x qvkbd
-yay -S --mflags --skipinteg --noconfirm airgeddon metasploit dhcp hashcat hashcat-utils ipscan crunch mdk4 reaver beef hostapd lighttpd bettercap ettercap sslstrip dsniff bully pixiewps usbutils xorg-xdpyinfo ccze asleap john hostapd-wpe nftables mdk3 hcxtools hcxdumptool 
+yay -S --mflags --skipinteg --noconfirm netactview loudmouth hddtemp ki18n-git plasma6-applets-thermal-monitor-git netdiscover fail2ban plasma6-applets-netspeed ffmulticonverter steghide noisy-py3-git cpu-x qvkbd
 #yay -S --mflags --skipinteg --noconfirm lact
 yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift megasync fritzing mednaffe mednafen
 #yay -U --mflags --skipinteg --noconfirm ~/ArchLinux/Package/mystiq-20.03.23-1-x86_64.pkg.tar.zst
@@ -41,12 +40,11 @@ sudo mv /usr/share/noisy/examples/systemd/noisy.service /usr/share/noisy/example
 #yay -S --mflags --skipinteg --noconfirm plasma5-applets-resources-monitor 
 
 sudo systemctl enable fail2ban.service
-yay -S --mflags --skipinteg --noconfirm libreoffice-fresh-ru unoconv mc htop ncdu edk2-ovmf virt-manager qemu dnsmasq ffmpeg yt-dlp mediainfo-gui qtqr portproton
+yay -S --mflags --skipinteg --noconfirm mc htop ncdu edk2-ovmf virt-manager qemu dnsmasq ffmpeg yt-dlp mediainfo-gui qtqr portproton
 sudo systemctl enable libvirtd.service && sudo gpasswd -a $USER libvirt
 yes | sudo sensors-detect
 #yay -S --mflags --skipinteg --noconfirm playonlinux && sudo rm /usr/share/applications/wine.desktop #&& yay -Rscndd wine --noconfirm
 yes | yay -Syua && yes | yay -Scc && yes | yay -Rns $(yay -Qtdq)
-cp -Rf ~/ArchLinux/KDE/. ~/
 
 sudo rm -rf /root/.config/gtk-3.0
 sudo ln -s ~/.config/gtk-3.0 /root/.config/gtk-3.0
@@ -62,61 +60,7 @@ Percent=10
 UseSizeLimit=false
 UseTimeLimit=true" > ~/.config/ktrashrc
 #=============================================================================================
-#=============================================================================================
-echo "[General]
-confirmLogout=true
-excludeApps=
-loginMode=default
-offerShutdown=true
-shutdownType=0
 
-[LegacySession: saved at previous logout]
-count=0
-
-[Session: saved at previous logout]
-clientId1=10a5d4b0d8000157469050500000005630004
-clientId2=10a5d4b0d8000157469392300000005650005
-count=2
-discardCommand1[$e]=rm,$HOME/.config/session/kwin_10a5d4b0d8000157469050500000005630004_1574694021_149533
-program1=/usr/bin/kwin_x11
-program2=pulseaudio
-restartCommand1=/usr/bin/kwin_x11,-session,10a5d4b0d8000157469050500000005630004_1574694021_149533
-restartCommand2=
-restartStyleHint1=0
-restartStyleHint2=0
-userId1=$USER
-userId2=$USER
-wasWm1=true
-wasWm2=false" > ~/.config/ksmserverrc
-#=============================================================================================
-echo "[Desktop Entry]
-Comment=
-Exec=airgeddon
-Icon=/home/$USER/.config/LiveWallpaper/2000px-Biohazard_symbol.png
-Name=Airgeddon
-NoDisplay=false
-Path[$e]=
-StartupNotify=true
-Terminal=1
-TerminalOptions=
-Type=Application
-X-KDE-SubstituteUID=true
-X-KDE-Username=root" > ~/.local/share/applications/Airgeddon.desktop
-#=============================================================================================
-echo "[Desktop Entry]
-Comment=
-Exec=msfconsole
-Icon=/home/$USER/.config/LiveWallpaper/2000px-Biohazard_symbol.svg.png
-Name=Metasploit
-NoDisplay=false
-Path[$e]=
-StartupNotify=true
-Terminal=1
-TerminalOptions=
-Type=Application
-X-KDE-SubstituteUID=true
-X-KDE-Username=root" > ~/.local/share/applications/Metasploit.desktop
-#=============================================================================================
 echo "[Desktop Entry]
 Categories=GNOME;GTK;Network;Monitor;
 Comment=Просмотр сетевых соединений
