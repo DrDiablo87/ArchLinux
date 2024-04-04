@@ -1,4 +1,4 @@
-#!/bin/bash
+ #!/bin/bash
 
 echo -e '\033[32m'
 
@@ -198,13 +198,10 @@ cp /home/$username/ArchLinux/Package/.zshrc /home/$username/.zshrc
 cp /home/$username/ArchLinux/Package/zshrc /etc/zsh/zshrc
 mkdir /home/$username/.config/neofetch
 cp /home/$username/ArchLinux/Package/config.conf /home/$username/.config/neofetch/config.conf
-cp /home/$username/ArchLinux/Package/ArcDark.colorscheme /home/$username/.local/share/konsole/ArcDark.colorscheme
 cp /home/$username/ArchLinux/Package/'Profile 1.profile' /home/$username/.local/share/konsole/'Profile 1.profile'
 cp /home/$username/ArchLinux/Package/konsolerc /home/$username/.config/konsolerc
-cp /home/$username/ArchLinux/Package/ArcDark.colorscheme /root/share/konsole/ArcDark.colorscheme
 cp /home/$username/ArchLinux/Package/'Profile 1.profile' /root/share/konsole/'Profile 1.profile'
 cp /home/$username/ArchLinux/Package/konsolerc /root/.config/konsolerc
-chown -R $username:users /home/$username
 
 echo -e '
 
@@ -236,14 +233,6 @@ CursorTheme=breeze_cursors
 [Users]
 MaximumUid=60000
 MinimumUid=1000 ' > /etc/sddm.conf.d/kde_settings.conf
-
-echo '[Layout]
-DisplayNames=,
-LayoutList=us,ru
-Options=grp:alt_shift_toggle
-ResetOldOptions=true
-Use=true
-VariantList=,' > /home/$username/.config/kxkbrc
 
 chown -R $username:users /home/$username
 
@@ -301,8 +290,6 @@ echo -e '
 '
 echo -e '\033[32m'
 
-cp /home/$username/.config/LiveWallpaper/screenshot.jpg /usr/share/sddm/themes/breeze/preview.png
-cp /home/$username/.config/LiveWallpaper/screenshot.jpg /usr/share/sddm/themes/breeze/screenshot.jpg
 cp /home/$username/.config/LiveWallpaper/archlinux-logo-dark.png /usr/share/sddm/themes/breeze/archlinux-logo-dark.png
 
 #SWAP
