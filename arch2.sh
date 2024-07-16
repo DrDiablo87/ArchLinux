@@ -180,7 +180,6 @@ systemctl enable sddm.service
 systemctl enable NetworkManager.service
 
 pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent gwenview kompare kde-gtk-config plasma-sdk encfs cryfs kscreen sddm-kcm kwalletmanager kinfocenter spectacle ktouch kwave kdenlive kleopatra krfb krdc freerdp kdegraphics-thumbnailers kdesdk-thumbnailers ffmpegthumbs kdesdk-thumbnailers breeze-gtk kfind cmake extra-cmake-modules systemdgenie --noconfirm
-sed -i 's|image/\*\,||' /usr/share/kservices5/ServiceMenus/mediainfo-gui.desktop
 pacman -S firefox-i18n-ru firefox-ublock-origin filelight ntfs-3g gufw mtr exfat-utils cronie gnome-disk-utility f2fs-tools udftools net-tools libvirt linux-headers qt5-translations kdeplasma-addons networkmanager-openvpn openresolv kcalc tree kmag openssh bridge-utils --noconfirm
 pacman -S steam steam-native-runtime ttf-liberation ttf-dejavu xterm --noconfirm
 
@@ -198,9 +197,7 @@ cp /home/$username/ArchLinux/Package/.zshrc /home/$username/.zshrc
 cp /home/$username/ArchLinux/Package/zshrc /etc/zsh/zshrc
 mkdir /home/$username/.config/neofetch
 cp /home/$username/ArchLinux/Package/config.conf /home/$username/.config/neofetch/config.conf
-cp /home/$username/ArchLinux/Package/'Profile 1.profile' /home/$username/.local/share/konsole/'Profile 1.profile'
 cp /home/$username/ArchLinux/Package/konsolerc /home/$username/.config/konsolerc
-cp /home/$username/ArchLinux/Package/'Profile 1.profile' /root/share/konsole/'Profile 1.profile'
 cp /home/$username/ArchLinux/Package/konsolerc /root/.config/konsolerc
 
 echo -e '
@@ -236,12 +233,12 @@ MinimumUid=1000 ' > /etc/sddm.conf.d/kde_settings.conf
 
 chown -R $username:users /home/$username
 
-pacman -S torsocks tor i2pd torctl --noconfirm
-cp /home/$username/ArchLinux/Package/i2pd.conf /etc/i2pd/i2pd.conf
-mv /etc/systemd/system/torctl-autostart.service /etc/systemd/system/Tor.service
-mv /usr/lib/systemd/system/i2pd.service /usr/lib/systemd/system/I2pd.service
-mv /usr/lib/systemd/system/libvirtd.service /usr/lib/systemd/system/VManager.service
-mv /usr/lib/systemd/system/sshd.service /usr/lib/systemd/system/SSH.service
+#pacman -S torsocks tor i2pd torctl --noconfirm
+#cp /home/$username/ArchLinux/Package/i2pd.conf /etc/i2pd/i2pd.conf
+#mv /etc/systemd/system/torctl-autostart.service /etc/systemd/system/Tor.service
+#mv /usr/lib/systemd/system/i2pd.service /usr/lib/systemd/system/I2pd.service
+#mv /usr/lib/systemd/system/libvirtd.service /usr/lib/systemd/system/VManager.service
+#mv /usr/lib/systemd/system/sshd.service /usr/lib/systemd/system/SSH.service
 
 timedatectl set-ntp yes
 systemctl enable sddm.service NetworkManager.service
@@ -290,7 +287,7 @@ echo -e '
 '
 echo -e '\033[32m'
 
-cp /home/$username/.config/LiveWallpaper/archlinux-logo-dark.png /usr/share/sddm/themes/breeze/archlinux-logo-dark.png
+#cp /home/$username/.config/LiveWallpaper/archlinux-logo-dark.png /usr/share/sddm/themes/breeze/archlinux-logo-dark.png
 
 #SWAP
 
@@ -323,13 +320,3 @@ chown -R $username:users /home/$username
 cp -Rf /home/$username/ArchLinux/KDE/.config/kscreenlockerrc /home/$username/.config
 cp -Rf /home/$username/ArchLinux/KDE/. /root
 
-
-
-
-
-
-
-
-
-pacman -S gtkmm3 open-vm-tools --noconfirm
-systemctl enable vmtoolsd.service
