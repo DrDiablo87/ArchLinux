@@ -31,13 +31,13 @@ yay -S --mflags --skipinteg --noconfirm profile-sync-daemon && psd -p
 #systemctl --user enable psd.service
 sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
 yay -Rns --mflags --skipinteg --noconfirm extra-cmake-modules && yay -S --mflags --skipinteg --noconfirm extra-cmake-modules-git
-yay -S --mflags --skipinteg --noconfirm netactview loudmouth hddtemp ki18n plasma6-applets-thermal-monitor-git netdiscover fail2ban plasma6-applets-netspeed ffmulticonverter steghide noisy-py3-git cpu-x qvkbd
+yay -S --mflags --skipinteg --noconfirm netactview loudmouth hddtemp ki18n plasma6-applets-thermal-monitor-git netdiscover fail2ban plasma6-applets-netspeed ffmulticonverter steghide noisy-py3-git cpu-x qvkbd kf6-servicemenus-rootactions
 #yay -S --mflags --skipinteg --noconfirm lact
-yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift megasync fritzing mednaffe mednafen
+yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift megasync mednaffe mednafen
 #yay -U --mflags --skipinteg --noconfirm ~/ArchLinux/Package/mystiq-20.03.23-1-x86_64.pkg.tar.zst
 sudo mv /etc/systemd/system/noisy.service /etc/systemd/system/Noisy.service
 sudo mv /usr/share/noisy/examples/systemd/noisy.service /usr/share/noisy/examples/systemd/Noisy.service
-#yay -S --mflags --skipinteg --noconfirm plasma5-applets-resources-monitor 
+#yay -S --mflags --skipinteg --noconfirm plasma5-applets-resources-monitor fritzing
 
 sudo systemctl enable fail2ban.service
 yay -S --mflags --skipinteg --noconfirm mc htop ncdu edk2-ovmf virt-manager qemu dnsmasq ffmpeg yt-dlp mediainfo-gui qtqr portproton
@@ -219,5 +219,5 @@ sudo tar -xf ~/ArchLinux/Package/archlive.tar.gz -C ~/
 #tar -xf ~/ArchLinux/Package/archlive.tar.gz -C ~/
 #cp ~/archlive/airootfs/root/.mozilla ~/
 #sudo chown -R root:root ~/archlive
-sudo rm -R ~/1 ~/.config/autostart-scripts/xxx ~/.config/autostart/xxx ~/ArchLinux
+sudo rm -R ~/1 ~/.config/autostart-scripts/xxx ~/.config/autostart/xxx 
 qdbus org.kde.ksmserver /KSMServer logout 0 1 2  #logout 0 3 3
