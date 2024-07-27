@@ -313,10 +313,10 @@ cp /home/$username/ArchLinux/Package/systemdgenie.mo /usr/share/locale/ru/LC_MES
 mkdir /home/$username/.config/autostart
 
 echo '[Desktop Entry]
-Exec=/home/'$username'/ArchLinux/arch3.sh
-Icon=aplication-x-shellscript
+Exec=konsole -e sh /home/'$username'/ArchLinux/arch3.sh
+Icon=application-x-shellscript
 Name=arch3.sh
-Tipe=Aplication
+Tipe=Application
 X-KDE-AutostartScript=true' > /home/$username/.config/autostart/arch3.sh.desktop
 chmod +x /home/$username/ArchLinux/arch3.sh
 chmod +x /home/$username/.config/autostart/arch3.sh.desktop
