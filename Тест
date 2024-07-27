@@ -1,0 +1,21 @@
+plasma6-applets-thermal-monitor-git
+
+plasma6-applets-resources-monitor
+
+
+arc-kde-git
+
+
+systemctl --user start psd
+systemctl --user stop psd
+
+sudo systemctl start Noisy.service
+
+
+
+sudo systemctl start libvirtd.service
+sudo systemctl stop libvirtd.service libvirtd.socket libvirtd-ro.socket libvirtd-admin.socket 
+
+
+
+kf6-servicemenus-rootactions
