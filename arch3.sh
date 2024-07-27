@@ -10,9 +10,8 @@ if [[ $driver == 1 ]]; then
   sudo systemctl enable vmtoolsd.service
   sudo systemctl start vmtoolsd.service
   echo '#!/bin/bash
-  sleep 5
-  sudo systemctl restart vmtoolsd.service' > ~/.config/autostart-scripts/restart && sudo chmod +x ~/.config/autostart-scripts/restart
-  sudo rm -r ~/.config/autostart-scripts ~/.config/old-autostart-scripts ~/.config/autostart
+  sleep 3
+  sudo systemctl restart vmtoolsd.service' > ~/.config/autostart/restart && sudo chmod +x ~/.config/autostart/restart
   pkill mplayer
 elif [[ $driver == 2 ]]; then
   sudo pacman -S virtualbox-host-modules-arch virtualbox-guest-utils --noconfirm
