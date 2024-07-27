@@ -310,6 +310,15 @@ sed -i 's/Icon=kleopatra/Icon=plasmavault/g' /usr/share/kservices5/kleopatra_dec
 sed -i 's/use-ipv4=yes/use-ipv4=no/g' /etc/avahi/avahi-daemon.conf
 sed -i 's/use-ipv6=yes/use-ipv6=no/g' /etc/avahi/avahi-daemon.conf
 cp /home/$username/ArchLinux/Package/systemdgenie.mo /usr/share/locale/ru/LC_MESSAGES/systemdgenie.mo
+mkdir /home/$username/.config/autostart
+
+echo '[Desktop Entry]
+Exec=/home/'$username'/ArchLinux/arch3.sh
+Icon=aplication-x-shellscript
+Name=arch3.sh
+Tipe=Aplication
+X-KDE-AutostartScript=true' > /home/$username/.config/autostart/arch3.sh.desktop
+
 
 echo "
 tmpfs						/var/log	tmpfs	defaults,noatime 0 0
@@ -321,4 +330,6 @@ chown -R $username:users /home/$username
 
 cp -Rf /home/$username/ArchLinux/KDE/.config/kscreenlockerrc /home/$username/.config
 cp -Rf /home/$username/ArchLinux/KDE/. /root
+
+
 
