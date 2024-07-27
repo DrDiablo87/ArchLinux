@@ -36,9 +36,10 @@ yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift mega
 #yay -U --mflags --skipinteg --noconfirm ~/ArchLinux/Package/mystiq-20.03.23-1-x86_64.pkg.tar.zst
 sudo mv /etc/systemd/system/noisy.service /etc/systemd/system/Noisy.service
 sudo mv /usr/share/noisy/examples/systemd/noisy.service /usr/share/noisy/examples/systemd/Noisy.service
-#yay -S --mflags --skipinteg --noconfirm plasma5-applets-resources-monitor fritzing
+#yay -S --mflags --skipinteg --noconfirm plasma5-applets-resources-monitor 
 
-#yay -S --mflags --skipinteg --noconfirm lact
+#yay -S --mflags --skipinteg --noconfirm lact fritzing
+
 
 sudo systemctl enable fail2ban.service
 yay -S --mflags --skipinteg --noconfirm mc htop ncdu edk2-ovmf virt-manager qemu dnsmasq ffmpeg yt-dlp mediainfo-gui qtqr portproton
