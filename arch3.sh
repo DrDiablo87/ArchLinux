@@ -38,7 +38,7 @@ sudo mv /etc/systemd/system/noisy.service /etc/systemd/system/Noisy.service
 sudo mv /usr/share/noisy/examples/systemd/noisy.service /usr/share/noisy/examples/systemd/Noisy.service
 #yay -S --mflags --skipinteg --noconfirm plasma5-applets-resources-monitor fritzing
 
-yay -S --mflags --skipinteg --noconfirm lact
+#yay -S --mflags --skipinteg --noconfirm lact
 
 sudo systemctl enable fail2ban.service
 yay -S --mflags --skipinteg --noconfirm mc htop ncdu edk2-ovmf virt-manager qemu dnsmasq ffmpeg yt-dlp mediainfo-gui qtqr portproton
