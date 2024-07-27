@@ -200,6 +200,7 @@ mkdir /home/$username/.config/neofetch
 cp /home/$username/ArchLinux/Package/config.conf /home/$username/.config/neofetch/config.conf
 cp /home/$username/ArchLinux/Package/konsolerc /home/$username/.config/konsolerc
 cp /home/$username/ArchLinux/Package/konsolerc /root/.config/konsolerc
+cp /home/$username/ArchLinux/KDE/.config/yt-dlp /home/$username/.config/yt-dlp
 
 echo -e '
 
