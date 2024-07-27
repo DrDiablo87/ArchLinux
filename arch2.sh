@@ -318,6 +318,8 @@ Icon=aplication-x-shellscript
 Name=arch3.sh
 Tipe=Aplication
 X-KDE-AutostartScript=true' > /home/$username/.config/autostart/arch3.sh.desktop
+chmod +x /home/$username/ArchLinux/arch3.sh
+chmod +x /home/$username/.config/autostart/arch3.sh.desktop
 
 
 echo "
