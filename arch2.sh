@@ -310,6 +310,13 @@ sed -i 's/Icon=kleopatra/Icon=plasmavault/g' /usr/share/kservices5/kleopatra_dec
 sed -i 's/use-ipv4=yes/use-ipv4=no/g' /etc/avahi/avahi-daemon.conf
 sed -i 's/use-ipv6=yes/use-ipv6=no/g' /etc/avahi/avahi-daemon.conf
 cp /home/$username/ArchLinux/Package/systemdgenie.mo /usr/share/locale/ru/LC_MESSAGES/systemdgenie.mo
+cp /home/$username/ArchLinux/Package/config.conf /home/$username/.config/neofetch/config.conf
+
+cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.png /usr/share/icons/breeze-dark/apps/48/Airgeddon.png
+cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.png /usr/share/icons/breeze/apps/48/Airgeddon.png
+cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.png /usr/share/icons/breeze-dark/apps/48/Metasploit.png
+cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.png /usr/share/icons/breeze/apps/48/Metasploit.png
+
 mkdir /home/$username/.config/autostart
 
 echo '[Desktop Entry]
