@@ -316,6 +316,7 @@ cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.png /usr/share/icons/breeze
 cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.png /usr/share/icons/breeze/apps/48/Airgeddon.png
 cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.png /usr/share/icons/breeze-dark/apps/48/Metasploit.png
 cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.png /usr/share/icons/breeze/apps/48/Metasploit.png
+cp /home/$username/ArchLinux/KDE/.face.icon  /usr/share/plasma/avatars/Kurchatov.icon
 
 mkdir /home/$username/.config/autostart
 
