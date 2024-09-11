@@ -111,12 +111,7 @@ mount /dev/sda1 /mnt/boot
 #Выбор зеркал для загрузки
 #echo "Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
 #Server = http://mirror.yandex.ru/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
-echo "Server = https://repository.su/archlinux/$repo/os/$arch
-Server = https://mirror.rol.ru/archlinux/$repo/os/$arch
-Server = https://mirror2.sl-chat.ru/archlinux/$repo/os/$arch
-Server = https://mirror3.sl-chat.ru/archlinux/$repo/os/$arch
-Server = https://mirror.truenetwork.ru/archlinux/$repo/os/$arch
-Server = https://mirror.yandex.ru/archlinux/$repo/os/$arch" > /etc/pacman.d/mirrorlist
+echo "Server = https://mirror.yandex.ru/archlinux/$repo/os/$arch" > /etc/pacman.d/mirrorlist
 
 echo -e '
 
