@@ -134,6 +134,12 @@ X-KDE-HasTempFileOption=true
 X-KDE-SubstituteUID=false
 X-KDE-Username=" > ~/.local/share/applications/org.kde.kate.desktop
 #=============================================================================================
+cp ~/ArchLinux/Package/.zshrc ~/.zshrc
+cp ~/ArchLinux/Package/zshrc /etc/zsh/zshrc
+cp ~/ArchLinux/Package/config.conf ~/.config/neofetch/config.conf
+cp ~/ArchLinux/Package/konsolerc ~/.config/konsolerc
+cp ~/ArchLinux/Package/konsolerc /root/.config/konsolerc
+cp ~/ArchLinux/KDE/.config/yt-dlp ~/.config/yt-dlp
 #============================================================================
 git clone https://github.com/Kurchatov87/12345.git
 sudo tar -xf ~/ArchLinux/Package/archlive.tar.gz -C ~/
