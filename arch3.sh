@@ -65,159 +65,75 @@ Percent=10
 UseSizeLimit=false
 UseTimeLimit=true" > ~/.config/ktrashrc
 #=============================================================================================
-
 echo "[Desktop Entry]
 Categories=GNOME;GTK;Network;Monitor;
 Comment=Просмотр сетевых соединений
 Exec=netactview
-Icon=preferences-system-network-dsl
+Icon=preferences-system-network-ethernet
 Name[ru_RU]=Net Activity Viewer
 Name=Net Activity Viewer
 NoDisplay=false
-Path[$e]=
+Path=
 StartupNotify=true
-Terminal=0
+Terminal=false
 TerminalOptions=
 Type=Application
 X-KDE-SubstituteUID=false
-X-KDE-Username= " > ~/.local/share/applications/netactview.desktop
+X-KDE-Username=" > ~/.local/share/applications/netactview.desktop
 #=============================================================================================
-mkdir ~/.local/share/kate
-echo "[Document 0]
-Bookmarks=
-Encoding=UTF-8
-Highlighting=None
-Highlighting Set By User=false
-Indentation Mode=normal
-Mode=Normal
-Mode Set By User=false
-URL=file:///home/$USER/.gtkrc-2.0
-
-[Kate Plugins]
-cuttlefishplugin=false
-katebacktracebrowserplugin=false
-katebuildplugin=false
-katecloseexceptplugin=false
-katectagsplugin=false
-katefilebrowserplugin=true
-katefiletreeplugin=true
-kategdbplugin=false
-katekonsoleplugin=true
-kateopenheaderplugin=false
-kateprojectplugin=true
-katereplicodeplugin=false
-katesearchplugin=true
-katesnippetsplugin=false
-katesqlplugin=false
-katesymbolviewerplugin=false
-katexmlcheckplugin=false
-katexmltoolsplugin=false
-kterustcompletionplugin=false
-ktexteditor_lumen=false
-ktexteditorpreviewplugin=false
-tabswitcherplugin=true
-textfilterplugin=true
-
-[MainWindow0]
-Active ViewSpace=0
-Kate-MDI-H-Splitter=200,640,200
-Kate-MDI-Sidebar-0-Splitter=0,0,0
-Kate-MDI-Sidebar-1-Splitter=
-Kate-MDI-Sidebar-2-Splitter=
-Kate-MDI-Sidebar-3-Splitter=0,0,0
-Kate-MDI-Sidebar-Style=2
-Kate-MDI-Sidebar-Visible=false
-Kate-MDI-ToolView-kate_plugin_katesearch-Persistent=false
-Kate-MDI-ToolView-kate_plugin_katesearch-Position=3
-Kate-MDI-ToolView-kate_plugin_katesearch-Sidebar-Position=0
-Kate-MDI-ToolView-kate_plugin_katesearch-Visible=false
-Kate-MDI-ToolView-kate_private_plugin_katefileselectorplugin-Persistent=false
-Kate-MDI-ToolView-kate_private_plugin_katefileselectorplugin-Position=0
-Kate-MDI-ToolView-kate_private_plugin_katefileselectorplugin-Sidebar-Position=2
-Kate-MDI-ToolView-kate_private_plugin_katefileselectorplugin-Visible=false
-Kate-MDI-ToolView-kate_private_plugin_katefiletreeplugin-Persistent=false
-Kate-MDI-ToolView-kate_private_plugin_katefiletreeplugin-Position=0
-Kate-MDI-ToolView-kate_private_plugin_katefiletreeplugin-Sidebar-Position=0
-Kate-MDI-ToolView-kate_private_plugin_katefiletreeplugin-Visible=false
-Kate-MDI-ToolView-kate_private_plugin_katekonsoleplugin-Persistent=false
-Kate-MDI-ToolView-kate_private_plugin_katekonsoleplugin-Position=3
-Kate-MDI-ToolView-kate_private_plugin_katekonsoleplugin-Sidebar-Position=2
-Kate-MDI-ToolView-kate_private_plugin_katekonsoleplugin-Visible=false
-Kate-MDI-ToolView-kateproject-Persistent=false
-Kate-MDI-ToolView-kateproject-Position=0
-Kate-MDI-ToolView-kateproject-Sidebar-Position=1
-Kate-MDI-ToolView-kateproject-Visible=false
-Kate-MDI-ToolView-kateprojectinfo-Persistent=false
-Kate-MDI-ToolView-kateprojectinfo-Position=3
-Kate-MDI-ToolView-kateprojectinfo-Sidebar-Position=1
-Kate-MDI-ToolView-kateprojectinfo-Visible=false
-Kate-MDI-V-Splitter=150,450,200
-State=AAAA/wAAAAD9AAAAAAAAAoAAAAHCAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAWAG0AYQBpAG4AVABvAG8AbABCAGEAcgAAAAAA/////wAAAAAAAAAA
-
-[MainWindow0 Settings]
-State=AAAA/wAAAAD9AAAAAAAAAoAAAAHCAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAWAG0AYQBpAG4AVABvAG8AbABCAGEAcgAAAAAA/////wAAAAAAAAAA
-WindowState=8
-
-[MainWindow0-Splitter 0]
-Children=MainWindow0-ViewSpace 0
-Orientation=1
-Sizes=640
-
-[MainWindow0-ViewSpace 0]
-Active View=file:///home/$USER/.gtkrc-2.0
-Count=1
-Documents=file:///home/$USER/.gtkrc-2.0
-View 0=file:///home/$USER/.gtkrc-2.0
-
-[MainWindow0-ViewSpace 0 file:///home/$USER/.gtkrc-2.0]
-CursorColumn=0
-CursorLine=0
-Dynamic Word Wrap=true
-JumpList=
-TextFolding=[]
-ViMarks=.,0,0,[,0,0,],0,0
-
-[Open Documents]
-Count=1
-
-[Open MainWindows]
-Count=1
-
-[Plugin:katefilebrowserplugin:MainWindow:0]
-Allow Expansion=false
-Decoration position=2
-Show Inline Previews=true
-Show Preview=false
-Show hidden files=false
-Sort by=Name
-Sort directories first=true
-Sort reversed=false
-View Style=DetailTree
-auto sync folder=false
-filter history=
-location=file:///home/$USER
-
-[Plugin:katesearchplugin:MainWindow:0]
-BinaryFiles=false
-CurrentExcludeFilter=-1
-CurrentFilter=-1
-ExcludeFilters=
-ExpandSearchResults=false
-Filters=
-FollowSymLink=false
-HiddenFiles=false
-MatchCase=false
-Place=1
-Recursive=true
-Replaces=
-Search=
-SearchDiskFiles=
-SearchDiskFiless=
-UseRegExp=false
-
-[Recent Files]
-File1[$e]=$HOME/.gtkrc-2.0
-Name1[$e]=.gtkrc-2.0" > ~/.local/share/kate/anonymous.katesession
+echo "[Desktop Entry]
+Comment=
+Exec=sudo msfconsole
+Icon=Metasploit
+Name=Metasploit
+NoDisplay=false
+Path=
+StartupNotify=true
+Terminal=true
+TerminalOptions=
+Type=Application
+X-KDE-SubstituteUID=false
+X-KDE-Username=" > ~/.local/share/applications/Metasploit.desktop
+#=============================================================================================
+echo "[Desktop Entry]
+Comment=
+Exec=sudo airgeddon
+Icon=Airgeddon
+Name=Airgeddon
+NoDisplay=false
+Path=
+StartupNotify=true
+Terminal=true
+TerminalOptions=
+Type=Application
+X-KDE-SubstituteUID=false
+X-KDE-Username=" > ~/.local/share/applications/Airgeddon.desktop
+#=============================================================================================
+echo "[Desktop Entry]
+Categories=Qt;KDE;Utility;TextEditor;Development;
+Comment=Улучшенный текстовый редактор от KDE
+Exec=kate -b %U
+GenericName[ru_RU]=Улучшенный текстовый редактор
+GenericName=Advanced Text Editor
+Icon=kwrite
+InitialPreference=9
+Keywords[ru_RU]=text;txt;editor;programming;programmer;development;developer;code;текст;редактор;программирование;программист;разработка;разработчик;код;
+Keywords=text;txt;editor;programming;programmer;development;developer;code;
+MimeType=text/plain;inode/directory;
+Name[ru_RU]=Kate
+Name=Kate
+NoDisplay=false
+Path=
+StartupNotify=true
+StartupWMClass=kate
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DocPath=kate/index.html
+X-KDE-HasTempFileOption=true
+X-KDE-SubstituteUID=false
+X-KDE-Username=" > ~/.local/share/applications/org.kde.kate.desktop
+#=============================================================================================
 #============================================================================
 git clone https://github.com/Kurchatov87/12345.git
 sudo tar -xf ~/ArchLinux/Package/archlive.tar.gz -C ~/
