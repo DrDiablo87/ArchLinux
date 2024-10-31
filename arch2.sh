@@ -136,7 +136,7 @@ echo 'SigLevel = Never' >> /etc/pacman.conf
 
 #curl -s "https://blackarch.org/blackarch-mirrorlist" -o "/etc/pacman.d/blackarch-mirrorlist"
 #cp /home/$username/ArchLinux/Package/blackarch-mirrorlist /etc/pacman.d/blackarch-mirrorlist
-pacman -Syyu --noconfirm
+#pacman -Syyu --noconfirm
 
 sed -i 's!#PKGDEST=/home/packages!PKGDEST=~/Package!' /etc/makepkg.conf
 echo 'MAKEFLAGS="-j'$(nproc)'"
