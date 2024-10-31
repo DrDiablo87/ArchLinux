@@ -1,4 +1,4 @@
-#!/bin/bash
+     #!/bin/bash
 #tourch || exit $?                 # завершение скрипта при возникновении ошибки, а она в этой комманде есть
 #sudo sed -i 's/Required TrustedOnly/Never/g' /etc/pacman.conf
 
@@ -29,8 +29,8 @@ git config --global url."https://".insteadOf git://
 yay -S --mflags --skipinteg --noconfirm profile-sync-daemon && psd -p
 #systemctl --user enable psd.service
 sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
-yay -Rns --mflags --skipinteg --noconfirm extra-cmake-modules && yay -S --mflags --skipinteg --noconfirm extra-cmake-modules-git discover
-yay -S --mflags --skipinteg --noconfirm netactview loudmouth hddtemp ki18n plasma6-applets-thermal-monitor-git plasma6-applets-resources-monitor netdiscover fail2ban plasma6-applets-netspeed ffmulticonverter steghide noisy-py3-git cpu-x qvkbd kf6-servicemenus-rootactions arc-kde-git
+#yay -Rns --mflags --skipinteg --noconfirm extra-cmake-modules && yay -S --mflags --skipinteg --noconfirm extra-cmake-modules-git discover
+yay -S --mflags --skipinteg --noconfirm netactview loudmouth hddtemp ki18n plasma6-applets-thermal-monitor-git plasma6-applets-resources-monitor netdiscover fail2ban plasma6-applets-netspeed ffmulticonverter steghide noisy-py3-git cpu-x qvkbd kf6-servicemenus-rootactions arc-kde-git onlyoffice-bin
 #yay -S --mflags --skipinteg --noconfirm lact
 yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift megasync mednaffe mednafen
 #yay -U --mflags --skipinteg --noconfirm ~/ArchLinux/Package/mystiq-20.03.23-1-x86_64.pkg.tar.zst
