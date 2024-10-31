@@ -168,15 +168,15 @@ pacman -S --needed lib32-mesa mesa xf86-video-amdgpu vulkan-radeon lib32-vulkan-
 pacman -S xorg-drivers xorg-xinit mesa-vdpau lib32-mesa --noconfirm
 #pacman -S nvidia-settings nvidia nvidia-settings xorg-server-devel opencl-nvidia nvidia && wget https://ru.download.nvidia.com/XFree86/Linux-x86_64/390.141/NVIDIA-Linux-x86_64-390.141.run
 ####pacman -S plasma-workspace xorg sddm sddm-kcm networkmanager --noconfirm
-pacman -S plasma-pa plasma-nm plasma-desktop kde-system-meta kate konsole kde-gtk-config  --noconfirm
+pacman -S plasma-pa plasma-nm plasma-desktop dolphin kate konsole kde-gtk-config  --noconfirm
 pacman -S yay --noconfirm
 systemctl enable sddm.service
 systemctl enable NetworkManager.service
 
 pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent gwenview kompare kde-gtk-config plasma-sdk encfs cryfs kscreen sddm-kcm kinfocenter wireshark-qt spectacle ktouch kwave kdenlive kleopatra krfb krdc freerdp kdegraphics-thumbnailers kdesdk-thumbnailers ffmpegthumbs kdesdk-thumbnailers breeze-gtk kfind cmake extra-cmake-modules systemdgenie --noconfirm
 pacman -S firefox-i18n-ru firefox-ublock-origin filelight ntfs-3g gufw mtr exfat-utils cronie gnome-disk-utility f2fs-tools udftools net-tools libvirt linux-headers qt5-translations kdeplasma-addons networkmanager-openvpn openresolv kcalc tree kmag openssh bridge-utils --noconfirm
-pacman -S steam steam-native-runtime ttf-liberation ttf-dejavu xterm --noconfirm
-pacman -R kwrited hwloc --noconfirm
+pacman -S steam steam-native-runtime ttf-liberation ttf-dejavu --noconfirm
+#pacman -R partitionmanager --noconfirm
 
 echo -e '
 
