@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sed -i 's/#ParallelDownloads = 5/ParallelDownloads = 10/g' /etc/pacman.conf
 loadkeys ru
 setfont cyr-sun16
 
