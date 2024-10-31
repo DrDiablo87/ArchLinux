@@ -6,7 +6,7 @@ mkdir ~/Package
 #===========================================================================================
 read -p "1 - VMware, 2 - VBox, 3 - PC: " driver
 if [[ $driver == 1 ]]; then
-  sudo pacman -S gtkmm3 open-vm-tools --noconfirm
+  sudo pacman -S  gtkmm gtkmm3 open-vm-tools --noconfirm
   sudo systemctl enable vmtoolsd.service
   sudo systemctl start vmtoolsd.service
   echo '#!/bin/bash
