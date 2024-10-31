@@ -128,17 +128,11 @@ Include = /etc/pacman.d/mirrorlist
 [archlinuxcn]
 Server = https://repo.archlinuxcn.org/$arch
 SigLevel = Never
-#
-[blackarch]
-Server = http://mirror.yandex.ru/mirrors/blackarch/$repo/os/$arch
-Server = https://mirror.cyberbits.eu/blackarch/$repo/os/$arch
-Server = https://mirror.tillo.ch/ftp/blackarch/$repo/os/$arch
-Server = https://www.blackarch.org/blackarch/$repo/os/$arch
-Server = https://blackarch.unixpeople.org/$repo/os/$arch
-Server = https://www.mirrorservice.org/sites/blackarch.org/blackarch/$repo/os/$arch
-Server = https://ftp.halifax.rwth-aachen.de/blackarch/$repo/os/$arch
-Server = https://mirror.undisclose.de/blackarch/$repo/os/$arch
-SigLevel = Never' > /etc/pacman.conf
+#' > /etc/pacman.conf
+curl -O https://blackarch.org/strap.sh
+sh ./strap.sh
+rm ./strap.sh
+echo 'SigLevel = Never' /etc/pacman.conf
 
 #curl -s "https://blackarch.org/blackarch-mirrorlist" -o "/etc/pacman.d/blackarch-mirrorlist"
 #cp /home/$username/ArchLinux/Package/blackarch-mirrorlist /etc/pacman.d/blackarch-mirrorlist
@@ -174,7 +168,7 @@ pacman -S --needed lib32-mesa mesa xf86-video-amdgpu vulkan-radeon lib32-vulkan-
 pacman -S xorg-drivers xorg-xinit mesa-vdpau lib32-mesa --noconfirm
 #pacman -S nvidia-settings nvidia nvidia-settings xorg-server-devel opencl-nvidia nvidia && wget https://ru.download.nvidia.com/XFree86/Linux-x86_64/390.141/NVIDIA-Linux-x86_64-390.141.run
 ####pacman -S plasma-workspace xorg sddm sddm-kcm networkmanager --noconfirm
-pacman -S plasma plasma-pa plasma-desktop kde-system-meta kio-extras kwalletmanager kate konsole --noconfirm
+pacman -S plasma-pa plasma-nm plasma-desktop kde-system-meta kate konsole kde-gtk-config  --noconfirm
 pacman -S yay --noconfirm
 systemctl enable sddm.service
 systemctl enable NetworkManager.service
@@ -312,10 +306,10 @@ sed -i 's/use-ipv6=yes/use-ipv6=no/g' /etc/avahi/avahi-daemon.conf
 cp /home/$username/ArchLinux/Package/systemdgenie.mo /usr/share/locale/ru/LC_MESSAGES/systemdgenie.mo
 cp /home/$username/ArchLinux/Package/config.conf /home/$username/.config/neofetch/config.conf
 
-cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.png /usr/share/icons/breeze-dark/apps/48/Airgeddon.png
-cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.png /usr/share/icons/breeze/apps/48/Airgeddon.png
-cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.png /usr/share/icons/breeze-dark/apps/48/Metasploit.png
-cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.png /usr/share/icons/breeze/apps/48/Metasploit.png
+cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.svg /usr/share/icons/breeze-dark/apps/48/Airgeddon.svg
+cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.svg /usr/share/icons/breeze/apps/48/Airgeddon.svg
+cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.svg /usr/share/icons/breeze-dark/apps/48/Metasploit.svg
+cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.svg /usr/share/icons/breeze/apps/48/Metasploit.svg
 cp /home/$username/ArchLinux/KDE/.face.icon  /usr/share/plasma/avatars/Kurchatov.png
 
 mkdir /home/$username/.config/autostart
