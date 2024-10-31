@@ -32,11 +32,11 @@ sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
 yay -Rns --mflags --skipinteg --noconfirm extra-cmake-modules && yay -S --mflags --skipinteg --noconfirm extra-cmake-modules-git discover
 yay -S --mflags --skipinteg --noconfirm netactview loudmouth hddtemp ki18n plasma6-applets-thermal-monitor-git plasma6-applets-resources-monitor netdiscover fail2ban plasma6-applets-netspeed ffmulticonverter steghide noisy-py3-git cpu-x qvkbd kf6-servicemenus-rootactions arc-kde-git
 #yay -S --mflags --skipinteg --noconfirm lact
-yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift megasync mednaffe mednafen lact
+yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift megasync mednaffe mednafen
 #yay -U --mflags --skipinteg --noconfirm ~/ArchLinux/Package/mystiq-20.03.23-1-x86_64.pkg.tar.zst
 sudo mv /etc/systemd/system/noisy.service /etc/systemd/system/Noisy.service
 sudo mv /usr/share/noisy/examples/systemd/noisy.service /usr/share/noisy/examples/systemd/Noisy.service
-#yay -S --mflags --skipinteg --noconfirm fritzing
+#yay -S --mflags --skipinteg --noconfirm fritzing lact
 yay -S --mflags --skipinteg --noconfirm airgeddon metasploit dhcp hashcat hashcat-utils tcpdump ipscan crunch mdk4 reaver beef hostapd lighttpd bettercap ettercap sslstrip dsniff bully pixiewps usbutils xorg-xdpyinfo ccze asleap john hostapd-wpe nftables mdk3 hcxtools hcxdumptool
 #создать пункты
 #программа     sudo
