@@ -176,7 +176,7 @@ systemctl enable NetworkManager.service
 pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent gwenview kompare kde-gtk-config plasma-sdk encfs cryfs kscreen sddm-kcm kinfocenter wireshark-qt spectacle ktouch kwave kdenlive kleopatra krfb krdc freerdp kdegraphics-thumbnailers kdesdk-thumbnailers ffmpegthumbs kdesdk-thumbnailers breeze-gtk kfind cmake extra-cmake-modules systemdgenie --noconfirm
 pacman -S firefox-i18n-ru firefox-ublock-origin filelight ntfs-3g gufw mtr exfat-utils cronie gnome-disk-utility f2fs-tools udftools net-tools libvirt linux-headers qt5-translations kdeplasma-addons networkmanager-openvpn openresolv kcalc tree kmag openssh bridge-utils --noconfirm
 pacman -S steam steam-native-runtime ttf-liberation ttf-dejavu xterm --noconfirm
-pacman -R kwrited vlc --noconfirm
+pacman -R kwrited hwloc --noconfirm
 
 echo -e '
 
