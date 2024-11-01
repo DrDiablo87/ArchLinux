@@ -47,7 +47,7 @@ DialogHeight=540
 DialogWidth=720
 
 [Containments][2][Applets][23][Configuration][General]
-customButtonImage=/home/$USER/.local/share/applications/Archlinux-icon-crystal-64.png
+customButtonImage=/usr/share/icons/breeze-dark/apps/48/Archlinux-icon-crystal-64.png
 favoritesPortedToKAstats=true
 useCustomButtonImage=true
 
