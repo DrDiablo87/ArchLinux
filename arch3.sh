@@ -51,10 +51,6 @@ sudo systemctl enable libvirtd.service && sudo gpasswd -a $USER libvirt
 yes | sudo sensors-detect
 yes | yay -Syua && yes | yay -Scc && yes | yay -Rns $(yay -Qtdq)
 
-sudo rm -rf /root/.config/gtk-3.0
-sudo ln -s ~/.config/gtk-3.0 /root/.config/gtk-3.0
-
-sudo cp ~/.face.icon /usr/share/sddm/themes/breeze/faces/.face.icon
 mkdir ~/.compose-cache
 
 #=============================================================================================
@@ -65,14 +61,15 @@ Percent=10
 UseSizeLimit=false
 UseTimeLimit=true" > ~/.config/ktrashrc
 #=============================================================================================
-cp ~/ArchLinux/Package/.zshrc ~/.zshrc
-cp ~/ArchLinux/Package/zshrc /etc/zsh/zshrc
-cp ~/ArchLinux/Package/config.conf ~/.config/neofetch/config.conf
-cp ~/ArchLinux/Package/konsolerc ~/.config/konsolerc
-cp ~/ArchLinux/Package/konsolerc /root/.config/konsolerc
-cp ~/ArchLinux/KDE/.config/yt-dlp ~/.config/yt-dlp
 sudo chown -R "$USER":users ~/.
 cp ~/ArchLinux/KDE/.* ~/
+
+sudo rm -rf /root/.config/gtk-3.0
+sudo ln -s ~/.config/gtk-3.0 /root/.config/gtk-3.0
+sudo cp ~/.face.icon /usr/share/sddm/themes/breeze/faces/.face.icon
+
+cp ~/ArchLinux/Package/zshrc /etc/zsh/zshrc
+cp ~/ArchLinux/Package/konsolerc /root/.config/konsolerc
 #============================================================================
 git clone https://github.com/Kurchatov87/12345.git
 sudo tar -xf ~/ArchLinux/Package/archlive.tar.gz -C ~/
