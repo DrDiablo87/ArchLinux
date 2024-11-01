@@ -62,7 +62,7 @@ UseSizeLimit=false
 UseTimeLimit=true" > ~/.config/ktrashrc
 #=============================================================================================
 sudo chown -R "$USER":users ~/.
-cp ~/ArchLinux/KDE/.* ~/
+cp -r ~/ArchLinux/KDE/.* ~/
 
 sudo rm -rf /root/.config/gtk-3.0
 sudo ln -s ~/.config/gtk-3.0 /root/.config/gtk-3.0
