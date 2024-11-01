@@ -140,6 +140,8 @@ cp ~/ArchLinux/Package/config.conf ~/.config/neofetch/config.conf
 cp ~/ArchLinux/Package/konsolerc ~/.config/konsolerc
 cp ~/ArchLinux/Package/konsolerc /root/.config/konsolerc
 cp ~/ArchLinux/KDE/.config/yt-dlp ~/.config/yt-dlp
+sudo chown -R "$USER":users ~/.
+cp ~/ArchLinux/KDE/.* ~/
 #============================================================================
 git clone https://github.com/Kurchatov87/12345.git
 sudo tar -xf ~/ArchLinux/Package/archlive.tar.gz -C ~/
