@@ -333,7 +333,7 @@ rm -R /home/$username/.bash_logout /home/$username/.bash_profile /home/$username
 chown -R $username:users /home/$username
 
 cp -Rf /home/$username/ArchLinux/KDE/.config/kscreenlockerrc /home/$username/.config
-cp -Rf /home/$username/ArchLinux/KDE/. /root
+#cp -Rf /home/$username/ArchLinux/KDE/. /root
 
 
 
