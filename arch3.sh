@@ -70,6 +70,13 @@ sudo cp ~/.face.icon /usr/share/sddm/themes/breeze/faces/.face.icon
 
 cp ~/ArchLinux/Package/zshrc /etc/zsh/zshrc
 cp ~/ArchLinux/Package/konsolerc /root/.config/konsolerc
+
+echo "[Containments][47][Wallpaper][org.kde.image][General]
+Image=/home/$USER/.local/share/applications/screenshot.jpg" >> ~/.config/plasma-org.kde.plasma.desktop-appletsrc
+echo "[Greeter][Wallpaper][org.kde.image][General]
+Image=/home/$USER/.local/share/applications/screenshot.jpg
+PreviewImage=/home/$USER/.local/share/applications/screenshot.jpg" > ~/.config/kscreenlockerrc
+
 #============================================================================
 git clone https://github.com/Kurchatov87/12345.git
 sudo tar -xf ~/ArchLinux/Package/archlive.tar.gz -C ~/
