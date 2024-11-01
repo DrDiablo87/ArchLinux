@@ -5,7 +5,7 @@ DefaultProfile=Профиль 1.profile
 ConfigVersion=1
 
 [MainWindow]
-MenuBar=Enabled
+MenuBar=Disabled
 ToolBarsMovable=Disabled
 
 [UiSettings]
