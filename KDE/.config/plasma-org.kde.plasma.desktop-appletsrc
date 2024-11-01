@@ -46,11 +46,6 @@ popupWidth=300
 DialogHeight=540
 DialogWidth=720
 
-[Containments][2][Applets][23][Configuration][General]
-customButtonImage=/usr/share/icons/breeze-dark/apps/48/Archlinux-icon-crystal-64.png
-favoritesPortedToKAstats=true
-useCustomButtonImage=true
-
 [Containments][2][Applets][24]
 immutability=1
 plugin=org.kde.netspeedWidget
