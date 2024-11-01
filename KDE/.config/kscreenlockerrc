@@ -1,3 +1,3 @@
 [Greeter][Wallpaper][org.kde.image][General]
-Image=/home/$USER/.local/share/applications/screenshot.jpg
-PreviewImage=/home/$USER/.local/share/applications/screenshot.jpg
+Image=~/.local/share/applications/screenshot.jpg
+PreviewImage=~/.local/share/applications/screenshot.jpg
