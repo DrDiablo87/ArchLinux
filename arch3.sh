@@ -82,4 +82,4 @@ sudo tar -xf ~/ArchLinux/Package/archlive.tar.gz -C ~/
 sudo rm -R ~/1 ~/.config/autostart-scripts/xxx ~/.config/autostart/xxx 
 qdbus org.kde.ksmserver /KSMServer logout 0 1 2  #logout 0 3 3
 rm ~/.config/autostart/arch3.sh.desktop ~/.config/autostart/restart
-#systemctl reboot
+systemctl reboot
