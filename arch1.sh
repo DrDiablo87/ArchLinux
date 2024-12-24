@@ -72,7 +72,7 @@ echo -e '\033[32m' &&
 read -p "                                                                                       1 - Arch, 2 - WinArch: " OS
 if [[ $OS == 1 ]]; then
   #Создание разделов
-wipefs -a /dev/sda
+wipefs -a /dev/nvme0n1
 echo -e '\033[32m' &&
 (
   echo g;
@@ -87,27 +87,27 @@ echo -e '\033[32m' &&
   echo;
   echo;
   echo w;
-) | fdisk --color=never /dev/sda
+) | fdisk --color=never /dev/nvme0n1
 
 #Ваша разметка диска
 echo -e '\e[31m' ; lsblk -f
 
 #Форматирование дисков
 echo -e '\033[32m'
-mkfs.fat -F32 /dev/sda1
-mkfs.btrfs -f -L ArchLinux /dev/sda2
+mkfs.fat -F32 /dev/nvme0n1p1
+mkfs.btrfs -f -L ArchLinux /dev/nvme0n1p2
 
 #Монтирование дисков
-mount -t btrfs /dev/sda2 /mnt
+mount -t btrfs /dev/nvme0n1p2 /mnt
 btrfs subvolume create /mnt/@
 umount /mnt
-mount -t btrfs /dev/sda2 /mnt
+mount -t btrfs /dev/nvme0n1p2 /mnt
 btrfs subvolume create /mnt/@home
 umount /mnt
-mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@ /dev/sda2 /mnt
+mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@ /dev/nvme0n1p2 /mnt
 mkdir /mnt/home /mnt/boot
-mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@home /dev/sda2 /mnt/home
-mount /dev/sda1 /mnt/boot
+mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@home /dev/nvme0n1p2 /mnt/home
+mount /dev/nvme0n1p1 /mnt/boot
 
 #Выбор зеркал для загрузки
 #echo "Server = https://mirror.yandex.ru/archlinux/$repo/os/$arch
