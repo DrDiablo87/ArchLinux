@@ -239,10 +239,10 @@ chown -R $username:users /home/$username
 timedatectl set-ntp yes
 systemctl enable sddm.service NetworkManager.service
 systemctl mask man-db.service man-db.timer 
-systemctl disable avahi-daemon
-systemctl mask avahi-daemon
-systemctl mask avahi-daemon.service
-systemctl mask avahi-daemon.socket
+#systemctl disable avahi-daemon
+#systemctl mask avahi-daemon
+#systemctl mask avahi-daemon.service
+#systemctl mask avahi-daemon.socket
 systemctl mask ModemManager.service
 systemctl mask lvm2-monitor.socket
 systemctl mask lvm2-monitor.service
