@@ -65,12 +65,12 @@ echo 'title Arch Linux
 linux /vmlinuz-linux
 initrd /amd-ucode.img
 initrd /initramfs-linux.img
-options root=/dev/sda2 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinux.conf
+options root=/dev/nvme0n1p2 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinux.conf
 echo 'title Arch Linux Zen
 linux /vmlinuz-linux-zen
 initrd /amd-ucode.img
 initrd /initramfs-linux-zen.img
-options root=/dev/sda2 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinuxZen.conf
+options root=/dev/nvme0n1p2 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinuxZen.conf
 fi
 
 #Добавляем пользователя
