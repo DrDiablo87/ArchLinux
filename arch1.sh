@@ -110,18 +110,24 @@ mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@home 
 mount /dev/nvme0n1p1 /mnt/boot
 
 #Выбор зеркал для загрузки
-echo "Server = https://archlinux.gay/archlinux/$repo/os/$arch
-Server = https://ru.mirrors.cicku.me/archlinux/$repo/os/$arch
-Server = https://mirror.kamtv.ru/archlinux/$repo/os/$arch
-Server = https://mirror.kpfu.ru/archlinux/$repo/os/$arch
-Server = https://mirror.nw-sys.ru/archlinux/$repo/os/$arch
-Server = https://repository.su/archlinux/$repo/os/$arch
-Server = https://mirror.rol.ru/archlinux/$repo/os/$arch
-Server = https://web.sketserv.ru/archlinux/$repo/os/$arch
-Server = https://mirror2.sl-chat.ru/archlinux/$repo/os/$arch
-Server = https://mirror3.sl-chat.ru/archlinux/$repo/os/$arch
-Server = https://mirror.truenetwork.ru/archlinux/$repo/os/$arch
-Server = https://mirror.yandex.ru/archlinux/$repo/os/$arch" > /etc/pacman.d/mirrorlist
+echo "Server = https://archlinux.uk.mirror.allworldit.com/archlinux/$repo/os/$arch
+Server = https://mirror.bytemark.co.uk/archlinux/$repo/os/$arch
+Server = https://repo.c48.uk/arch/$repo/os/$arch
+Server = https://gb.mirrors.cicku.me/archlinux/$repo/os/$arch
+Server = https://london.mirror.pkgbuild.com/$repo/os/$arch
+Server = https://mirrors.gethosted.online/archlinux/$repo/os/$arch
+Server = https://mirrors.melbourne.co.uk/archlinux/$repo/os/$arch
+Server = https://mirror.infernocomms.net/archlinux/$repo/os/$arch
+Server = https://www.mirrorservice.org/sites/ftp.archlinux.org/$repo/os/$arch
+Server = https://mirror.netweaver.uk/archlinux/$repo/os/$arch
+Server = https://lon.mirror.rackspace.com/archlinux/$repo/os/$arch
+Server = https://mirror.server.net/archlinux/$repo/os/$arch
+Server = https://repo.slithery.uk/$repo/os/$arch
+Server = https://mirror.st2projects.com/archlinux/$repo/os/$arch
+Server = https://mirrors.ukfast.co.uk/sites/archlinux.org/$repo/os/$arch
+Server = https://mirror.cov.ukservers.com/archlinux/$repo/os/$arch
+Server = https://mirror.vinehost.net/archlinux/$repo/os/$arch
+Server = https://mirrors.xhosts.co.uk/arch/$repo/os/$arch" > /etc/pacman.d/mirrorlist
 #echo "Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
 #Server = http://mirror.yandex.ru/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
 
