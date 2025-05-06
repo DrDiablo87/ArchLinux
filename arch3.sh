@@ -32,8 +32,8 @@ sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
 #yay -Rns --mflags --skipinteg --noconfirm extra-cmake-modules && yay -S --mflags --skipinteg --noconfirm extra-cmake-modules-git discover
 yay -S --mflags --skipinteg --noconfirm discover flatpak
 yay -S --mflags --skipinteg --noconfirm netactview loudmouth hddtemp ki18n plasma6-applets-thermal-monitor-git plasma6-applets-resources-monitor netdiscover fail2ban plasma6-applets-netspeed ffmulticonverter steghide noisy-py3-git cpu-x qvkbd kf6-servicemenus-rootactions arc-kde-git onlyoffice-bin 
-yay -S --mflags --skipinteg --noconfirm lact corectrl svp-bin phonon-qt6-mpv-git plasma6-wallpapers-wallpaper-engine-git opencl-amd
-yay -Rns --noconfirm phonon-qt6-vlc
+yay -S --mflags --skipinteg --noconfirm lact corectrl svp-bin phonon-qt6-mpv plasma6-wallpapers-wallpaper-engine-git opencl-amd
+#yay -Rns --noconfirm phonon-qt6-vlc
 yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift megasync mednaffe mednafen
 #yay -U --mflags --skipinteg --noconfirm ~/ArchLinux/Package/mystiq-20.03.23-1-x86_64.pkg.tar.zst
 sudo mv /etc/systemd/system/noisy.service /etc/systemd/system/Noisy.service
@@ -70,8 +70,8 @@ sudo rm -rf /root/.config/gtk-3.0
 sudo ln -s ~/.config/gtk-3.0 /root/.config/gtk-3.0
 sudo cp ~/.face.icon /usr/share/sddm/themes/breeze/faces/.face.icon
 
-cp ~/ArchLinux/Package/zshrc /etc/zsh/zshrc
-cp ~/ArchLinux/Package/konsolerc /root/.config/konsolerc
+sudo cp ~/ArchLinux/Package/zshrc /etc/zsh/zshrc
+sudo cp ~/ArchLinux/Package/konsolerc /root/.config/konsolerc
 
 echo "[Containments][47][Wallpaper][org.kde.image][General]
 Image=/home/$USER/.local/share/applications/screenshot.jpg" >> ~/.config/plasma-org.kde.plasma.desktop-appletsrc
@@ -85,7 +85,9 @@ sudo tar -xf ~/ArchLinux/Package/archlive.tar.gz -C ~/
 #tar -xf ~/ArchLinux/Package/archlive.tar.gz -C ~/
 #cp ~/archlive/airootfs/root/.mozilla ~/
 #sudo chown -R root:root ~/archlive
-sudo rm -R ~/1 ~/.config/autostart-scripts/xxx ~/.config/autostart/xxx 
-qdbus org.kde.ksmserver /KSMServer logout 0 1 2  #logout 0 3 3
+#sudo rm -R ~/1 ~/.config/autostart-scripts/xxx ~/.config/autostart/xxx 
+
+#qdbus org.kde.ksmserver /KSMServer logout 0 1 2  #logout 0 3 3
+
 rm ~/.config/autostart/arch3.sh.desktop ~/.config/autostart/restart
 systemctl reboot
