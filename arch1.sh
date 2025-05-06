@@ -114,7 +114,7 @@ mount /dev/nvme0n1p1 /mnt/boot
 #" > /etc/pacman.d/mirrorlist
 #echo "Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
 #Server = http://mirror.yandex.ru/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
-
+echo 'ParallelDownloads = 10' >> /etc/pacman.conf
 
 echo -e '
 
