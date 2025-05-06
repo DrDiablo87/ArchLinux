@@ -7,7 +7,6 @@ echo $hostname > /etc/hostname
 ln -svf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
 hwclock --systohc
 
-loadkeys ru
 setfont cyr-sun16
 #Добавляем русскую локаль системы
 echo "en_US.UTF-8 UTF-8
@@ -138,7 +137,7 @@ echo 'SigLevel = Never' >> /etc/pacman.conf
 sed -i 's!#PKGDEST=/home/packages!PKGDEST=~/Package!' /etc/makepkg.conf
 echo 'MAKEFLAGS="-j'$(nproc)'"
 BILDDIR=/temp/makepkg' >> /etc/makepkg.conf
-   '$(nproc)'                                              
+                                             
 echo '127.0.1.1   '$hostname'.localdomain   '$hostname'
 #127.0.0.1 localhost
 #::1       localhost
@@ -158,16 +157,14 @@ echo -e '\033[32m'
 #NVIDIA
 #pacman -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 #AMD
-pacman -S --needed lib32-mesa mesa xf86-video-amdgpu vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader libva-mesa-driver lib32-libva-mesa-driver mesa-vdpau lib32-mesa-vdpau --noconfirm
+pacman -S --needed lib32-mesa mesa xf86-video-amdgpu vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader libva-mesa-driver lib32-libva-mesa-driver mesa-vdpau lib32-mesa-vdpau xorg-drivers xorg-xinit --noconfirm
 #INTEL
 #pacman -S --needed lib32-mesa vulkan-intel lib32-vulkan-intel vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
-
-pacman -S xorg-drivers xorg-xinit mesa-vdpau lib32-mesa --noconfirm
 #pacman -S nvidia-settings nvidia nvidia-settings xorg-server-devel opencl-nvidia nvidia && wget https://ru.download.nvidia.com/XFree86/Linux-x86_64/390.141/NVIDIA-Linux-x86_64-390.141.run
 ####pacman -S plasma-workspace xorg sddm sddm-kcm networkmanager --noconfirm
 pacman -S plasma-pa plasma-nm plasma-desktop dolphin kate konsole kde-gtk-config  --noconfirm
 pacman -S yay --noconfirm
-systemctl enable sddm.service
+#systemctl enable sddm.service
 systemctl enable NetworkManager.service
 
 pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent gwenview kompare kde-gtk-config plasma-sdk encfs cryfs kscreen sddm-kcm kinfocenter wireshark-qt spectacle ktouch kwave kdenlive kleopatra krfb krdc freerdp kdegraphics-thumbnailers kdesdk-thumbnailers ffmpegthumbs kdesdk-thumbnailers breeze-gtk kfind cmake extra-cmake-modules systemdgenie plasma-systemmonitor --noconfirm
@@ -190,6 +187,7 @@ cp /home/$username/ArchLinux/Package/zshrc /etc/zsh/zshrc
 mkdir /home/$username/.config/neofetch
 cp /home/$username/ArchLinux/Package/config.conf /home/$username/.config/neofetch/config.conf
 cp /home/$username/ArchLinux/Package/konsolerc /home/$username/.config/konsolerc
+mkdir /root/.config
 cp /home/$username/ArchLinux/Package/konsolerc /root/.config/konsolerc
 cp /home/$username/ArchLinux/KDE/.config/yt-dlp /home/$username/.config/yt-dlp
 
@@ -233,7 +231,8 @@ chown -R $username:users /home/$username
 #mv /usr/lib/systemd/system/libvirtd.service /usr/lib/systemd/system/VManager.service
 #mv /usr/lib/systemd/system/sshd.service /usr/lib/systemd/system/SSH.service
 
-timedatectl set-ntp yes
+systemctl enable systemd-timesyncd.service
+timedatectl set-ntp true
 systemctl enable sddm.service NetworkManager.service
 systemctl mask man-db.service man-db.timer 
 #systemctl disable avahi-daemon
@@ -251,7 +250,6 @@ systemctl mask lvm2-activation.service
 systemctl mask lvm2-activation-early.service
 systemctl mask systemd-journald-audit.socket
 systemctl mask systemd-journald-dev-log.socket
-systemctl enable fstrim.service
 systemctl enable fstrim.timer
 systemctl mask systemd-tmpfiles-setup.service    # предотвращение создания проблемного снапшота
 btrfs subvolume delete /var/lib/machines         # удаление проблемного снапшота
@@ -297,7 +295,7 @@ cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze/apps/
 cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze-dark/apps/48/kleopatra.svg
 cp /usr/share/icons/breeze/preferences/32/preferences-desktop-keyboard.svg /usr/share/icons/breeze/preferences/32/qvkbd.svg
 cp /usr/share/icons/breeze-dark/preferences/32/preferences-desktop-keyboard.svg /usr/share/icons/breeze-dark/preferences/32/qvkbd.svg
-sed -i 's/Icon=kleopatra/Icon=plasmavault/g' /usr/share/kservices5/kleopatra_decryptverifyfiles.desktop /usr/share/kservices5/kleopatra_decryptverifyfolders.desktop /usr/share/kservices5/kleopatra_signencryptfiles.desktop /usr/share/kservices5/kleopatra_signencryptfolders.desktop
+sed -i 's/Icon=kleopatra/Icon=plasmavault/g' /usr/share/kio/servicemenus/kleopatra_decryptverifyfiles.desktop /usr/share/kio/servicemenus/kleopatra_signencryptfiles.desktop /usr/share/kio/servicemenus/kleopatra_signencryptfolders.desktop
 sed -i 's/use-ipv4=yes/use-ipv4=no/g' /etc/avahi/avahi-daemon.conf
 sed -i 's/use-ipv6=yes/use-ipv6=no/g' /etc/avahi/avahi-daemon.conf
 cp /home/$username/ArchLinux/Package/systemdgenie.mo /usr/share/locale/ru/LC_MESSAGES/systemdgenie.mo
@@ -327,10 +325,10 @@ tmpfs						/var/log	tmpfs	defaults,noatime 0 0
 tmpfs						/var/run	tmpfs	defaults,noatime 0 0
 tmpfs						/var/lock	tmpfs	defaults,noatime 0 0 " >> /etc/fstab
 
-rm -R /home/$username/.bash_logout /home/$username/.bash_profile /home/$username/.bashrc /home/$username/Package /var/cache/pacman/pkg /boot/initramfs-linux-fallback.img
+rm -R /home/$username/.bash_logout /home/$username/.bash_profile /home/$username/.bashrc /home/$username/Package /var/cache/pacman/pkg
 chown -R $username:users /home/$username
 
-cp -Rf /home/$username/ArchLinux/KDE/.config/kscreenlockerrc /home/$username/.config
+cp -Rf /home/$username/ArchLinux/KDE/.config /home/$username/.config
 #cp -Rf /home/$username/ArchLinux/KDE/. /root
 
 
