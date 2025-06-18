@@ -125,9 +125,9 @@ Include = /etc/pacman.d/mirrorlist
 Server = https://repo.archlinuxcn.org/$arch
 SigLevel = Never
 #' > /etc/pacman.conf
-#curl -O https://blackarch.org/strap.sh
-#sh ./strap.sh
-#rm ./strap.sh
+curl -O https://blackarch.org/strap.sh
+sh ./strap.sh
+rm ./strap.sh
 echo 'SigLevel = Never' >> /etc/pacman.conf
 
 #curl -s "https://blackarch.org/blackarch-mirrorlist" -o "/etc/pacman.d/blackarch-mirrorlist"
