@@ -204,3 +204,110 @@ MaximumUid=60000
 MinimumUid=1000 ' > /etc/sddm.conf.d/kde_settings.conf
 
 chown -R $username:users /home/$username
+
+#pacman -S torsocks tor i2pd torctl --noconfirm
+#cp /home/$username/ArchLinux/Package/i2pd.conf /etc/i2pd/i2pd.conf
+#mv /etc/systemd/system/torctl-autostart.service /etc/systemd/system/Tor.service
+#mv /usr/lib/systemd/system/i2pd.service /usr/lib/systemd/system/I2pd.service
+#mv /usr/lib/systemd/system/libvirtd.service /usr/lib/systemd/system/VManager.service
+#mv /usr/lib/systemd/system/sshd.service /usr/lib/systemd/system/SSH.service
+
+systemctl enable systemd-timesyncd.service
+timedatectl set-ntp true
+systemctl enable sddm.service NetworkManager.service
+systemctl mask man-db.service man-db.timer 
+#systemctl disable avahi-daemon
+#systemctl mask avahi-daemon
+#systemctl mask avahi-daemon.service
+#systemctl mask avahi-daemon.socket
+systemctl mask ModemManager.service
+systemctl mask lvm2-monitor.socket
+systemctl mask lvm2-monitor.service
+systemctl mask lvm2-lvmpolld.socket
+systemctl mask lvm2-lvmpolld.service
+systemctl mask lvm2-lvmetad.socket
+systemctl mask lvm2-lvmetad.service
+systemctl mask lvm2-activation.service
+systemctl mask lvm2-activation-early.service
+systemctl mask systemd-journald-audit.socket
+systemctl mask systemd-journald-dev-log.socket
+systemctl enable fstrim.timer
+systemctl mask systemd-tmpfiles-setup.service    # предотвращение создания проблемного снапшота
+btrfs subvolume delete /var/lib/machines         # удаление проблемного снапшота
+usermod -a -G wireshark $username
+
+#===========================================================================================================================================================================================================
+
+echo -e '
+
+\e[31m==================================================================================== Установка и настройка MPV ===================================\e[0m
+'
+echo -e '\033[32m'
+
+pacman -S amarok taglib1 gst-libav gst-plugins-bad gst-plugins-good gst-plugins-ugly --noconfirm
+
+pacman -S mpv --noconfirm
+cp /home/$username/ArchLinux/Package/mpv.desktop /usr/share/applications/mpv.desktop
+cp /home/$username/ArchLinux/Package/mpv_single /usr/bin/mpv_single
+chmod +x /usr/bin/mpv_single
+cp /home/$username/ArchLinux/Package/mpv.conf /etc/mpv/mpv.conf
+cp /home/$username/ArchLinux/Package/input.conf /etc/mpv/input.conf
+
+echo -e '
+
+\e[31m==================================================================================== Установка и настройка Live Wallpaper ========================\e[0m
+'
+echo -e '\033[32m'
+
+#cp /home/$username/.config/LiveWallpaper/archlinux-logo-dark.png /usr/share/sddm/themes/breeze/archlinux-logo-dark.png
+
+#SWAP
+
+#truncate -s 0 /swapfile
+#chattr +C /swapfile
+#fallocate -l 512M /swapfile
+#chmod 600 /swapfile
+#mkswap /swapfile
+#swapon /swapfile
+#echo /swapfile none swap sw 0 0 | sudo tee -a /etc/fstab
+#echo 'vm.swappiness=10' > /etc/sysctl.d/99-sysctl.conf
+
+cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze/apps/48/kleopatra.svg  
+cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze-dark/apps/48/kleopatra.svg
+cp /usr/share/icons/breeze/preferences/32/preferences-desktop-keyboard.svg /usr/share/icons/breeze/preferences/32/qvkbd.svg
+cp /usr/share/icons/breeze-dark/preferences/32/preferences-desktop-keyboard.svg /usr/share/icons/breeze-dark/preferences/32/qvkbd.svg
+sed -i 's/Icon=kleopatra/Icon=plasmavault/g' /usr/share/kio/servicemenus/kleopatra_decryptverifyfiles.desktop /usr/share/kio/servicemenus/kleopatra_signencryptfiles.desktop /usr/share/kio/servicemenus/kleopatra_signencryptfolders.desktop
+sed -i 's/use-ipv4=yes/use-ipv4=no/g' /etc/avahi/avahi-daemon.conf
+sed -i 's/use-ipv6=yes/use-ipv6=no/g' /etc/avahi/avahi-daemon.conf
+cp /home/$username/ArchLinux/Package/systemdgenie.mo /usr/share/locale/ru/LC_MESSAGES/systemdgenie.mo
+cp /home/$username/ArchLinux/Package/config.conf /home/$username/.config/neofetch/config.conf
+
+cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.svg /usr/share/icons/breeze-dark/apps/48/Airgeddon.svg
+cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.svg /usr/share/icons/breeze/apps/48/Airgeddon.svg
+cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.svg /usr/share/icons/breeze-dark/apps/48/Metasploit.svg
+cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.svg /usr/share/icons/breeze/apps/48/Metasploit.svg
+cp /home/$username/ArchLinux/KDE/.face.icon  /usr/share/plasma/avatars/Kurchatov.png
+cp /home/$username/ArchLinux/KDE/.local/share/applications/Archlinux-icon-crystal-64.png /usr/share/icons/breeze-dark/apps/48/Archlinux-icon-crystal-64.png
+
+mkdir /home/$username/.config/autostart
+
+echo '[Desktop Entry]
+Exec=konsole -e sh /home/'$username'/ArchLinux/arch3.sh
+Icon=application-x-shellscript
+Name=arch3.sh
+Type=Application
+X-KDE-AutostartScript=true' > /home/$username/.config/autostart/arch3.sh.desktop
+chmod +x /home/$username/ArchLinux/arch3.sh
+chmod +x /home/$username/.config/autostart/arch3.sh.desktop
+
+
+echo "
+tmpfs						/var/log	tmpfs	defaults,noatime 0 0
+tmpfs						/var/run	tmpfs	defaults,noatime 0 0
+tmpfs						/var/lock	tmpfs	defaults,noatime 0 0 " >> /etc/fstab
+
+rm -R /home/$username/.bash_logout /home/$username/.bash_profile /home/$username/.bashrc /home/$username/Package /var/cache/pacman/pkg
+chown -R $username:users /home/$username
+
+#cp -Rf /home/$username/ArchLinux/KDE/.config /home/$username/.config
+#cp -Rf /home/$username/ArchLinux/KDE/. /root
