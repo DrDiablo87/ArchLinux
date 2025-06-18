@@ -274,5 +274,61 @@ cp /home/$username/ArchLinux/Package/input.conf /etc/mpv/input.conf
 
 echo -e '
 
+\e[31m==================================================================================== Установка и настройка Live Wallpaper ========================\e[0m
+'
+echo -e '\033[32m'
+
+#cp /home/$username/.config/LiveWallpaper/archlinux-logo-dark.png /usr/share/sddm/themes/breeze/archlinux-logo-dark.png
+
+#SWAP
+
+#truncate -s 0 /swapfile
+#chattr +C /swapfile
+#fallocate -l 512M /swapfile
+#chmod 600 /swapfile
+#mkswap /swapfile
+#swapon /swapfile
+#echo /swapfile none swap sw 0 0 | sudo tee -a /etc/fstab
+#echo 'vm.swappiness=10' > /etc/sysctl.d/99-sysctl.conf
+
+cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze/apps/48/kleopatra.svg  
+cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze-dark/apps/48/kleopatra.svg
+cp /usr/share/icons/breeze/preferences/32/preferences-desktop-keyboard.svg /usr/share/icons/breeze/preferences/32/qvkbd.svg
+cp /usr/share/icons/breeze-dark/preferences/32/preferences-desktop-keyboard.svg /usr/share/icons/breeze-dark/preferences/32/qvkbd.svg
+sed -i 's/Icon=kleopatra/Icon=plasmavault/g' /usr/share/kio/servicemenus/kleopatra_decryptverifyfiles.desktop /usr/share/kio/servicemenus/kleopatra_signencryptfiles.desktop /usr/share/kio/servicemenus/kleopatra_signencryptfolders.desktop
+sed -i 's/use-ipv4=yes/use-ipv4=no/g' /etc/avahi/avahi-daemon.conf
+sed -i 's/use-ipv6=yes/use-ipv6=no/g' /etc/avahi/avahi-daemon.conf
+cp /home/$username/ArchLinux/Package/systemdgenie.mo /usr/share/locale/ru/LC_MESSAGES/systemdgenie.mo
+cp /home/$username/ArchLinux/Package/config.conf /home/$username/.config/neofetch/config.conf
+
+cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.svg /usr/share/icons/breeze-dark/apps/48/Airgeddon.svg
+cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.svg /usr/share/icons/breeze/apps/48/Airgeddon.svg
+cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.svg /usr/share/icons/breeze-dark/apps/48/Metasploit.svg
+cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.svg /usr/share/icons/breeze/apps/48/Metasploit.svg
+cp /home/$username/ArchLinux/KDE/.face.icon  /usr/share/plasma/avatars/Kurchatov.png
+cp /home/$username/ArchLinux/KDE/.local/share/applications/Archlinux-icon-crystal-64.png /usr/share/icons/breeze-dark/apps/48/Archlinux-icon-crystal-64.png
+
+mkdir /home/$username/.config/autostart
+
+echo '[Desktop Entry]
+Exec=konsole -e sh /home/'$username'/ArchLinux/arch3.sh
+Icon=application-x-shellscript
+Name=arch3.sh
+Type=Application
+X-KDE-AutostartScript=true' > /home/$username/.config/autostart/arch3.sh.desktop
+chmod +x /home/$username/ArchLinux/arch3.sh
+chmod +x /home/$username/.config/autostart/arch3.sh.desktop
+
+
+echo "
+tmpfs						/var/log	tmpfs	defaults,noatime 0 0
+tmpfs						/var/run	tmpfs	defaults,noatime 0 0
+tmpfs						/var/lock	tmpfs	defaults,noatime 0 0 " >> /etc/fstab
+
+rm -R /home/$username/.bash_logout /home/$username/.bash_profile /home/$username/.bashrc /home/$username/Package /var/cache/pacman/pkg
+chown -R $username:users /home/$username
+
+#cp -Rf /home/$username/ArchLinux/KDE/.config /home/$username/.config
+#cp -Rf /home/$username/ArchLinux/KDE/. /root
 
 
