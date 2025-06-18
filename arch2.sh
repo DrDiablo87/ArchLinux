@@ -289,7 +289,7 @@ cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.svg /usr/share/icons/breez
 cp /home/$username/ArchLinux/KDE/.face.icon  /usr/share/plasma/avatars/Kurchatov.png
 cp /home/$username/ArchLinux/KDE/.local/share/applications/Archlinux-icon-crystal-64.png /usr/share/icons/breeze-dark/apps/48/Archlinux-icon-crystal-64.png
 
-mkdir /home/$username/.config/autostart
+mkdir -p /home/$username/.config/autostart
 
 echo '[Desktop Entry]
 Exec=konsole -e sh /home/'$username'/ArchLinux/arch3.sh
