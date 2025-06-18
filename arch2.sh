@@ -174,22 +174,33 @@ pacman -S steam steam-native-runtime ttf-liberation ttf-dejavu --noconfirm
 
 echo -e '
 
-\e[31m==================================================================================== Ставим и настрайваем ZSH ====================================\e[0m
+#==============================================================================================================================================================
 '
-echo -e '\033[32m'
+#Настраиваем тему
+mkdir /etc/sddm.conf.d                           # Автологин
+echo '[Theme]
+CursorTheme=breeze_cursors' > /etc/sddm.conf
 
-mkdir -p /home/$username/.config /home/$username/.local/share/konsole
-pacman -S zsh-theme-powerlevel10k awesome-terminal-fonts zsh-syntax-highlighting zsh-autosuggestions neofetch lsd bat fd --noconfirm
-usermod -s /usr/bin/zsh $username
-usermod -s /usr/bin/zsh root
-cp /home/$username/ArchLinux/Package/.zshrc /home/$username/.zshrc
-cp /home/$username/ArchLinux/Package/zshrc /etc/zsh/zshrc
-mkdir /home/$username/.config/neofetch
-cp /home/$username/ArchLinux/Package/config.conf /home/$username/.config/neofetch/config.conf
-cp /home/$username/ArchLinux/Package/konsolerc /home/$username/.config/konsolerc
-mkdir /root/.config
-cp /home/$username/ArchLinux/Package/konsolerc /root/.config/konsolerc
-cp /home/$username/ArchLinux/KDE/.config/yt-dlp /home/$username/.config/yt-dlp
+echo '[Autologin]
+User='$username'
+Session=plasma.desktop
+Numlock=on ' > /etc/sddm.conf.d/autologin.conf
 
-echo -e '
+echo '[Autologin]
+Relogin=false
+Session=plasma
+User='$username'
 
+[General]
+HaltCommand=/usr/bin/systemctl poweroff
+RebootCommand=/usr/bin/systemctl reboot
+
+[Theme]
+Current=breeze
+CursorTheme=breeze_cursors
+
+[Users]
+MaximumUid=60000
+MinimumUid=1000 ' > /etc/sddm.conf.d/kde_settings.conf
+
+chown -R $username:users /home/$username
