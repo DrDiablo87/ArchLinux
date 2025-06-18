@@ -150,5 +150,162 @@ echo 'include "/usr/share/nano/*.nanorc"' > /etc/nanorc                      #Р
 
 echo -e '
 
+\e[31m==================================================================================== Ставим KDE ==================================================\e[0m
+'
+echo -e '\033[32m'
+#sed -i 's/#MAKEFLAGS="-j'$(nproc)'"/MAKEFLAGS="-j'$(nproc)'"/g' /etc/makepkg.conf
+#NVIDIA
+#pacman -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
+#AMD
+pacman -S --needed lib32-mesa mesa xf86-video-amdgpu vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader libva-mesa-driver lib32-libva-mesa-driver mesa-vdpau lib32-mesa-vdpau xorg-drivers xorg-xinit --noconfirm
+#INTEL
+#pacman -S --needed lib32-mesa vulkan-intel lib32-vulkan-intel vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
+#pacman -S nvidia-settings nvidia nvidia-settings xorg-server-devel opencl-nvidia nvidia && wget https://ru.download.nvidia.com/XFree86/Linux-x86_64/390.141/NVIDIA-Linux-x86_64-390.141.run
+####pacman -S plasma-workspace xorg sddm sddm-kcm networkmanager --noconfirm
+pacman -S plasma-pa plasma-nm plasma-desktop dolphin kate konsole kde-gtk-config  --noconfirm
+pacman -S yay --noconfirm
+#systemctl enable sddm.service
+systemctl enable NetworkManager.service
+
+pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent gwenview kompare kde-gtk-config plasma-sdk encfs cryfs kscreen sddm-kcm kinfocenter wireshark-qt spectacle ktouch kwave kdenlive kleopatra krfb krdc freerdp kdegraphics-thumbnailers kdesdk-thumbnailers ffmpegthumbs kdesdk-thumbnailers breeze-gtk kfind cmake extra-cmake-modules systemdgenie plasma-systemmonitor bluedevil --noconfirm
+pacman -S firefox-i18n-ru firefox-ublock-origin filelight ntfs-3g gufw mtr exfat-utils cronie gnome-disk-utility f2fs-tools udftools net-tools libvirt linux-headers qt5-translations kdeplasma-addons networkmanager-openvpn openresolv kcalc tree kmag openssh bridge-utils --noconfirm
+pacman -S steam steam-native-runtime ttf-liberation ttf-dejavu --noconfirm
+#pacman -R partitionmanager --noconfirm
+
+echo -e '
+
+\e[31m==================================================================================== Ставим и настрайваем ZSH ====================================\e[0m
+'
+echo -e '\033[32m'
+
+mkdir -p /home/$username/.config /home/$username/.local/share/konsole
+pacman -S zsh-theme-powerlevel10k awesome-terminal-fonts zsh-syntax-highlighting zsh-autosuggestions neofetch lsd bat fd --noconfirm
+usermod -s /usr/bin/zsh $username
+usermod -s /usr/bin/zsh root
+cp /home/$username/ArchLinux/Package/.zshrc /home/$username/.zshrc
+cp /home/$username/ArchLinux/Package/zshrc /etc/zsh/zshrc
+mkdir /home/$username/.config/neofetch
+cp /home/$username/ArchLinux/Package/config.conf /home/$username/.config/neofetch/config.conf
+cp /home/$username/ArchLinux/Package/konsolerc /home/$username/.config/konsolerc
+mkdir /root/.config
+cp /home/$username/ArchLinux/Package/konsolerc /root/.config/konsolerc
+cp /home/$username/ArchLinux/KDE/.config/yt-dlp /home/$username/.config/yt-dlp
+
+echo -e '
+
+#==============================================================================================================================================================
+'
+#Настраиваем тему
+
+
+chown -R $username:users /home/$username
+
+#pacman -S torsocks tor i2pd torctl --noconfirm
+#cp /home/$username/ArchLinux/Package/i2pd.conf /etc/i2pd/i2pd.conf
+#mv /etc/systemd/system/torctl-autostart.service /etc/systemd/system/Tor.service
+#mv /usr/lib/systemd/system/i2pd.service /usr/lib/systemd/system/I2pd.service
+#mv /usr/lib/systemd/system/libvirtd.service /usr/lib/systemd/system/VManager.service
+#mv /usr/lib/systemd/system/sshd.service /usr/lib/systemd/system/SSH.service
+
+systemctl enable systemd-timesyncd.service
+timedatectl set-ntp true
+systemctl enable sddm.service NetworkManager.service
+systemctl mask man-db.service man-db.timer 
+#systemctl disable avahi-daemon
+#systemctl mask avahi-daemon
+#systemctl mask avahi-daemon.service
+#systemctl mask avahi-daemon.socket
+systemctl mask ModemManager.service
+systemctl mask lvm2-monitor.socket
+systemctl mask lvm2-monitor.service
+systemctl mask lvm2-lvmpolld.socket
+systemctl mask lvm2-lvmpolld.service
+systemctl mask lvm2-lvmetad.socket
+systemctl mask lvm2-lvmetad.service
+systemctl mask lvm2-activation.service
+systemctl mask lvm2-activation-early.service
+systemctl mask systemd-journald-audit.socket
+systemctl mask systemd-journald-dev-log.socket
+systemctl enable fstrim.timer
+systemctl mask systemd-tmpfiles-setup.service    # предотвращение создания проблемного снапшота
+btrfs subvolume delete /var/lib/machines         # удаление проблемного снапшота
+usermod -a -G wireshark $username
+
+#===========================================================================================================================================================================================================
+
+echo -e '
+
+\e[31m==================================================================================== Установка и настройка MPV ===================================\e[0m
+'
+echo -e '\033[32m'
+
+pacman -S amarok taglib1 gst-libav gst-plugins-bad gst-plugins-good gst-plugins-ugly --noconfirm
+
+pacman -S mpv --noconfirm
+cp /home/$username/ArchLinux/Package/mpv.desktop /usr/share/applications/mpv.desktop
+cp /home/$username/ArchLinux/Package/mpv_single /usr/bin/mpv_single
+chmod +x /usr/bin/mpv_single
+cp /home/$username/ArchLinux/Package/mpv.conf /etc/mpv/mpv.conf
+cp /home/$username/ArchLinux/Package/input.conf /etc/mpv/input.conf
+
+echo -e '
+
+\e[31m==================================================================================== Установка и настройка Live Wallpaper ========================\e[0m
+'
+echo -e '\033[32m'
+
+#cp /home/$username/.config/LiveWallpaper/archlinux-logo-dark.png /usr/share/sddm/themes/breeze/archlinux-logo-dark.png
+
+#SWAP
+
+#truncate -s 0 /swapfile
+#chattr +C /swapfile
+#fallocate -l 512M /swapfile
+#chmod 600 /swapfile
+#mkswap /swapfile
+#swapon /swapfile
+#echo /swapfile none swap sw 0 0 | sudo tee -a /etc/fstab
+#echo 'vm.swappiness=10' > /etc/sysctl.d/99-sysctl.conf
+
+cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze/apps/48/kleopatra.svg  
+cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze-dark/apps/48/kleopatra.svg
+cp /usr/share/icons/breeze/preferences/32/preferences-desktop-keyboard.svg /usr/share/icons/breeze/preferences/32/qvkbd.svg
+cp /usr/share/icons/breeze-dark/preferences/32/preferences-desktop-keyboard.svg /usr/share/icons/breeze-dark/preferences/32/qvkbd.svg
+sed -i 's/Icon=kleopatra/Icon=plasmavault/g' /usr/share/kio/servicemenus/kleopatra_decryptverifyfiles.desktop /usr/share/kio/servicemenus/kleopatra_signencryptfiles.desktop /usr/share/kio/servicemenus/kleopatra_signencryptfolders.desktop
+sed -i 's/use-ipv4=yes/use-ipv4=no/g' /etc/avahi/avahi-daemon.conf
+sed -i 's/use-ipv6=yes/use-ipv6=no/g' /etc/avahi/avahi-daemon.conf
+cp /home/$username/ArchLinux/Package/systemdgenie.mo /usr/share/locale/ru/LC_MESSAGES/systemdgenie.mo
+cp /home/$username/ArchLinux/Package/config.conf /home/$username/.config/neofetch/config.conf
+
+cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.svg /usr/share/icons/breeze-dark/apps/48/Airgeddon.svg
+cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.svg /usr/share/icons/breeze/apps/48/Airgeddon.svg
+cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.svg /usr/share/icons/breeze-dark/apps/48/Metasploit.svg
+cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.svg /usr/share/icons/breeze/apps/48/Metasploit.svg
+cp /home/$username/ArchLinux/KDE/.face.icon  /usr/share/plasma/avatars/Kurchatov.png
+cp /home/$username/ArchLinux/KDE/.local/share/applications/Archlinux-icon-crystal-64.png /usr/share/icons/breeze-dark/apps/48/Archlinux-icon-crystal-64.png
+
+mkdir /home/$username/.config/autostart
+
+echo '[Desktop Entry]
+Exec=konsole -e sh /home/'$username'/ArchLinux/arch3.sh
+Icon=application-x-shellscript
+Name=arch3.sh
+Type=Application
+X-KDE-AutostartScript=true' > /home/$username/.config/autostart/arch3.sh.desktop
+chmod +x /home/$username/ArchLinux/arch3.sh
+chmod +x /home/$username/.config/autostart/arch3.sh.desktop
+
+
+echo "
+tmpfs						/var/log	tmpfs	defaults,noatime 0 0
+tmpfs						/var/run	tmpfs	defaults,noatime 0 0
+tmpfs						/var/lock	tmpfs	defaults,noatime 0 0 " >> /etc/fstab
+
+rm -R /home/$username/.bash_logout /home/$username/.bash_profile /home/$username/.bashrc /home/$username/Package /var/cache/pacman/pkg
+chown -R $username:users /home/$username
+
+#cp -Rf /home/$username/ArchLinux/KDE/.config /home/$username/.config
+#cp -Rf /home/$username/ArchLinux/KDE/. /root
+
 
 
