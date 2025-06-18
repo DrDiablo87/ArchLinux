@@ -196,7 +196,31 @@ echo -e '
 #==============================================================================================================================================================
 '
 #Настраиваем тему
+mkdir /etc/sddm.conf.d                           # Автологин
+echo '[Theme]
+CursorTheme=breeze_cursors' > /etc/sddm.conf
 
+echo '[Autologin]
+User='$username'
+Session=plasma.desktop
+Numlock=on ' > /etc/sddm.conf.d/autologin.conf
+
+echo '[Autologin]
+Relogin=false
+Session=plasma
+User='$username'
+
+[General]
+HaltCommand=/usr/bin/systemctl poweroff
+RebootCommand=/usr/bin/systemctl reboot
+
+[Theme]
+Current=breeze
+CursorTheme=breeze_cursors
+
+[Users]
+MaximumUid=60000
+MinimumUid=1000 ' > /etc/sddm.conf.d/kde_settings.conf
 
 chown -R $username:users /home/$username
 
