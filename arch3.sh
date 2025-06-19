@@ -79,11 +79,11 @@ echo "[Greeter][Wallpaper][org.kde.image][General]
 Image=/home/$USER/.local/share/applications/screenshot.jpg
 PreviewImage=/home/$USER/.local/share/applications/screenshot.jpg" > ~/.config/kscreenlockerrc
 ============================================================================================
-curl -LO https://github.com/amnezia-vpn/amnezia-client/releases/download/4.8.5.0/AmneziaVPN_4.8.5.0_linux.tar.zip
-unzip AmneziaVPN_4.8.5.0_linux.tar.zip
+curl -LO https://github.com/amnezia-vpn/amnezia-client/releases/download/4.8.7.2/AmneziaVPN_4.8.7.2_linux_x64.tar.zip
+unzip AmneziaVPN_4.8.7.2_linux_x64.tar.zip
 tar -xvf AmneziaVPN_Linux_Installer.tar
 chmod +x AmneziaVPN_Linux_Installer.bin
-rm -R AmneziaVPN_4.8.5.0_linux.tar.zip AmneziaVPN_Linux_Installer.tar
+rm -R AmneziaVPN_4.8.7.2_linux_x64.tar.zip AmneziaVPN_Linux_Installer.tar
 
 #============================================================================
 git clone https://github.com/Kurchatov87/12345.git
