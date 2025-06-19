@@ -94,6 +94,11 @@ Defaults env_reset, timestamp_timeout=30' > /etc/sudoers
 
 git clone https://github.com/DrDiablo87/ArchLinux.git /home/$username/ArchLinux
 
+pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+pacman-key --lsign-key 3056513887B78AEB
+pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'  --noconfirm
+pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'  --noconfirm
+
 #Настройка Pacman.conf
 echo '[options]
 #
@@ -123,6 +128,10 @@ Include = /etc/pacman.d/mirrorlist
 #
 [archlinuxcn]
 Server = https://repo.archlinuxcn.org/$arch
+SigLevel = Never
+#
+[chaotic-aur]
+Include = /etc/pacman.d/chaotic-mirrorlist
 SigLevel = Never
 #' > /etc/pacman.conf
 curl -O https://blackarch.org/strap.sh
@@ -171,6 +180,25 @@ pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent gwenview kompare kde-
 pacman -S firefox-i18n-ru firefox-ublock-origin filelight ntfs-3g gufw mtr exfat-utils cronie gnome-disk-utility f2fs-tools udftools net-tools libvirt linux-headers qt5-translations kdeplasma-addons networkmanager-openvpn openresolv kcalc tree kmag openssh bridge-utils --noconfirm
 pacman -S steam steam-native-runtime ttf-liberation ttf-dejavu --noconfirm
 #pacman -R partitionmanager --noconfirm
+
+echo -e '
+
+\e[31m==================================================================================== Ставим и настрайваем ZSH ====================================\e[0m
+'
+echo -e '\033[32m'
+
+mkdir -p /home/$username/.config /home/$username/.local/share/konsole
+pacman -S zsh-theme-powerlevel10k awesome-terminal-fonts zsh-syntax-highlighting zsh-autosuggestions neofetch lsd bat fd --noconfirm
+usermod -s /usr/bin/zsh $username
+usermod -s /usr/bin/zsh root
+cp /home/$username/ArchLinux/Package/.zshrc /home/$username/.zshrc
+cp /home/$username/ArchLinux/Package/zshrc /etc/zsh/zshrc
+mkdir -p /home/$username/.config/neofetch
+cp /home/$username/ArchLinux/Package/config.conf /home/$username/.config/neofetch/config.conf
+cp /home/$username/ArchLinux/Package/konsolerc /home/$username/.config/konsolerc
+mkdir -p /root/.config
+cp /home/$username/ArchLinux/Package/konsolerc /root/.config/konsolerc
+cp /home/$username/ArchLinux/KDE/.config/yt-dlp /home/$username/.config/yt-dlp
 
 echo -e '
 
