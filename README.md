@@ -11,3 +11,6 @@ pacman -Syy wget && wget git.io/www.sh && sh www.sh
 sudo mkarchiso -v ~/archlive
 
 rm out work /var/cache/pacman ~/Package/*
+
+
+sudo GDK_BACKEND=x11 qvkbd
