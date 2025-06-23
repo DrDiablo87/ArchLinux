@@ -173,6 +173,9 @@ pacman -S --needed lib32-mesa mesa xf86-video-amdgpu vulkan-radeon lib32-vulkan-
 ####pacman -S plasma-workspace xorg sddm sddm-kcm networkmanager --noconfirm
 pacman -S plasma-pa plasma-nm plasma-desktop dolphin kate konsole kde-gtk-config  --noconfirm
 pacman -S yay --noconfirm
+pacman -Rns blackarch-officials --noconfirm
+pacman -S bettercap ettercap bully pixiewps hashcat tcpdump mdk4 reaver hcxtools john onionshare metasploit --noconfirm
+
 #systemctl enable sddm.service
 systemctl enable NetworkManager.service
 
