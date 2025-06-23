@@ -135,6 +135,7 @@ Include = /etc/pacman.d/chaotic-mirrorlist
 SigLevel = Never
 #' > /etc/pacman.conf
 curl -O https://blackarch.org/strap.sh
+sed -i 's/pacman -S --noconfirm --needed blackarch-officials/ /g' ./strap.sh
 sh ./strap.sh
 rm ./strap.sh
 echo 'SigLevel = Never' >> /etc/pacman.conf
@@ -171,10 +172,9 @@ pacman -S --needed lib32-mesa mesa xf86-video-amdgpu vulkan-radeon lib32-vulkan-
 #pacman -S --needed lib32-mesa vulkan-intel lib32-vulkan-intel vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 #pacman -S nvidia-settings nvidia nvidia-settings xorg-server-devel opencl-nvidia nvidia && wget https://ru.download.nvidia.com/XFree86/Linux-x86_64/390.141/NVIDIA-Linux-x86_64-390.141.run
 ####pacman -S plasma-workspace xorg sddm sddm-kcm networkmanager --noconfirm
-pacman -S plasma-pa plasma-nm plasma-desktop dolphin kate konsole kde-gtk-config  --noconfirm
-pacman -S yay --noconfirm
-pacman -Rns blackarch-officials --noconfirm
-pacman -S bettercap ettercap bully pixiewps hashcat tcpdump mdk4 reaver hcxtools john onionshare metasploit --noconfirm
+pacman -S yay plasma-pa plasma-nm plasma-desktop dolphin kate konsole kde-gtk-config  --noconfirm
+#pacman -Rns blackarch-officials --noconfirm
+#pacman -S bettercap ettercap bully pixiewps hashcat tcpdump mdk4 reaver hcxtools john onionshare metasploit --noconfirm
 
 #systemctl enable sddm.service
 systemctl enable NetworkManager.service
