@@ -32,7 +32,7 @@ sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
 #yay -Rns --mflags --skipinteg --noconfirm extra-cmake-modules && yay -S --mflags --skipinteg --noconfirm extra-cmake-modules-git discover
 yay -S --mflags --skipinteg --noconfirm discover flatpak
 yay -S --mflags --skipinteg --noconfirm netactview loudmouth hddtemp ki18n plasma6-applets-resources-monitor netdiscover fail2ban plasma6-applets-netspeed ffmulticonverter steghide noisy-py3-git cpu-x qvkbd kf6-servicemenus-rootactions arc-kde-git onlyoffice-bin 
-yay -S --mflags --skipinteg --noconfirm lact corectrl svp-bin phonon-qt6-mpv plasma6-wallpapers-wallpaper-engine-git opencl-amd noisetorch-bin
+yay -S --mflags --skipinteg --noconfirm lact corectrl svp-bin phonon-qt6-mpv plasma6-wallpapers-wallpaper-engine-git opencl-amd easyeffects pavucontrol-qt
 #yay -Rns --noconfirm phonon-qt6-vlc
 yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift megasync mednaffe mednafen
 #yay -U --mflags --skipinteg --noconfirm ~/ArchLinux/Package/mystiq-20.03.23-1-x86_64.pkg.tar.zst
@@ -48,7 +48,7 @@ yay -S --mflags --skipinteg --noconfirm airgeddon metasploit dhcp hashcat hashca
 
 
 sudo systemctl enable fail2ban.service
-yay -S --mflags --skipinteg --noconfirm mc htop ncdu edk2-ovmf virt-manager qemu dnsmasq ffmpeg yt-dlp mediainfo-gui qtqr startwine qt-heif-image-plugin-git ifuse wireguard-tools wireproxy krecorder
+yay -S --mflags --skipinteg --noconfirm mc htop ncdu edk2-ovmf virt-manager qemu dnsmasq ffmpeg yt-dlp mediainfo-gui qtqr startwine qt-heif-image-plugin-git ifuse wireguard-tools wireproxy 
 sudo systemctl enable libvirtd.service && sudo gpasswd -a $USER libvirt
 yes | sudo sensors-detect
 yes | yay -Syua && yes | yay -Scc && yes | yay -Rns $(yay -Qtdq)
