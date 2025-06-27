@@ -179,7 +179,7 @@ pacman -S yay plasma-pa plasma-nm plasma-desktop dolphin kate konsole kde-gtk-co
 #systemctl enable sddm.service
 systemctl enable NetworkManager.service
 
-pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent gwenview kompare kde-gtk-config plasma-sdk encfs cryfs kscreen sddm-kcm kinfocenter wireshark-qt spectacle ktouch kwave kdenlive kleopatra krfb krdc freerdp kdegraphics-thumbnailers kdesdk-thumbnailers ffmpegthumbs kdesdk-thumbnailers breeze-gtk kfind cmake extra-cmake-modules systemdgenie plasma-systemmonitor bluedevil --noconfirm
+pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent gwenview kompare kde-gtk-config plasma-sdk encfs cryfs kscreen sddm-kcm kinfocenter wireshark-qt spectacle ktouch kwave kdenlive kleopatra krfb krdc freerdp kdegraphics-thumbnailers kdesdk-thumbnailers ffmpegthumbs kdesdk-thumbnailers breeze-gtk kfind cmake extra-cmake-modules systemdgenie plasma-systemmonitor bluedevil bluez-utils --noconfirm
 pacman -S firefox-i18n-ru firefox-ublock-origin filelight ntfs-3g gufw mtr exfat-utils cronie gnome-disk-utility f2fs-tools udftools net-tools libvirt linux-headers qt5-translations kdeplasma-addons networkmanager-openvpn openresolv kcalc tree kmag openssh bridge-utils --noconfirm
 pacman -S steam steam-native-runtime ttf-liberation ttf-dejavu --noconfirm
 #pacman -R partitionmanager --noconfirm
@@ -263,6 +263,7 @@ systemctl mask lvm2-activation-early.service
 systemctl mask systemd-journald-audit.socket
 systemctl mask systemd-journald-dev-log.socket
 systemctl enable fstrim.timer
+systemctl enable bluetooth.service
 systemctl mask systemd-tmpfiles-setup.service    # предотвращение создания проблемного снапшота
 btrfs subvolume delete /var/lib/machines         # удаление проблемного снапшота
 usermod -a -G wireshark $username
