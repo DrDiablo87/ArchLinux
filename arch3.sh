@@ -31,6 +31,8 @@ sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
 sudo mv /etc/systemd/system/noisy.service /etc/systemd/system/Noisy.service
 sudo mv /usr/share/noisy/examples/systemd/noisy.service /usr/share/noisy/examples/systemd/Noisy.service
 psd -p
+cp ~/ArchLinux/Package/firefox-on.png ~/.config/psd/firefox-on.png
+cp ~/ArchLinux/Package/firefox-off.png ~/.config/psd/firefox-off.png
 #systemctl --user start psd
 #systemctl --user stop psd
 #sudo systemctl start Noisy.service
