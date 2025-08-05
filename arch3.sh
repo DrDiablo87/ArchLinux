@@ -28,7 +28,9 @@ fi
 git config --global url."https://".insteadOf git://
 yay -S --mflags --skipinteg --noconfirm profile-sync-daemon 
 ## psd -p
-#systemctl --user enable psd
+#systemctl --user start psd
+#systemctl --user stop psd
+
 sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
 #yay -Rns --mflags --skipinteg --noconfirm extra-cmake-modules && yay -S --mflags --skipinteg --noconfirm extra-cmake-modules-git discover
 yay -S --mflags --skipinteg --noconfirm discover flatpak
