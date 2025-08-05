@@ -303,6 +303,7 @@ echo -e '\033[32m'
 #swapon /swapfile
 #echo /swapfile none swap sw 0 0 | sudo tee -a /etc/fstab
 #echo 'vm.swappiness=10' > /etc/sysctl.d/99-sysctl.conf
+cp /home/$username/ArchLinux/Package/com.github.configurable-button.tar.xz /home/$username/com.github.configurable-button.tar.xz
 
 cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze/apps/48/kleopatra.svg  
 cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze-dark/apps/48/kleopatra.svg
