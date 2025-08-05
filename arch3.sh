@@ -30,7 +30,7 @@ yay -S --mflags --skipinteg --noconfirm profile-sync-daemon noisy-py3-git
 sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
 sudo mv /etc/systemd/system/noisy.service /etc/systemd/system/Noisy.service
 sudo mv /usr/share/noisy/examples/systemd/noisy.service /usr/share/noisy/examples/systemd/Noisy.service
-## psd -p
+psd -p
 #systemctl --user start psd
 #systemctl --user stop psd
 #sudo systemctl start Noisy.service
