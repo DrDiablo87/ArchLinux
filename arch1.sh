@@ -121,7 +121,7 @@ echo -e '
 '
 echo -e '\033[32m'
 
-pacstrap /mnt base base-devel nano linux linux-zen linux-firmware btrfs-progs iwd
+pacstrap /mnt base base-devel nano linux linux-zen linux-firmware btrfs-progs iwd linux-zen-headers
 
 echo -e '
 
