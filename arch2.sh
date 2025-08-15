@@ -294,6 +294,7 @@ echo -e '\033[32m'
 #cp /home/$username/.config/LiveWallpaper/archlinux-logo-dark.png /usr/share/sddm/themes/breeze/archlinux-logo-dark.png
 pacman -S virtualbox virtualbox-guest-utils --noconfirm
 cp /home/$username/ArchLinux/LiveWallpaper/Box.svg /usr/share/icons/breeze-dark/apps/48/Box.svg
+#cp /home/$username/ArchLinux/LiveWallpaper/Box.svg /usr/share/icons/breeze/apps/48/Box.svg
 sed -i 's/Icon=virtualbox/Icon=Box/g' /usr/share/applications/virtualbox.desktop
 #SWAP
 
