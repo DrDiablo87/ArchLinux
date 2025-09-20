@@ -338,6 +338,7 @@ chmod +x /home/$username/.config/autostart/arch3.sh.desktop
 
 
 echo "
+tmpfs      /home/'$username'/.cache tmpfs rw 0 0
 tmpfs						/var/log	tmpfs	defaults,noatime 0 0
 tmpfs						/var/run	tmpfs	defaults,noatime 0 0
 tmpfs						/var/lock	tmpfs	defaults,noatime 0 0 " >> /etc/fstab
