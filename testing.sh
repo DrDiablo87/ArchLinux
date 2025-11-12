@@ -37,9 +37,9 @@ echo "LANG=ru_RU.UTF-8" > /etc/locale.conf
 echo "KEYMAP=ru" > /etc/vconsole.conf
 echo "arch" > /etc/hostname
 
-echo "root:123456" | chpasswd
+echo "root:w" | chpasswd
 useradd -m -G wheel -s /bin/bash user
-echo "user:123456" | chpasswd
+echo "www:w" | chpasswd
 echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 
 bootctl --path=/boot install
