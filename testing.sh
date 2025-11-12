@@ -274,8 +274,8 @@ main() {
     print_info "reboot"
     print_info ""
     print_info "После входа:"
-    print_info "Логин: user"
-    print_info "Пароль: 123456"
+    print_info "Логин: www"
+    print_info "Пароль: w"
 }
 
 main "$@"
