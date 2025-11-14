@@ -20,8 +20,10 @@ rm out work /var/cache/pacman ~/Package/*
 
 https://spvcomp.com/soft/load_torrent_zona_skachat.php
 
-Proton 10.0-3 или Experimental
+Proton 10.0-3 или Experimental   Zona 2.1.0.3
+
 "/home/www/.local/share/Steam/steamapps/compatdata/.........../pfx/drive_c/Program Files (x86)/Zona/Zona.exe"
+
 "/home/www/.local/share/Steam/steamapps/compatdata/.........../pfx/drive_c/Program Files (x86)/Zona/"
 
 PROTON_USE_WINED3D11=1 %command%
