@@ -99,6 +99,7 @@ PreviewImage=/home/$USER/.local/share/applications/screenshot.jpg" > ~/.config/k
 git clone https://github.com/Kurchatov87/12345.git
 sudo tar -xf ~/ArchLinux/Package/archlive.tar.gz -C ~/
 wget https://dl2.appzona.org/ZonaSetup.exe
+yay -Rns --mflags --skipinteg --noconfirm extra-cmake-modules discover
 #tar -xf ~/ArchLinux/Package/archlive.tar.gz -C ~/
 #cp ~/archlive/airootfs/root/.mozilla ~/
 #sudo chown -R root:root ~/archlive
