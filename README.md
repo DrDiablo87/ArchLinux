@@ -22,10 +22,9 @@ Proton 10.0-3 или Experimental
 PROTON_USE_WINED3D11=1 %command%
 
 # qvkbd
-
- Программа qvkbd
- Аргументы GDK_BACKEND=x11
- Запуск от root
+Программа qvkbd
+Аргументы GDK_BACKEND=x11
+Запуск от root
 # Поиск
 sudo find ~/.local ~/.config -type f -mmin -1 -exec ls -al {} \;
 
