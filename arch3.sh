@@ -44,7 +44,7 @@ sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
 yay -Rns --mflags --skipinteg --noconfirm extra-cmake-modules discover
 yay -S --mflags --skipinteg --noconfirm discover flatpak amneziavpn-bin
 yay -S --mflags --skipinteg --noconfirm netactview loudmouth hddtemp ki18n plasma6-applets-resources-monitor netdiscover fail2ban plasma6-applets-netspeed ffmulticonverter steghide cpu-x kf6-servicemenus-rootactions arc-kde-git onlyoffice-bin plasma6-applets-thermal-monitor qvkbd
-yay -S --mflags --skipinteg --noconfirm lact svp-bin phonon-qt6-mpv plasma6-wallpapers-wallpaper-engine-git opencl-amd easyeffects pavucontrol-qt
+yay -S --mflags --skipinteg --noconfirm lact phonon-qt6-mpv plasma6-wallpapers-wallpaper-engine-git opencl-amd easyeffects pavucontrol-qt
 #yay -Rns --noconfirm phonon-qt6-vlc
 yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift fritzing 
 #yay -U --mflags --skipinteg --noconfirm ~/ArchLinux/Package/mystiq-20.03.23-1-x86_64.pkg.tar.zst
@@ -55,7 +55,7 @@ yay -S --mflags --skipinteg --noconfirm airgeddon metasploit dhcp hashcat hashca
 #программа     sudo
 #Аргументы     msfconsole     или      airgeddon             plasma5-applets-systemd
 # Запуск в терминале налочка  
-#yay -S --mflags --skipinteg --noconfirm  startwine 
+#yay -S --mflags --skipinteg --noconfirm  startwine svp-bin
 
 sudo systemctl enable fail2ban.service
 yay -S --mflags --skipinteg --noconfirm mc ncdu edk2-ovmf virt-manager virt-viewer qemu dnsmasq ffmpeg yt-dlp mediainfo-gui qtqr qt-heif-image-plugin-git ifuse wireguard-tools wireproxy
