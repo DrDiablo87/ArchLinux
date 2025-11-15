@@ -15,5 +15,7 @@ PROTON_USE_WINED3D11=1 %command%
 Аргументы GDK_BACKEND=x11       <br>
 Запуск от root       <br>
 # Поиск недавно изменённых файлов
-sudo find ~/.local ~/.config -type f -mmin -1 -exec ls -al {} \;
+sudo find ~/.local ~/.config -type f -mmin -1 -exec ls -al {} \;       <br>
+
+
 
