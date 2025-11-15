@@ -7,7 +7,6 @@ pacman -Syy wget && wget git.io/www.sh && sh www.sh
 
 # ArchLive
 sudo mkarchiso -v ~/archlive  <br>
-
 rm out work /var/cache/pacman ~/Package/*
 
 # Zona 2.1.0.3
