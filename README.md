@@ -26,3 +26,7 @@ Proton 10.0-3 или Experimental     ====       Zona 2.1.0.3
 
 PROTON_USE_WINED3D11=1 %command%
 
+
+
+sudo find ~/.local ~/.config -type f -mmin -1 -exec ls -al {} \;
+
