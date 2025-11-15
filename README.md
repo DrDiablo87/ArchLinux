@@ -6,10 +6,6 @@ pacman -Syy wget && wget git.io/1.sh && sh 1.sh
 
 pacman -Syy wget && wget git.io/www.sh && sh www.sh
 
-Программа qvkbd
-Аргументы GDK_BACKEND=x11
-Запуск от root
-
 # ArchLive
 
 sudo mkarchiso -v ~/archlive
@@ -26,7 +22,11 @@ Proton 10.0-3 или Experimental     ====       Zona 2.1.0.3
 
 PROTON_USE_WINED3D11=1 %command%
 
+=============================================
 
+-Программа qvkbd
+-Аргументы GDK_BACKEND=x11
+#Запуск от root
 
 sudo find ~/.local ~/.config -type f -mmin -1 -exec ls -al {} \;
 
