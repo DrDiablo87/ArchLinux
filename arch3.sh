@@ -1,6 +1,8 @@
      #!/bin/bash
 #tourch || exit $?                 # завершение скрипта при возникновении ошибки, а она в этой комманде есть
 #sudo sed -i 's/Required TrustedOnly/Never/g' /etc/pacman.conf
+# Поиск недавно изменённых файлов
+# sudo find ~/.local ~/.config -type f -mmin -1 -exec ls -al {} \;
 
 mkdir ~/Package
 #===========================================================================================
