@@ -94,6 +94,11 @@ PreviewImage=/home/$USER/.local/share/applications/screenshot.jpg" > ~/.config/k
 #tar -xvf AmneziaVPN_Linux_Installer.tar
 #chmod +x AmneziaVPN_Linux_Installer.bin
 #rm -R AmneziaVPN.tar.zip AmneziaVPN_Linux_Installer.tar
+touch $(xdg-user-dir TEMPLATES)/Bash\ файл.sh
+echo "#\!/bin/bash" > $(xdg-user-dir TEMPLATES)/Bash\ файл.sh
+touch $(xdg-user-dir TEMPLATES)/Конфиг\ файл.conf
+touch $(xdg-user-dir TEMPLATES)/Python\ файл.py  
+echo "#\!/usr/bin/env python3" > $(xdg-user-dir TEMPLATES)/Python\ файл.py
 
 #============================================================================
 git clone https://github.com/Kurchatov87/12345.git
