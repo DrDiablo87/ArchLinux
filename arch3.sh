@@ -28,7 +28,7 @@ fi
 
 #===========================================================================================
 git config --global url."https://".insteadOf git://
-yay -S --mflags --skipinteg --noconfirm profile-sync-daemon noisy-py3-git 
+yay -S --mflags --skipinteg --noconfirm profile-sync-daemon noisy-py3-git dolphin-compress-media
 sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
 sudo mv /etc/systemd/system/noisy.service /etc/systemd/system/Noisy.service
 sudo mv /usr/share/noisy/examples/systemd/noisy.service /usr/share/noisy/examples/systemd/Noisy.service
@@ -46,7 +46,7 @@ yay -S --mflags --skipinteg --noconfirm discover flatpak amneziavpn-bin
 yay -S --mflags --skipinteg --noconfirm netactview loudmouth hddtemp ki18n plasma6-applets-resources-monitor netdiscover fail2ban plasma6-applets-netspeed ffmulticonverter steghide cpu-x hardinfo2 kf6-servicemenus-rootactions arc-kde-git onlyoffice-bin plasma6-applets-thermal-monitor qvkbd
 yay -S --mflags --skipinteg --noconfirm lact phonon-qt6-mpv plasma6-wallpapers-wallpaper-engine-git opencl-amd easyeffects pavucontrol-qt
 #yay -Rns --noconfirm phonon-qt6-vlc
-yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift fritzing 
+yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift fritzing
 #yay -U --mflags --skipinteg --noconfirm ~/ArchLinux/Package/mystiq-20.03.23-1-x86_64.pkg.tar.zst
 
 
