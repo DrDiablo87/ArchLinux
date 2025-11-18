@@ -1,0 +1,15 @@
+[Desktop Entry]
+Categories=GNOME;GTK;Network;Monitor;
+Comment=Просмотр сетевых соединений
+Exec=netactview
+Icon=preferences-system-network-ethernet
+Name[ru_RU]=Net Activity Viewer
+Name=Net Activity Viewer
+NoDisplay=false
+Path=
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-KDE-SubstituteUID=false
+X-KDE-Username=

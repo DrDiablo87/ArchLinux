@@ -1,0 +1,13 @@
+[Desktop Entry]
+Comment=
+Exec=sudo airgeddon
+Icon=Airgeddon
+Name=Airgeddon
+NoDisplay=false
+Path=
+StartupNotify=true
+Terminal=true
+TerminalOptions=
+Type=Application
+X-KDE-SubstituteUID=false
+X-KDE-Username=
