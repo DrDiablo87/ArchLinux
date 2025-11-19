@@ -55,7 +55,7 @@ yay -S --mflags --skipinteg --noconfirm airgeddon metasploit dhcp hashcat hashca
 #программа     sudo
 #Аргументы     msfconsole     или      airgeddon             plasma5-applets-systemd
 # Запуск в терминале налочка  
-#yay -S --mflags --skipinteg --noconfirm  startwine svp-bin
+#yay -S --mflags --skipinteg --noconfirm  startwine svp-bin fancontrol-gui
 
 sudo systemctl enable fail2ban.service
 yay -S --mflags --skipinteg --noconfirm mc ncdu edk2-ovmf virt-manager virt-viewer qemu dnsmasq ffmpeg yt-dlp mediainfo-gui qtqr qt-heif-image-plugin-git ifuse wireguard-tools wireproxy
