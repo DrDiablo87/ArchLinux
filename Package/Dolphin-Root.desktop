@@ -1,0 +1,13 @@
+[Desktop Entry]
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+X-KDE-Priority=TopLevel
+Type=Service
+MimeType=all/all
+Actions=EditFromRoot
+Icon=folder-red
+
+[Desktop Action EditFromRoot]
+Name=Edit from root
+Name[ru]=Dolphin-Root
+Icon=folder-red
+Exec=pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY KDE_SESSION_VERSION=5 KDE_FULL_SESSION=true dbus-launch dolphin

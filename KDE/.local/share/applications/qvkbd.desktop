@@ -1,0 +1,21 @@
+[Desktop Entry]
+Categories=Utility;Accessibility;
+Comment=Virtual keyboard
+Exec=qvkbd GDK_BACKEND=x11
+GenericName[ru_RU]=
+GenericName=
+Icon=qvkbd
+MimeType=
+Name[ru_RU]=QVKbd
+Name=QVKbd
+NoDisplay=false
+Path=
+PrefersNonDefaultGPU=false
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=true
+X-KDE-Username=root
