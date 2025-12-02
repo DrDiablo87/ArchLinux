@@ -58,7 +58,7 @@ yay -S --mflags --skipinteg --noconfirm airgeddon metasploit dhcp hashcat hashca
 #yay -S --mflags --skipinteg --noconfirm  startwine svp-bin fancontrol-gui
 
 sudo systemctl enable fail2ban.service
-yay -S --mflags --skipinteg --noconfirm mc ncdu edk2-ovmf virt-manager virt-viewer qemu dnsmasq ffmpeg yt-dlp mediainfo-gui qtqr qt-heif-image-plugin-git ifuse wireguard-tools wireproxy
+yay -S --mflags --skipinteg --noconfirm mc ncdu edk2-ovmf virt-manager virt-viewer qemu dnsmasq ffmpeg yt-dlp mediainfo-gui qrca qt-heif-image-plugin-git ifuse wireguard-tools wireproxy
 sudo systemctl enable libvirtd.service && sudo gpasswd -a $USER libvirt
 yes | sudo sensors-detect
 yes | yay -Syua && yes | yay -Scc && yes | yay -Rns $(yay -Qtdq)
