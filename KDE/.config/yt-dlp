@@ -6,7 +6,7 @@ read -p "1 - 720p, 2 - 720p60, 3 - 1080p, 4 - 1080p60, 5 - Max, 6 - list720p, 7 
 
 if [[ $b == 1 ]]; then
   
-  yt-dlp --no-playlist -f 136+140 -o "%(title)s.%(ext)s"  --sponsorblock-remove all --merge-output-format mkv $a
+  yt-dlp --no-playlist -f hls-2053 -o "%(title)s.%(ext)s"  --sponsorblock-remove all --merge-output-format mkv $a
   
 elif [[ $b == 2 ]]; then
   
@@ -14,7 +14,7 @@ elif [[ $b == 2 ]]; then
 
 elif [[ $b == 3 ]]; then
   
-  yt-dlp --no-playlist -f 137+140 -o "%(title)s.%(ext)s"  --sponsorblock-remove all --merge-output-format mkv $a
+  yt-dlp --no-playlist -f hls-3843 -o "%(title)s.%(ext)s"  --sponsorblock-remove all --merge-output-format mkv $a
 
 elif [[ $b == 4 ]]; then
   
