@@ -50,6 +50,7 @@ alias rm='sudo rm -rf'
 alias cp='cp -r'
 alias g='git clone'
 alias ydl='sh ~/.config/yt-dlp'
+alias ydlx='sh ~/.config/yt-dlpx'
 alias av="sudo freshclam"            # обновить базы антивируса clamav
 
 echo -ne '\e[1 q'                    # Вид курсора от 1-6
