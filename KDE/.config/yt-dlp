@@ -2,7 +2,7 @@
 
 read -p "Ссылка: " a
 
-read -p "1 - 720p, 2 - 720p60, 3 - 1080p, 4 - 1080p60, 5 - Max, 6 - list720p, 7 - list1080p, 8 - mp3: " b
+read -p "1 - 720p, 2 - 720p60, 3 - 1080p, 4 - 1080p60, 5 - PH 720p, 6 - PH 1080p 7 - Max, 8 - list720p, 9 - list1080p, 10 - mp3: " b
 
 if [[ $b == 1 ]]; then
   
@@ -22,17 +22,25 @@ elif [[ $b == 4 ]]; then
 
 elif [[ $b == 5 ]]; then
   
-  yt-dlp --no-playlist -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --cookies-from-browser firefox -o "%(title)s.%(ext)s" --sponsorblock-remove all --remux-video mkv $a
+  yt-dlp --no-playlist -f hls-2053 --cookies-from-browser firefox -o "%(title)s.%(ext)s"  --sponsorblock-remove all --remux-video mkv $a
   
 elif [[ $b == 6 ]]; then
   
-  yt-dlp -f "((bv*[fps>30]/bv*)[height<=720]/(wv*[fps>30]/wv*)) + ba / (b[fps>30]/b)[height<=720]/(w[fps>30]/w)" --cookies-from-browser firefox -o "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s" --sponsorblock-remove all --remux-video mkv $a
+  yt-dlp --no-playlist -f hls-3843 --cookies-from-browser firefox -o "%(title)s.%(ext)s"  --sponsorblock-remove all --remux-video mkv $a
 
 elif [[ $b == 7 ]]; then
+  
+  yt-dlp --no-playlist -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --cookies-from-browser firefox -o "%(title)s.%(ext)s" --sponsorblock-remove all --remux-video mkv $a
+  
+elif [[ $b == 8 ]]; then
+  
+  yt-dlp -f "((bv*[fps>30]/bv*)[height<=720]/(wv*[fps>30]/wv*)) + ba / (b[fps>30]/b)[height<=720]/(w[fps>30]/w)" --cookies-from-browser firefox -o "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s" --sponsorblock-remove all --remux-video mkv $a
+
+elif [[ $b == 9 ]]; then
 
   yt-dlp -f "((bv*[fps>30]/bv*)[height<=1080]/(wv*[fps>30]/wv*)) + ba / (b[fps>30]/b)[height<=1080]/(w[fps>30]/w)" --cookies-from-browser firefox -o "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s" --sponsorblock-remove all --remux-video mkv $a
 
-elif [[ $b == 8 ]]; then
+elif [[ $b == 10 ]]; then
 
   yt-dlp -x --audio-format mp3 --audio-quality 320k --cookies-from-browser firefox -o "%(title)s.%(ext)s" $a
   
