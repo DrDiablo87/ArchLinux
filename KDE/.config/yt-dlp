@@ -6,31 +6,31 @@ read -p "1 - 720p, 2 - 720p60, 3 - 1080p, 4 - 1080p60, 5 - Max, 6 - list720p, 7 
 
 if [[ $b == 1 ]]; then
   
-  yt-dlp --no-playlist -f hls-2053 -o "%(title)s.%(ext)s"  --sponsorblock-remove all --merge-output-format mkv $a
+  yt-dlp --no-playlist -f 95 --cookies-from-browser firefox -o "%(title)s.%(ext)s"  --sponsorblock-remove all --merge-output-format mkv $a
   
 elif [[ $b == 2 ]]; then
   
-  yt-dlp --no-playlist -f 398+140 -o "%(title)s.%(ext)s"  --sponsorblock-remove all --merge-output-format mkv $a
+  yt-dlp --no-playlist -f 300 --cookies-from-browser firefox -o "%(title)s.%(ext)s"  --sponsorblock-remove all --merge-output-format mkv $a
 
 elif [[ $b == 3 ]]; then
   
-  yt-dlp --no-playlist -f hls-3843 -o "%(title)s.%(ext)s"  --sponsorblock-remove all --merge-output-format mkv $a
+  yt-dlp --no-playlist -f 96 --cookies-from-browser firefox -o "%(title)s.%(ext)s"  --sponsorblock-remove all --merge-output-format mkv $a
 
 elif [[ $b == 4 ]]; then
   
-  yt-dlp --no-playlist -f 399+140 -o "%(title)s.%(ext)s"  --sponsorblock-remove all --merge-output-format mkv $a
+  yt-dlp --no-playlist -f 301 --cookies-from-browser firefox -o "%(title)s.%(ext)s"  --sponsorblock-remove all --merge-output-format mkv $a
 
 elif [[ $b == 5 ]]; then
   
-  yt-dlp --no-playlist -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' -o "%(title)s.%(ext)s" --sponsorblock-remove all --merge-output-format mkv $a
+  yt-dlp --no-playlist -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --cookies-from-browser firefox -o "%(title)s.%(ext)s" --sponsorblock-remove all --merge-output-format mkv $a
   
 elif [[ $b == 6 ]]; then
   
-  yt-dlp -f "((bv*[fps>30]/bv*)[height<=720]/(wv*[fps>30]/wv*)) + ba / (b[fps>30]/b)[height<=720]/(w[fps>30]/w)" -o "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s" --sponsorblock-remove all --merge-output-format mkv $a
+  yt-dlp -f "((bv*[fps>30]/bv*)[height<=720]/(wv*[fps>30]/wv*)) + ba / (b[fps>30]/b)[height<=720]/(w[fps>30]/w)" --cookies-from-browser firefox -o "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s" --sponsorblock-remove all --merge-output-format mkv $a
 
 elif [[ $b == 7 ]]; then
 
-  yt-dlp -f "((bv*[fps>30]/bv*)[height<=1080]/(wv*[fps>30]/wv*)) + ba / (b[fps>30]/b)[height<=1080]/(w[fps>30]/w)" -o "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s" --sponsorblock-remove all --merge-output-format mkv $a
+  yt-dlp -f "((bv*[fps>30]/bv*)[height<=1080]/(wv*[fps>30]/wv*)) + ba / (b[fps>30]/b)[height<=1080]/(w[fps>30]/w)" --cookies-from-browser firefox -o "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s" --sponsorblock-remove all --merge-output-format mkv $a
 
 elif [[ $b == 8 ]]; then
 
