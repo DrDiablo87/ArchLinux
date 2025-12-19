@@ -1,7 +1,7 @@
 [Desktop Entry]
 Categories=Utility;Accessibility;
 Comment=Virtual keyboard
-Exec=qvkbd GDK_BACKEND=x11
+Exec=qvkbd
 GenericName[ru_RU]=
 GenericName=
 Icon=qvkbd
