@@ -46,37 +46,40 @@ pacman -Syu --noconfirm
 #echo "Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
 #Server = http://mirror.yandex.ru/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
 
+pacman -S grub --noconfirm
+grub-install /dev/sda
+
 #tourch || exit $?                 # завершение скрипта при возникновении ошибки, а она в этой комманде есть
+#=========================================================================================================================================================================================================
+#bootctl install
+#echo 'default Arch
+#timeout 1
+#editor 0' > /boot/loader/loader.conf
 
-bootctl install
-echo 'default Arch
-timeout 1
-editor 0' > /boot/loader/loader.conf
-
-if [ -e /dev/sda5 ]; then
-echo 'title Arch Linux
-linux /vmlinuz-linux
-initrd /amd-ucode.img
-initrd /initramfs-linux.img
-options root=/dev/sda5 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinux.conf
-echo 'title Arch Linux Zen
-linux /vmlinuz-linux-zen
-initrd /amd-ucode.img
-initrd /initramfs-linux-zen.img
-options root=/dev/sda5 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinuxZen.conf
-else 
-echo 'title Arch Linux
-linux /vmlinuz-linux
-initrd /amd-ucode.img
-initrd /initramfs-linux.img
-options root=/dev/sda2 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinux.conf
-echo 'title Arch Linux Zen
-linux /vmlinuz-linux-zen
-initrd /amd-ucode.img
-initrd /initramfs-linux-zen.img
-options root=/dev/sda2 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinuxZen.conf
-fi
-
+#if [ -e /dev/sda5 ]; then
+#echo 'title Arch Linux
+#linux /vmlinuz-linux
+#initrd /amd-ucode.img
+#initrd /initramfs-linux.img
+#options root=/dev/sda5 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinux.conf
+#echo 'title Arch Linux Zen
+#linux /vmlinuz-linux-zen
+#initrd /amd-ucode.img
+#initrd /initramfs-linux-zen.img
+#options root=/dev/sda5 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinuxZen.conf
+#else 
+#echo 'title Arch Linux
+#linux /vmlinuz-linux
+#initrd /amd-ucode.img
+#initrd /initramfs-linux.img
+#options root=/dev/sda2 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinux.conf
+#echo 'title Arch Linux Zen
+#linux /vmlinuz-linux-zen
+#initrd /amd-ucode.img
+#initrd /initramfs-linux-zen.img
+#options root=/dev/sda2 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinuxZen.conf
+#fi
+#=========================================================================================================================================================================================================
 #Добавляем пользователя
 useradd -m -g users -G audio,games,video,storage,wheel -s /bin/bash $username
 
