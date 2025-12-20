@@ -75,14 +75,13 @@ if [[ $OS == 1 ]]; then
 wipefs -a /dev/sda
 echo -e '\033[32m' &&
 (
-  echo g;
   echo n;
+  echo p;
   echo;
   echo;
-  echo +200M;
-  echo t;
-  echo 1;
+  echo +128M;
   echo n;
+  echo p;
   echo;
   echo;
   echo;
