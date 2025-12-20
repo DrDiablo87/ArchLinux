@@ -107,7 +107,7 @@ umount /mnt
 mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@ /dev/sda2 /mnt
 mkdir /mnt/home /mnt/boot
 mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@home /dev/sda2 /mnt/home
-mount /dev/nvme0n1p1 /mnt/boot
+mount /dev/sda1 /mnt/boot
 
 #Выбор зеркал для загрузки
 #echo "Server = https://archlinux.uk.mirror.allworldit.com/archlinux/$repo/os/$arch
