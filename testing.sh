@@ -164,7 +164,7 @@ umount /mnt
 mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@ /dev/sda5 /mnt
 mkdir /mnt/home /mnt/boot
 mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@home /dev/sda5 /mnt/home
-mount /dev/nvme0n1p1 /mnt/boot
+mount /dev/sda1 /mnt/boot
 
 
 echo -e '
