@@ -19,3 +19,6 @@ sudo systemctl stop libvirtd.service libvirtd.socket libvirtd-ro.socket libvirtd
 
 
 kf6-servicemenus-rootactions
+
+
+curl -LO https://raw.githubusercontent.com/DrDiablo87/ArchLinux/refs/heads/master/testing.sh && sh testing.sh
