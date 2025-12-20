@@ -86,7 +86,7 @@ echo -e '\033[32m' &&
   echo;
   echo;
   echo w;
-) | fdisk --color=never /dev/sda1
+) | fdisk --color=never /dev/sda
 
 #Ваша разметка диска
 echo -e '\e[31m' ; lsblk -f
