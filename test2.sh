@@ -73,5 +73,5 @@ PreviewImage=/home/$USER/.local/share/applications/screenshot.jpg" > ~/.config/k
 ============================================================================================
 yay -Rns --mflags --skipinteg --noconfirm extra-cmake-modules discover
 
-rm ~/.config/autostart/testing2.sh.desktop ~/.config/autostart/restart
+rm ~/.config/autostart/test2.sh.desktop ~/.config/autostart/restart
 systemctl reboot
