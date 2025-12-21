@@ -41,45 +41,11 @@ echo -e '
 '
 echo -e '\033[32m'
 pacman -S efibootmgr git wget reflector amd-ucode --noconfirm  
-#reflector --verbose -l 5 -p https --sort rate --save /etc/pacman.d/mirrorlist
 pacman -Syu --noconfirm
-#echo "Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
-#Server = http://mirror.yandex.ru/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
-
 pacman -S grub --noconfirm
 grub-install /dev/sda
 /sbin/grub-mkconfig -o /boot/grub/grub.cfg
 
-#tourch || exit $?                 # завершение скрипта при возникновении ошибки, а она в этой комманде есть
-#=========================================================================================================================================================================================================
-#bootctl install
-#echo 'default Arch
-#timeout 1
-#editor 0' > /boot/loader/loader.conf
-
-#if [ -e /dev/sda5 ]; then
-#echo 'title Arch Linux
-#linux /vmlinuz-linux
-#initrd /amd-ucode.img
-#initrd /initramfs-linux.img
-#options root=/dev/sda5 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinux.conf
-#echo 'title Arch Linux Zen
-#linux /vmlinuz-linux-zen
-#initrd /amd-ucode.img
-#initrd /initramfs-linux-zen.img
-#options root=/dev/sda5 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinuxZen.conf
-#else 
-#echo 'title Arch Linux
-#linux /vmlinuz-linux
-#initrd /amd-ucode.img
-#initrd /initramfs-linux.img
-#options root=/dev/sda2 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinux.conf
-#echo 'title Arch Linux Zen
-#linux /vmlinuz-linux-zen
-#initrd /amd-ucode.img
-#initrd /initramfs-linux-zen.img
-#options root=/dev/sda2 rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinuxZen.conf
-#fi
 #=========================================================================================================================================================================================================
 #Добавляем пользователя
 useradd -m -g users -G audio,games,video,storage,wheel -s /bin/bash $username
@@ -172,25 +138,13 @@ echo -e '
 \e[31m==================================================================================== Ставим KDE ==================================================\e[0m
 '
 echo -e '\033[32m'
-#sed -i 's/#MAKEFLAGS="-j'$(nproc)'"/MAKEFLAGS="-j'$(nproc)'"/g' /etc/makepkg.conf
-#NVIDIA
-#pacman -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
-#AMD
-pacman -S --needed lib32-mesa mesa xf86-video-amdgpu vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader libva-mesa-driver lib32-libva-mesa-driver mesa-vdpau lib32-mesa-vdpau xorg-drivers xorg-xinit --noconfirm
-#INTEL
-#pacman -S --needed lib32-mesa vulkan-intel lib32-vulkan-intel vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
-#pacman -S nvidia-settings nvidia nvidia-settings xorg-server-devel opencl-nvidia nvidia && wget https://ru.download.nvidia.com/XFree86/Linux-x86_64/390.141/NVIDIA-Linux-x86_64-390.141.run
-####pacman -S plasma-workspace xorg sddm sddm-kcm networkmanager --noconfirm
-pacman -S yay plasma-pa plasma-nm plasma-desktop dolphin kate konsole kde-gtk-config  --noconfirm
-#pacman -Rns blackarch-officials --noconfirm
-#pacman -S bettercap ettercap bully pixiewps hashcat tcpdump mdk4 reaver hcxtools john onionshare metasploit --noconfirm
 
-#systemctl enable sddm.service
+pacman -S --needed lib32-mesa mesa xf86-video-amdgpu vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader libva-mesa-driver lib32-libva-mesa-driver mesa-vdpau lib32-mesa-vdpau xorg-drivers xorg-xinit --noconfirm
+pacman -S yay plasma-pa plasma-nm plasma-desktop dolphin kate konsole kde-gtk-config  --noconfirm
 systemctl enable NetworkManager.service
 
-pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent gwenview kompare kde-gtk-config plasma-sdk encfs cryfs kscreen sddm-kcm kinfocenter wireshark-qt spectacle ktouch kwave krita kdenlive kleopatra krfb krdc freerdp kdegraphics-thumbnailers kdesdk-thumbnailers ffmpegthumbs kdesdk-thumbnailers breeze-gtk kfind cmake extra-cmake-modules systemdgenie plasma-systemmonitor bluedevil bluez-utils --noconfirm
+pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent gwenview kompare kde-gtk-config plasma-sdk encfs cryfs kscreen sddm-kcm kinfocenter wireshark-qt spectacle kwave kleopatra krfb krdc freerdp kdegraphics-thumbnailers kdesdk-thumbnailers ffmpegthumbs kdesdk-thumbnailers breeze-gtk kfind cmake extra-cmake-modules systemdgenie plasma-systemmonitor bluedevil bluez-utils --noconfirm
 pacman -S firefox-i18n-ru firefox-ublock-origin filelight ntfs-3g gufw mtr exfat-utils cronie gnome-disk-utility f2fs-tools udftools net-tools libvirt linux-headers qt5-translations kdeplasma-addons networkmanager-openvpn openresolv kcalc tree openssh bridge-utils --noconfirm
-pacman -S steam ttf-liberation ttf-dejavu --noconfirm
 #pacman -R partitionmanager --noconfirm
 
 echo -e '
@@ -245,21 +199,11 @@ MinimumUid=1000 ' > /etc/sddm.conf.d/kde_settings.conf
 
 chown -R $username:users /home/$username
 
-#pacman -S torsocks tor i2pd torctl --noconfirm
-#cp /home/$username/ArchLinux/Package/i2pd.conf /etc/i2pd/i2pd.conf
-#mv /etc/systemd/system/torctl-autostart.service /etc/systemd/system/Tor.service
-#mv /usr/lib/systemd/system/i2pd.service /usr/lib/systemd/system/I2pd.service
-#mv /usr/lib/systemd/system/libvirtd.service /usr/lib/systemd/system/VManager.service
-#mv /usr/lib/systemd/system/sshd.service /usr/lib/systemd/system/SSH.service
 
 systemctl enable systemd-timesyncd.service
 timedatectl set-ntp true
 systemctl enable sddm.service NetworkManager.service
 systemctl mask man-db.service man-db.timer 
-#systemctl disable avahi-daemon
-#systemctl mask avahi-daemon
-#systemctl mask avahi-daemon.service
-#systemctl mask avahi-daemon.socket
 systemctl mask ModemManager.service
 systemctl mask lvm2-monitor.socket
 systemctl mask lvm2-monitor.service
@@ -300,23 +244,9 @@ echo -e '
 '
 echo -e '\033[32m'
 
-#cp /home/$username/.config/LiveWallpaper/archlinux-logo-dark.png /usr/share/sddm/themes/breeze/archlinux-logo-dark.png
-pacman -S virtualbox virtualbox-guest-utils --noconfirm
 cp /home/$username/ArchLinux/LiveWallpaper/Box.svg /usr/share/icons/breeze-dark/apps/48/Box.svg
-#cp /home/$username/ArchLinux/LiveWallpaper/Box.svg /usr/share/icons/breeze/apps/48/Box.svg
 sed -i 's/Icon=virtualbox/Icon=Box/g' /usr/share/applications/virtualbox.desktop
-#SWAP
-
-#truncate -s 0 /swapfile
-#chattr +C /swapfile
-#fallocate -l 512M /swapfile
-#chmod 600 /swapfile
-#mkswap /swapfile
-#swapon /swapfile
-#echo /swapfile none swap sw 0 0 | sudo tee -a /etc/fstab
-#echo 'vm.swappiness=10' > /etc/sysctl.d/99-sysctl.conf
 cp /home/$username/ArchLinux/Package/com.github.configurable-button.tar.xz /home/$username/com.github.configurable-button.tar.xz
-
 cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze/apps/48/kleopatra.svg  
 cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze-dark/apps/48/kleopatra.svg
 cp /usr/share/icons/breeze/preferences/32/preferences-desktop-keyboard.svg /usr/share/icons/breeze/preferences/32/qvkbd.svg
@@ -337,13 +267,13 @@ cp /home/$username/ArchLinux/KDE/.local/share/applications/Archlinux-icon-crysta
 mkdir -p /home/$username/.config/autostart
 
 echo '[Desktop Entry]
-Exec=konsole -e sh /home/'$username'/ArchLinux/arch3.sh
+Exec=konsole -e sh /home/'$username'/ArchLinux/testing2.sh
 Icon=application-x-shellscript
-Name=arch3.sh
+Name=testing2.sh
 Type=Application
-X-KDE-AutostartScript=true' > /home/$username/.config/autostart/arch3.sh.desktop
-chmod +x /home/$username/ArchLinux/arch3.sh
-chmod +x /home/$username/.config/autostart/arch3.sh.desktop
+X-KDE-AutostartScript=true' > /home/$username/.config/autostart/testing2.sh.desktop
+chmod +x /home/$username/ArchLinux/testing2.sh
+chmod +x /home/$username/.config/autostart/testing2.sh.desktop
 
 
 echo "
