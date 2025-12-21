@@ -40,7 +40,7 @@ sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
 yay -S --mflags --skipinteg --noconfirm flatpak amneziavpn-bin
 yay -S --mflags --skipinteg --noconfirm netactview loudmouth hddtemp ki18n plasma6-applets-resources-monitor netdiscover fail2ban plasma6-applets-netspeed ffmulticonverter steghide cpu-x hardinfo2 kf6-servicemenus-rootactions arc-kde-git onlyoffice-bin plasma6-applets-thermal-monitor qvkbd
 yay -S --mflags --skipinteg --noconfirm phonon-qt6-mpv calf pavucontrol-qt 
-yay -S --mflags --skipinteg --noconfirm ventoy-bin timeshift grub-customizer
+yay -S --mflags --skipinteg --noconfirm ventoy-bin timeshift grub-customizer arch-silence-grub-theme-git 
 yay -S --mflags --skipinteg --noconfirm airgeddon metasploit dhcp hashcat hashcat-utils tcpdump ipscan crunch mdk4 reaver beef hostapd lighttpd bettercap ettercap sslstrip dsniff bully pixiewps usbutils xorg-xdpyinfo ccze asleap john hostapd-wpe nftables mdk3 hcxtools hcxdumptool onionshare
 sudo systemctl enable fail2ban.service
 yay -S --mflags --skipinteg --noconfirm mc ncdu edk2-ovmf qrca qt-heif-image-plugin-git ifuse wireguard-tools wireproxy
