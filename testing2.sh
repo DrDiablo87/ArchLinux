@@ -43,7 +43,7 @@ yay -S --mflags --skipinteg --noconfirm phonon-qt6-mpv calf pavucontrol-qt
 yay -S --mflags --skipinteg --noconfirm ventoy-bin timeshift
 yay -S --mflags --skipinteg --noconfirm airgeddon metasploit dhcp hashcat hashcat-utils tcpdump ipscan crunch mdk4 reaver beef hostapd lighttpd bettercap ettercap sslstrip dsniff bully pixiewps usbutils xorg-xdpyinfo ccze asleap john hostapd-wpe nftables mdk3 hcxtools hcxdumptool onionshare
 sudo systemctl enable fail2ban.service
-yay -S --mflags --skipinteg --noconfirm mc ncdu edk2-ovmf virt-manager qrca qt-heif-image-plugin-git ifuse wireguard-tools wireproxy
+yay -S --mflags --skipinteg --noconfirm mc ncdu edk2-ovmf qrca qt-heif-image-plugin-git ifuse wireguard-tools wireproxy
 yes | sudo sensors-detect
 yes | yay -Syua && yes | yay -Scc && yes | yay -Rns $(yay -Qtdq)
 
