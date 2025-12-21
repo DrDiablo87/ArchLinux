@@ -69,17 +69,11 @@ read -p "                                                                       
 export hostname username rootpass userpass
 
 echo -e '\033[32m' &&
-read -p "                                                                                       1 - Arch, 2 - WinArch: " OS
-if [[ $OS == 1 ]]; then
+
   #Создание разделов
 wipefs -a /dev/sda
 echo -e '\033[32m' &&
 (
-  echo n;
-  echo p;
-  echo;
-  echo;
-  echo +128M;
   echo n;
   echo p;
   echo;
@@ -93,26 +87,18 @@ echo -e '\e[31m' ; lsblk -f
 
 #Форматирование дисков
 echo -e '\033[32m'
-mkfs.fat -F32 /dev/sda1
-mkfs.btrfs -f -L ArchLinux /dev/sda2
+mkfs.btrfs -f -L ArchLinux /dev/sda1
 
 #Монтирование дисков
-mount -t btrfs /dev/sda2 /mnt
+mount -t btrfs /dev/sda1 /mnt
 btrfs subvolume create /mnt/@
 umount /mnt
-mount -t btrfs /dev/sda2 /mnt
+mount -t btrfs /dev/sda1 /mnt
 btrfs subvolume create /mnt/@home
 umount /mnt
-mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@ /dev/sda2 /mnt
+mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@ /dev/sda1 /mnt
 mkdir /mnt/home /mnt/boot
-mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@home /dev/sda2 /mnt/home
-mount /dev/sda1 /mnt/boot
-
-#Выбор зеркал для загрузки
-#echo "Server = https://archlinux.uk.mirror.allworldit.com/archlinux/$repo/os/$arch
-#" > /etc/pacman.d/mirrorlist
-#echo "Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
-#Server = http://mirror.yandex.ru/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
+mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@home /dev/sda1 /mnt/home
 
 echo -e '
 
@@ -131,57 +117,3 @@ genfstab -pU /mnt >> /mnt/etc/fstab
 
 arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/DrDiablo87/ArchLinux/refs/heads/master/testing1.sh)"
 systemctl reboot
-
-elif [[ $OS == 2 ]]; then
-
-#Создание разделов
-#cfdisk /dev/nvme0n1
-echo -e '\033[32m' &&
-(
-  echo n;
-  echo;
-  echo;
-  echo;
-  echo w;
-) | fdisk --color=never /dev/sda
-
-#Ваша разметка диска
-echo -e '\e[31m' ; lsblk -f
-
-#Форматирование дисков
-echo -e '\033[32m'
-
-mkfs.btrfs -f -L ArchLinux /dev/sda5
-
-#Монтирование дисков
-mount -t btrfs /dev/sda5 /mnt
-btrfs subvolume create /mnt/@
-umount /mnt
-mount -t btrfs /dev/sda5 /mnt
-btrfs subvolume create /mnt/@home
-umount /mnt
-mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@ /dev/sda5 /mnt
-mkdir /mnt/home /mnt/boot
-mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@home /dev/sda5 /mnt/home
-mount /dev/sda1 /mnt/boot
-
-
-echo -e '
-
-\e[31m==================================================================================== Установка основных пакетов ==================================\e[0m
-'
-echo -e '\033[32m'
-
-pacstrap /mnt base base-devel nano linux linux-zen linux-firmware btrfs-progs iwd linux-zen-headers
-
-echo -e '
-
-\e[31m==================================================================================== Настройка системы ===========================================\e[0m
-'
-echo -e '\033[32m'
-genfstab -pU /mnt >> /mnt/etc/fstab
-
-arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/DrDiablo87/ArchLinux/refs/heads/master/testing1.sh)"
-systemctl reboot --firmware-setup
-  
-fi 
