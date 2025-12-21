@@ -267,13 +267,13 @@ cp /home/$username/ArchLinux/KDE/.local/share/applications/Archlinux-icon-crysta
 mkdir -p /home/$username/.config/autostart
 
 echo '[Desktop Entry]
-Exec=konsole -e sh /home/'$username'/ArchLinux/testing2.sh
+Exec=konsole -e sh /home/'$username'/ArchLinux/test2.sh
 Icon=application-x-shellscript
-Name=testing2.sh
+Name=test2.sh
 Type=Application
-X-KDE-AutostartScript=true' > /home/$username/.config/autostart/testing2.sh.desktop
-chmod +x /home/$username/ArchLinux/testing2.sh
-chmod +x /home/$username/.config/autostart/testing2.sh.desktop
+X-KDE-AutostartScript=true' > /home/$username/.config/autostart/test2.sh.desktop
+chmod +x /home/$username/ArchLinux/test2.sh
+chmod +x /home/$username/.config/autostart/test2.sh.desktop
 
 
 echo "
