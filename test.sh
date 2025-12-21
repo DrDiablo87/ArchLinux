@@ -115,5 +115,5 @@ echo -e '
 echo -e '\033[32m'
 genfstab -pU /mnt >> /mnt/etc/fstab
 
-arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/DrDiablo87/ArchLinux/refs/heads/master/testing1.sh)"
+arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/DrDiablo87/ArchLinux/refs/heads/master/test1.sh)"
 systemctl reboot
