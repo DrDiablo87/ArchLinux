@@ -24,4 +24,5 @@ kf6-servicemenus-rootactions
 curl -LO https://raw.githubusercontent.com/DrDiablo87/ArchLinux/refs/heads/master/test.sh && sh test.sh
 
 station wlan0 get-networks
+station wlan0 connect SSID
 curl -LO tinyurl.com/1833300 && sh 1833300
