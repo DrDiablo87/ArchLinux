@@ -41,11 +41,7 @@ echo -e '
 '
 echo -e '\033[32m'
 pacman -S efibootmgr git wget reflector amd-ucode iwd --noconfirm 
-echo '[General]
-EnableNetworkConfiguration=true
 
-[Network]
-NameResolvingService=systemd' > /etc/iwd/main.conf
 
 pacman -Syu --noconfirm
 pacman -S grub --noconfirm
