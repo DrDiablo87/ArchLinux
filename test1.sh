@@ -40,7 +40,7 @@ echo -e '
 \e[31m==================================================================================== Устанавливаем загрузчик =====================================\e[0m
 '
 echo -e '\033[32m'
-pacman -S efibootmgr git wget reflector amd-ucode iwd	wpa_supplicant broadcom-wl --noconfirm 
+pacman -S efibootmgr git wget reflector amd-ucode iwd --noconfirm 
 
 pacman -Syu --noconfirmbroadcom-wl
 pacman -S grub --noconfirm
@@ -285,6 +285,7 @@ tmpfs						/var/lock	tmpfs	defaults,noatime 0 0 " >> /etc/fstab
 
 rm -R /home/$username/.bash_logout /home/$username/.bash_profile /home/$username/.bashrc /home/$username/Package /var/cache/pacman/pkg
 chown -R $username:users /home/$username
+pacman -S wpa_supplicant broadcom-wl --noconfirm
 
 #cp -Rf /home/$username/ArchLinux/KDE/.config /home/$username/.config
 #cp -Rf /home/$username/ArchLinux/KDE/. /root
