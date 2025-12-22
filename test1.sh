@@ -41,8 +41,7 @@ echo -e '
 '
 echo -e '\033[32m'
 pacman -S efibootmgr git wget reflector amd-ucode --noconfirm 
-
-pacman -Syu --noconfirmbroadcom-wl
+pacman -Syu
 pacman -S grub --noconfirm
 grub-install /dev/sda
 /sbin/grub-mkconfig -o /boot/grub/grub.cfg
