@@ -1,0 +1,20 @@
+[KFileDialog Settings]
+Recent Files[$e]=screenshot.jpg,file:$HOME/.config/LiveWallpaper/screenshot.jpg
+Recent URLs[$e]=file:$HOME/.config/LiveWallpaper/
+detailViewIconSize=0
+
+[MainWindow]
+Height 805=699
+Height 810=705
+MenuBar=Disabled
+State=AAAA/wAAAAD9AAAAAAAABNwAAALBAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAWAG0AYQBpAG4AVABvAG8AbABCAGEAcgAAAAAA/////wAAAAAAAAAA
+ToolBarsMovable=Disabled
+Virtual1 Height 810=705
+Virtual1 Width 1438=1244
+Virtual1 XPosition=0
+Virtual1 YPosition=66
+Width 1438=1244
+Width 1440=1024
+
+[PlasmaRunnerManager]
+LaunchCounts=

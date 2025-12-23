@@ -1,0 +1,3 @@
+#!/bin/bash
+xwinwrap -ni -fs -s -st -sp -b -nf -- mplayer -fps 25 -framedrop -wid WID -nosound ~/.config/LiveWallpaper/Galaxy.mp4 -loop 0
+

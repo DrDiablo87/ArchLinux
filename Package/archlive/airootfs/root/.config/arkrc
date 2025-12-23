@@ -1,0 +1,11 @@
+[MainWindow]
+State=AAAA/wAAAAD9AAAAAAAAAoAAAAGfAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAWAG0AYQBpAG4AVABvAG8AbABCAGEAcgEAAAAA/////wAAAAAAAAAA
+StatusBar=Disabled
+ToolBarsMovable=Disabled
+Virtual1 XPosition=750
+Virtual1 YPosition=302
+splitterSizes=426,213
+
+[Recent Files]
+File1[$e]=$HOME/archsysback-master.zip
+Name1[$e]=archsysback-master.zip

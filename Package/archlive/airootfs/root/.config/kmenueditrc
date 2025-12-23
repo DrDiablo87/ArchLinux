@@ -1,0 +1,13 @@
+[General]
+SplitterSizes=259,370
+
+[KFileDialog Settings]
+Recent Files[$e]=2000px-Biohazard_symbol.png,file:$HOME/.config/LiveWallpaper/2000px-Biohazard_symbol.png
+Recent URLs[$e]=file:$HOME/.config/LiveWallpaper/
+detailViewIconSize=0
+
+[MainWindow]
+State=AAAA/wAAAAD9AAAAAAAAAoAAAAGcAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAWAG0AYQBpAG4AVABvAG8AbABCAGEAcgEAAAAA/////wAAAAAAAAAA
+ToolBarsMovable=Disabled
+Virtual1 XPosition=-10
+Virtual1 YPosition=302

@@ -1,0 +1,19 @@
+[Desktop Entry]
+Categories=Qt;KDE;Utility;
+Comment=
+Exec=kleopatra
+GenericName[ru_RU]=Управление сертификатами
+GenericName=Certificate Manager and Unified Crypto GUI
+Icon=plasmavault
+Name[ru_RU]=Kleopatra
+Name=Kleopatra
+NoDisplay=false
+Path[$e]=
+StartupNotify=true
+Terminal=0
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=org.kde.kleopatra
+X-DocPath=kleopatra/index.html
+X-KDE-SubstituteUID=false
+X-KDE-Username=

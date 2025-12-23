@@ -1,0 +1,275 @@
+[file:///etc/makepkg.conf]
+Bookmarks=
+Checksum=aaf54a03deaae70cd88c5b7a6019677948b337b5
+Encoding=UTF-8
+Highlighting=None
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Normal
+Mode Set By User=false
+Time=2020,12,25,4,15,16
+URL=file:///etc/makepkg.conf
+
+[file:///etc/nanorc]
+Bookmarks=
+Checksum=bc10d470646b5e8fd518569eb3d6d065dcf89bba
+Encoding=UTF-8
+Highlighting=None
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Normal
+Mode Set By User=false
+Time=2020,12,25,4,20,41
+URL=file:///etc/nanorc
+
+[file:///etc/pacman.conf]
+Bookmarks=
+Checksum=3ba7479c93243e1553f3c68c1b019f4eb3224c1a
+Encoding=UTF-8
+Highlighting=None
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Normal
+Mode Set By User=false
+Time=2020,12,26,5,27,34
+URL=file:///etc/pacman.conf
+
+[file:///etc/zsh/zprofile]
+Bookmarks=
+Checksum=6bfcdf7cb3b0819d481ab0bf9d1d651ab4ce59f8
+Encoding=UTF-8
+Highlighting=None
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Normal
+Mode Set By User=false
+Time=2020,12,25,4,23,50
+URL=file:///etc/zsh/zprofile
+
+[file:///home/www/archlive/airootfs/etc/pacman.conf]
+Bookmarks=
+Checksum=edf22fa39a6d9c28ba47f029d33fdbd79c712d48
+Encoding=UTF-8
+Highlighting=None
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Normal
+Mode Set By User=false
+Time=2020,12,25,4,18,34
+URL=file:///home/www/archlive/airootfs/etc/pacman.conf
+
+[file:///home/www/archlive/airootfs/etc/sddm.conf]
+Bookmarks=
+Checksum=d08847511b2b0f222106d6db22dc356c58c6f969
+Encoding=UTF-8
+Highlighting=None
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Normal
+Mode Set By User=false
+Time=2020,12,23,12,5,0
+URL=file:///home/www/archlive/airootfs/etc/sddm.conf
+
+[file:///home/www/archlive/airootfs/etc/xdg/reflector/reflector.conf]
+Bookmarks=
+Checksum=30cf0cb86d8950ec1a85c1e80b2035077a345cf9
+Encoding=UTF-8
+Highlighting=None
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Normal
+Mode Set By User=false
+Time=2020,12,23,12,6,49
+URL=file:///home/www/archlive/airootfs/etc/xdg/reflector/reflector.conf
+
+[file:///home/www/archlive/airootfs/root/.config/KDE/UserFeedback.conf]
+Bookmarks=
+Checksum=c3affc3752c97abe45bc9748f8a6d4092db7cdf8
+Encoding=UTF-8
+Highlighting=None
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Normal
+Mode Set By User=false
+Time=2020,12,25,4,28,31
+URL=file:///home/www/archlive/airootfs/root/.config/KDE/UserFeedback.conf
+
+[file:///home/www/archlive/airootfs/root/.config/kde.org/plasmashell.conf]
+Bookmarks=
+Checksum=b149dc2a19f0045d5527d83456cd5b4de9e8efa2
+Encoding=UTF-8
+Highlighting=None
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Normal
+Mode Set By User=false
+Time=2020,12,25,4,28,38
+URL=file:///home/www/archlive/airootfs/root/.config/kde.org/plasmashell.conf
+
+[file:///home/www/archlive/airootfs/root/.config/menus/applications-kmenuedit.menu]
+Bookmarks=
+Checksum=5f77275405f15fe457e384238307fe2b9235d49b
+Encoding=UTF-8
+Highlighting=AMPLE
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=AMPLE
+Mode Set By User=false
+Time=2020,12,25,4,29,25
+URL=file:///home/www/archlive/airootfs/root/.config/menus/applications-kmenuedit.menu
+
+[file:///home/www/archlive/airootfs/root/.config/user-dirs.dirs]
+Bookmarks=
+Checksum=fe26017c8899968edb115aece67db80617ea8c2c
+Encoding=UTF-8
+Highlighting=None
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Normal
+Mode Set By User=false
+Time=2020,12,25,4,29,56
+URL=file:///home/www/archlive/airootfs/root/.config/user-dirs.dirs
+
+[file:///home/www/archlive/airootfs/root/.config/user-dirs.locale]
+Bookmarks=
+Checksum=979c0acf7ea949d1aaf2481635f4a8349a96e324
+Encoding=UTF-8
+Highlighting=None
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Normal
+Mode Set By User=false
+Time=2020,12,25,4,30,0
+URL=file:///home/www/archlive/airootfs/root/.config/user-dirs.locale
+
+[file:///home/www/archlive/airootfs/root/customize_airootfs.sh]
+Bookmarks=
+Checksum=d2d0e96b39a7863a419ded73084ca16e2afec826
+Encoding=UTF-8
+Highlighting=Bash
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Bash
+Mode Set By User=false
+Time=2020,12,23,12,6,21
+URL=file:///home/www/archlive/airootfs/root/customize_airootfs.sh
+
+[file:///home/www/archlive/efiboot/loader/loader.conf]
+Bookmarks=
+Checksum=030a64c8dfe5509d2d28cca77a572396d192d170
+Encoding=UTF-8
+Highlighting=None
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Normal
+Mode Set By User=false
+Time=2020,12,23,12,6,5
+URL=file:///home/www/archlive/efiboot/loader/loader.conf
+
+[file:///home/www/archlive/packages.x86_64]
+Bookmarks=
+Checksum=1a28b84d94a64375e599e6eff45fa59718bc2847
+Encoding=UTF-8
+Highlighting=None
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Normal
+Mode Set By User=false
+Time=2020,12,23,15,18,15
+URL=file:///home/www/archlive/packages.x86_64
+
+[file:///home/www/archlive/pacman.conf]
+Bookmarks=
+Checksum=bc2c9086944c5c4136681107a9dce975d6aba86c
+Encoding=UTF-8
+Highlighting=None
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Normal
+Mode Set By User=false
+Time=2020,12,25,4,18,54
+URL=file:///home/www/archlive/pacman.conf
+
+[file:///root/.automated_script.sh]
+Bookmarks=
+Checksum=ed3a92474b47c7d5870f2c96271f1e18f82ae69a
+Encoding=UTF-8
+Highlighting=Bash
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Bash
+Mode Set By User=false
+Time=2020,12,26,6,34,37
+URL=file:///root/.automated_script.sh
+
+[file:///root/.config/htop/htoprc]
+Bookmarks=
+Checksum=f4b5d448b58017712dec2054dc831c6cf03a0f93
+Encoding=UTF-8
+Highlighting=None
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Normal
+Mode Set By User=false
+Time=2020,12,26,5,45,7
+URL=file:///root/.config/htop/htoprc
+
+[file:///root/.config/plasma-org.kde.plasma.desktop-appletsrc]
+Bookmarks=
+Checksum=ad08c7c57bc9ead180c225980fb2c3c585927061
+Encoding=UTF-8
+Highlighting=None
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Normal
+Mode Set By User=false
+Time=2020,12,26,5,40,39
+URL=file:///root/.config/plasma-org.kde.plasma.desktop-appletsrc
+
+[file:///root/.local/share/applications/Airgeddon.desktop]
+Bookmarks=
+Checksum=e538c90acededcbea3350aa5582a8e71ec9aa012
+Encoding=UTF-8
+Highlighting=.desktop
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=.desktop
+Mode Set By User=false
+Time=2020,12,26,5,42,27
+URL=file:///root/.local/share/applications/Airgeddon.desktop
+
+[file:///root/.local/share/applications/netactview.desktop]
+Bookmarks=
+Checksum=84fc6539b22681b6551089397dcca1da24659187
+Encoding=UTF-8
+Highlighting=.desktop
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=.desktop
+Mode Set By User=false
+Time=2020,12,26,5,43,8
+URL=file:///root/.local/share/applications/netactview.desktop
+
+[file:///root/.local/share/dolphin/view_properties/global/.directory]
+Bookmarks=
+Checksum=be33fbffde4aee1aaea96ae85e3880116ca0de2b
+Encoding=UTF-8
+Highlighting=None
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Normal
+Mode Set By User=false
+Time=2020,12,26,6,2,47
+URL=file:///root/.local/share/dolphin/view_properties/global/.directory
+
+[file:///root/.zshrc]
+Bookmarks=
+Checksum=1c82a932a8e86508a77b1cd6cfb2997b9334938e
+Encoding=UTF-8
+Highlighting=Zsh
+Highlighting Set By User=false
+Indentation Mode=normal
+Mode=Zsh
+Mode Set By User=false
+Time=2020,12,26,6,38,45
+URL=file:///root/.zshrc

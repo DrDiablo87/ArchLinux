@@ -1,0 +1,19 @@
+[General]
+ColorScheme=ArcDark
+font=Liberation Sans,10,-1,5,50,0,0,0,0,0
+menuFont=Liberation Sans,10,-1,5,50,0,0,0,0,0
+smallestReadableFont=Liberation Sans,8,-1,5,50,0,0,0,0,0
+toolBarFont=Liberation Sans,10,-1,5,50,0,0,0,0,0
+widgetStyle=Breeze
+
+[Icons]
+Theme=breeze-dark
+
+[KDE]
+ShowIconsInMenuItems=true
+ShowIconsOnPushButtons=true
+contrast=4
+
+[Toolbar style]
+ToolButtonStyle=TextBesideIcon
+ToolButtonStyleOtherToolbars=TextBesideIcon

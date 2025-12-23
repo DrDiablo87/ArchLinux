@@ -1,0 +1,6 @@
+[Event/sensor_alarm]
+Action=
+Execute=
+Logfile=
+Sound=
+TTS=

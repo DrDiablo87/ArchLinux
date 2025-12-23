@@ -1,0 +1,6 @@
+[$Version]
+update_info=spectacle_newConfig.upd:spectacle-new-config
+
+[GuiConfig]
+cropRegion=0,0,0,0
+window-position=50,50

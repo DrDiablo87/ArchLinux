@@ -1,0 +1,17 @@
+[Applications][org.kde.amarok]
+ShowBadges=false
+
+[Applications][org.kde.spectacle]
+ShowPopups=false
+
+[Applications][timeshift-gtk]
+ShowPopups=false
+
+[Notifications]
+PopupTimeout=2000
+
+[Services][kwalletd]
+ShowPopups=false
+
+[Services][plasma_workspace]
+ShowPopups=false

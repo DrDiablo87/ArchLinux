@@ -1,0 +1,28 @@
+[$Version]
+update_info=ksmserver_update_loginMode_value.upd:ksmserver_update_loginMode_value_default_enum
+
+[General]
+confirmLogout=true
+excludeApps=
+loginMode=emptySession
+offerShutdown=true
+shutdownType=0
+
+[LegacySession: saved at previous logout]
+count=0
+
+[Session: saved at previous logout]
+clientId1=10a5d4b0d8000157469050500000005630004
+clientId2=10a5d4b0d8000157469392300000005650005
+count=2
+discardCommand1[ru_RU]=rm,/home/www/.config/session/kwin_10a5d4b0d8000157469050500000005630004_1574694021_149533
+program1=/usr/bin/kwin_x11
+program2=pulseaudio
+restartCommand1=/usr/bin/kwin_x11,-session,10a5d4b0d8000157469050500000005630004_1574694021_149533
+restartCommand2=
+restartStyleHint1=0
+restartStyleHint2=0
+userId1=www
+userId2=www
+wasWm1=true
+wasWm2=false

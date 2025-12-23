@@ -1,0 +1,22 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=image/jpeg;image/bmp;audio/x-wav;audio/basic;
+Icon=document-encrypt
+#TryExec=steghide-kdialog
+Actions=embed;extract;
+Name=steghide service menu
+X-KDE-Priority=TopLevel
+X-KDE-Submenu=Steghide
+
+[Desktop Action embed]
+Icon=document-encrypt
+Name=Embed file
+Name[ru]=Спрятать
+Exec=steghide-kdialog embed %F
+
+[Desktop Action extract]
+Icon=document-decrypt
+Name=Extract file
+Name[ru]=Извлечь
+Exec=steghide-kdialog extract %F 

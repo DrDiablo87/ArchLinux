@@ -1,0 +1,13 @@
+[Desktop Entry]
+Comment=
+Exec=wget git.io/1.sh && konsole --geometry 8000x8000 -e sh 1.sh
+Icon=/usr/share/pixmaps/archlinux-logo.png
+Name=Arch Install
+NoDisplay=false
+Path[$e]=
+StartupNotify=true
+Terminal=0
+TerminalOptions=
+Type=Application
+X-KDE-SubstituteUID=false
+X-KDE-Username=

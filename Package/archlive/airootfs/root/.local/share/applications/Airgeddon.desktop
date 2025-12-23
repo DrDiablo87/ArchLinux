@@ -1,0 +1,14 @@
+[Desktop Entry]
+Comment=
+Exec=airgeddon
+Icon=/root/.config/LiveWallpaper/2000px-Biohazard_symbol.png
+Name=Airgeddon
+NoDisplay=false
+Path[]=
+StartupNotify=true
+Terminal=1
+TerminalOptions=
+Type=Application
+X-KDE-SubstituteUID=true
+X-KDE-Username=root
+

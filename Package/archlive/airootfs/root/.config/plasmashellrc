@@ -1,0 +1,32 @@
+[KFileDialog Settings]
+Recent Files[$e]=archlinux-logo-dark.png,file:$HOME/.config/LiveWallpaper/archlinux-logo-dark.png
+Recent URLs[$e]=file:$HOME/.config/LiveWallpaper/,file:$HOME/.config/
+detailViewIconSize=16
+
+[KPropertiesDialog]
+Virtual1 Height 810=433
+Virtual1 Width 1438=473
+
+[Notification Messages]
+really_clear_history=true
+
+[PlasmaRunnerManager]
+LaunchCounts=
+
+[PlasmaTransientsConfig]
+PreloadWeight=2
+
+[PlasmaViews][Panel 2][Defaults]
+thickness=28
+
+[PlasmaViews][Panel 2][Horizontal1438]
+thickness=28
+
+[PlasmaViews][Panel 2][Horizontal1440]
+thickness=28
+
+[ScreenConnectors]
+0=Virtual1
+
+[Updates]
+performed=/usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/move_desktop_layout_config.js,/usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/obsolete_kickoffrc.js,/usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/maintain_existing_desktop_icon_sizes.js,/usr/share/plasma/shells/org.kde.plasma.desktop/contents/updates/unlock_widgets.js

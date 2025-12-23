@@ -1,0 +1,49 @@
+Height 810=500
+MenuBar=Disabled
+State=AAAA/wAAAAD9AAAAAwAAAAAAAAC4AAABzvwCAAAAAvsAAAAWAGYAbwBsAGQAZQByAHMARABvAGMAawAAAAAA/////wAAAAoBAAAD+wAAABQAcABsAGEAYwBlAHMARABvAGMAawEAAAAmAAABzgAAAFoBAAADAAAAAQAAAAAAAAAA/AIAAAAB+wAAABAAaQBuAGYAbwBEAG8AYwBrAAAAAAD/////AAAACgEAAAMAAAADAAAAAAAAAAD8AQAAAAH7AAAAGAB0AGUAcgBtAGkAbgBhAGwARABvAGMAawAAAAAA/////wAAAAoBAAADAAACNQAAAc4AAAAEAAAABAAAAAgAAAAI/AAAAAEAAAACAAAAAQAAABYAbQBhAGkAbgBUAG8AbwBsAEIAYQByAQAAAAD/////AAAAAAAAAAA=
+Width 1438=750
+
+[CompactMode]
+FontWeight=50
+
+[DetailsMode]
+FontWeight=50
+
+[General]
+ConfirmClosingMultipleTabs=false
+ConfirmClosingTerminalRunningProgram=false
+ShowCopyMoveMenu=true
+Version=200
+ViewPropsTimestamp=2019,11,25,17,3,7
+
+[IconsMode]
+FontWeight=50
+
+[KPropertiesDialog]
+Height 810=456
+Virtual1 Height 810=500
+Virtual1 Width 1438=624
+Width 1438=459
+
+[MainWindow]
+Height 805=480
+Height 810=500
+MenuBar=Disabled
+State=AAAA/wAAAAD9AAAAAwAAAAAAAAC4AAABzvwCAAAAAvsAAAAWAGYAbwBsAGQAZQByAHMARABvAGMAawAAAAAA/////wAAAAoBAAAD+wAAABQAcABsAGEAYwBlAHMARABvAGMAawEAAAAmAAABzgAAAF0BAAADAAAAAQAAAAAAAAAA/AIAAAAB+wAAABAAaQBuAGYAbwBEAG8AYwBrAAAAAAD/////AAAACgEAAAMAAAADAAAAAAAAAAD8AQAAAAH7AAAAGAB0AGUAcgBtAGkAbgBhAGwARABvAGMAawAAAAAA/////wAAAAoBAAADAAACNQAAAc4AAAAEAAAABAAAAAgAAAAI/AAAAAEAAAACAAAAAQAAABYAbQBhAGkAbgBUAG8AbwBsAEIAYQByAQAAAAD/////AAAAAAAAAAA=
+ToolBarsMovable=Disabled
+Virtual1 Height 810=500
+Virtual1 Width 1438=750
+Virtual1 XPosition=0
+Virtual1 YPosition=282
+Width 1438=750
+Width 1440=800
+
+[PreviewSettings]
+Plugins=appimagethumbnail,ebookthumbnail,opendocumentthumbnail,audiothumbnail,ffmpegthumbs,kraorathumbnail,imagethumbnail,exrthumbnail,jpegthumbnail,windowsimagethumbnail,svgthumbnail,windowsexethumbnail,comicbookthumbnail,directorythumbnail,pothumbnail,mltpreview,blenderthumbnail,djvuthumbnail,gsthumbnail,fontthumbnail,rawthumbnail
+
+[SettingsDialog]
+Height 810=462
+Width 1438=834
+
+[VersionControl]
+enabledPlugins=Git

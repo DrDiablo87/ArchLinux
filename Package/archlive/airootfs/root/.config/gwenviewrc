@@ -1,0 +1,22 @@
+[$Version]
+update_info=gwenview.upd:SideBar_StatusBar_Rename,gwenview.upd:ImageView_AlphaBackgroundMode_Update,gwenview.upd:DeleteThumbnailSetting_Rename
+
+[General]
+ThumbnailBarIsVisible=true
+
+[ImageView]
+ThumbnailSplitterSizes=348,99
+
+[MainWindow]
+Height 810=518
+State=AAAA/wAAAAD9AAAAAAAAA4AAAAHCAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAEAAAAWAG0AYQBpAG4AVABvAG8AbABCAGEAcgEAAAAA/////wAAAAAAAAAA
+ToolBarsMovable=Disabled
+Width 1438=896
+
+[Recent Files]
+File1[$e]=$HOME/.config/LiveWallpaper/2000px-Biohazard_symbol.png
+Name1[$e]=2000px-Biohazard_symbol.png
+
+[SideBar]
+IsVisible ViewMode=false
+SideBarSplitterSizes=242,651

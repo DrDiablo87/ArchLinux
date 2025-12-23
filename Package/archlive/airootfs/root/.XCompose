@@ -1,0 +1,4 @@
+include "/usr/share/X11/locale/en_US.UTF-8/Compose"
+<Multi_key> <w> <w> : "⚠" U26A0 # Warning Sign
+<Multi_key> <b> <h> : "☣" U2623 #  Biohazard Sign
+<Multi_key> <r> <a> : "☢" U2622 #  Radioactive Sign

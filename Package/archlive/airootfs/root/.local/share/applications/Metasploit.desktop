@@ -1,0 +1,13 @@
+[Desktop Entry]
+Comment=
+Exec=msfconsole
+Icon=/root/.config/LiveWallpaper/2000px-Biohazard_symbol.svg.png
+Name=Metasploit
+NoDisplay=false
+Path[$e]=
+StartupNotify=true
+Terminal=1
+TerminalOptions=
+Type=Application
+X-KDE-SubstituteUID=true
+X-KDE-Username=root
