@@ -125,7 +125,7 @@ zsh-theme-powerlevel10k
 awesome-terminal-fonts
 zsh-syntax-highlighting
 zsh-autosuggestions
-neofetch-git
+neofetch
 networkmanager
 mpv
 wget
