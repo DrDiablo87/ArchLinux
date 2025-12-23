@@ -104,7 +104,8 @@ echo "#\!/usr/bin/env python3" > $(xdg-user-dir TEMPLATES)/Python\ файл.py
 
 #============================================================================
 git clone https://github.com/Kurchatov87/12345.git
-sudo tar -xf ~/ArchLinux/Package/archlive.tar.gz -C ~/
+#sudo tar -xf ~/ArchLinux/Package/archlive.tar.gz -C ~/
+cp -r ~/ArchLinux/Package/archlive ~/
 wget https://dl2.appzona.org/ZonaSetup.exe
 yay -Rns --mflags --skipinteg --noconfirm extra-cmake-modules discover
 #tar -xf ~/ArchLinux/Package/archlive.tar.gz -C ~/
