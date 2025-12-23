@@ -285,7 +285,7 @@ tmpfs						/var/lock	tmpfs	defaults,noatime 0 0 " >> /etc/fstab
 
 rm -R /home/$username/.bash_logout /home/$username/.bash_profile /home/$username/.bashrc /home/$username/Package /var/cache/pacman/pkg
 chown -R $username:users /home/$username
-pacman -S wpa_supplicant broadcom-wl dhcpcd dhcp networkmanager --noconfirm
+pacman -S wpa_supplicant broadcom-wl dhcpcd dhcp networkmanager netctl network-manager-applet dialog --noconfirm
 
 #cp -Rf /home/$username/ArchLinux/KDE/.config /home/$username/.config
 #cp -Rf /home/$username/ArchLinux/KDE/. /root
