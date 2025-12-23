@@ -68,8 +68,11 @@ echo 'root ALL=(ALL) ALL
 Defaults env_reset, timestamp_timeout=30' > /etc/sudoers
 
 git clone https://github.com/DrDiablo87/ArchLinux.git /home/$username/ArchLinux
+systemctl enable --now dhcpcd
+systemctl enable --now systemd-networkd.service
+systemctl enable --now systemd-resolved.service
+systemctl enable --now NetworkManager.service
 ping -c 5 google.com
-systemctl start NetworkManager.service
 
 pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
 pacman-key --lsign-key 3056513887B78AEB
