@@ -117,3 +117,7 @@ genfstab -pU /mnt >> /mnt/etc/fstab
 
 arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/DrDiablo87/ArchLinux/refs/heads/master/test1.sh)"
 systemctl reboot
+#pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+#pacman-key --lsign-key 3056513887B78AEB
+#pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'  --noconfirm
+#pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'  --noconfirm
