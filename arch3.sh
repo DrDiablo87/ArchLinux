@@ -45,7 +45,7 @@ cp ~/ArchLinux/Package/firefox-off.png ~/.config/psd/firefox-off.png
 sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
 yay -Rns --mflags --skipinteg --noconfirm extra-cmake-modules discover
 yay -S --mflags --skipinteg --noconfirm discover flatpak amneziavpn-bin
-yay -S --mflags --skipinteg --noconfirm netactview loudmouth hddtemp ki18n plasma6-applets-resources-monitor netdiscover fail2ban plasma6-applets-netspeed ffmulticonverter steghide cpu-x hardinfo2 kf6-servicemenus-rootactions arc-kde-git onlyoffice-bin plasma6-applets-thermal-monitor qvkbd
+yay -S --mflags --skipinteg --noconfirm loudmouth hddtemp ki18n plasma6-applets-resources-monitor netdiscover fail2ban plasma6-applets-netspeed ffmulticonverter steghide cpu-x hardinfo2 kf6-servicemenus-rootactions arc-kde-git onlyoffice-bin plasma6-applets-thermal-monitor qvkbd
 yay -S --mflags --skipinteg --noconfirm lact phonon-qt6-mpv plasma6-wallpapers-wallpaper-engine-git opencl-amd easyeffects calf pavucontrol-qt 
 #yay -Rns --noconfirm phonon-qt6-vlc
 yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift fritzing qtcreator
