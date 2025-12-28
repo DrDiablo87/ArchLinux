@@ -61,12 +61,7 @@ echo -e '\e[1;34m
                                                       +%@@@@%                                                                                     @@@@@@   
                                                      %@@@@%                                                                                         @@@@@ 
                                                     @@%%                                                                                              %%@@ \e[0m'
-echo -e '\033[32m'
-read -p "                                                                                       Введите имя компьютера: " hostname
-read -p "                                                                                       Введите имя пользователя: " username
-read -p "                                                                                       Введите пароль root: " rootpass
-read -p "                                                                                       Введите пароль user: " userpass
-export hostname username rootpass userpass
+
 
 echo -e '\033[32m' &&
 read -p "                                                                                       1 - Arch, 2 - WinArch: " OS
@@ -129,8 +124,8 @@ echo -e '
 '
 echo -e '\033[32m'
 genfstab -pU /mnt >> /mnt/etc/fstab
-arch-chroot /mnt sh -c "$(curl -fsSL git.io/2.sh)"
-#arch-chroot -S /mnt sh -c "$(curl -fsSL git.io/2.sh)"
+#arch-chroot /mnt sh -c "$(curl -fsSL git.io/2.sh)"
+arch-chroot -S /mnt sh -c "$(curl -fsSL git.io/2.sh)"
 #arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/DrDiablo87/ArchLinux/refs/heads/master/arch2.sh)"
 systemctl reboot
 
@@ -182,7 +177,7 @@ echo -e '
 '
 echo -e '\033[32m'
 genfstab -pU /mnt >> /mnt/etc/fstab
-arch-chroot /mnt sh -c "$(curl -fsSL git.io/2.sh)"
+arch-chroot -S /mnt sh -c "$(curl -fsSL git.io/2.sh)"
 #arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/DrDiablo87/ArchLinux/refs/heads/master/arch2.sh)"
 systemctl reboot --firmware-setup
   
