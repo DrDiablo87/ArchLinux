@@ -110,10 +110,18 @@ mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@home 
 mount /dev/nvme0n1p1 /mnt/boot
 
 #Выбор зеркал для загрузки
-#echo "Server = https://archlinux.uk.mirror.allworldit.com/archlinux/$repo/os/$arch
-#" > /etc/pacman.d/mirrorlist
-#echo "Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
-#Server = http://mirror.yandex.ru/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
+echo "Server = https://archlinux.gay/archlinux/$repo/os/$arch
+Server = https://ru.mirrors.cicku.me/archlinux/$repo/os/$arch
+Server = https://mirror.kamtv.ru/archlinux/$repo/os/$arch
+Server = https://mirror.kpfu.ru/archlinux/$repo/os/$arch
+Server = https://mirror.murmellow.lol/archlinux/$repo/os/$arch
+Server = https://mirror.nw-sys.ru/archlinux/$repo/os/$arch
+Server = https://repository.su/archlinux/$repo/os/$arch
+Server = https://web.sketserv.ru/archlinux/$repo/os/$arch
+Server = https://mirror.truenetwork.ru/archlinux/$repo/os/$arch
+Server = https://vladivostokst.ru/archlinux/$repo/os/$arch
+Server = https://mirror.yandex.ru/archlinux/$repo/os/$arch" > /etc/pacman.d/mirrorlist
+pacman -Sy --noconfirm
 
 echo -e '
 
