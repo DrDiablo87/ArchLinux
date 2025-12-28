@@ -41,8 +41,7 @@ echo -e '
 '
 echo -e '\033[32m'
 pacman -S efibootmgr git wget reflector amd-ucode --noconfirm  
-systemctl start reflector.service
-reflector --country "RU" --verbose -l 5 -p https --sort rate --save /etc/pacman.d/mirrorlist
+reflector --country Russia --verbose -l 5 -p https --sort rate --save /etc/pacman.d/mirrorlist
 pacman -Syu --noconfirm
 #echo "Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
 #Server = http://mirror.yandex.ru/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
@@ -176,7 +175,7 @@ echo -e '\033[32m'
 #NVIDIA
 #pacman -S --needed nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 #AMD
-pacman -S --needed lib32-mesa mesa xf86-video-amdgpu vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader libva-mesa-driver lib32-libva-mesa-driver mesa-vdpau lib32-mesa-vdpau xorg-drivers xorg-xinit --noconfirm
+pacman -S --needed lib32-mesa mesa xf86-video-amdgpu vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader libva-mesa-driver lib32-libva-mesa-driver xorg-drivers xorg-xinit --noconfirm
 #INTEL
 #pacman -S --needed lib32-mesa vulkan-intel lib32-vulkan-intel vulkan-icd-loader lib32-vulkan-icd-loader --noconfirm
 #pacman -S nvidia-settings nvidia nvidia-settings xorg-server-devel opencl-nvidia nvidia && wget https://ru.download.nvidia.com/XFree86/Linux-x86_64/390.141/NVIDIA-Linux-x86_64-390.141.run
@@ -287,6 +286,7 @@ echo -e '\033[32m'
 pacman -S amarok taglib1 gst-libav gst-plugins-bad gst-plugins-good gst-plugins-ugly --noconfirm
 
 pacman -S mpv --noconfirm
+mkdir /etc/mpv
 cp /home/$username/ArchLinux/Package/mpv.desktop /usr/share/applications/mpv.desktop
 cp /home/$username/ArchLinux/Package/mpv_single /usr/bin/mpv_single
 chmod +x /usr/bin/mpv_single
