@@ -49,7 +49,7 @@ pacman -Syu --noconfirm
 
 #tourch || exit $?                 # завершение скрипта при возникновении ошибки, а она в этой комманде есть
 
-bootctl install
+bootctl --variables=yes install
 echo 'default Arch
 timeout 1
 editor 0' > /boot/loader/loader.conf
