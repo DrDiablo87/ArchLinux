@@ -53,6 +53,7 @@ bootctl install
 echo 'default Arch
 timeout 1
 editor 0' > /boot/loader/loader.conf
+sleep 20
 
 if [ -e /dev/nvme0n1p5 ]; then
 echo 'title Arch Linux
@@ -99,7 +100,7 @@ echo 'root ALL=(ALL) ALL
 Defaults env_reset, timestamp_timeout=30' > /etc/sudoers
 
 git clone https://github.com/DrDiablo87/ArchLinux.git /home/$username/ArchLinux
-
+sleep 20
 systemctl enable --now systemd-networkd.service
 systemctl enable --now systemd-resolved.service
 
@@ -276,7 +277,7 @@ systemctl enable bluetooth.service
 systemctl mask systemd-tmpfiles-setup.service    # предотвращение создания проблемного снапшота
 btrfs subvolume delete /var/lib/machines         # удаление проблемного снапшота
 usermod -a -G wireshark $username
-
+sleep 20
 #===========================================================================================================================================================================================================
 
 echo -e '
