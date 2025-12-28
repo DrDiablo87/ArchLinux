@@ -41,7 +41,8 @@ echo -e '
 '
 echo -e '\033[32m'
 pacman -S efibootmgr git wget reflector amd-ucode --noconfirm  
-#reflector --verbose -l 5 -p https --sort rate --save /etc/pacman.d/mirrorlist
+systemctl start reflector.service
+reflector --country "RU" --verbose -l 5 -p https --sort rate --save /etc/pacman.d/mirrorlist
 pacman -Syu --noconfirm
 #echo "Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
 #Server = http://mirror.yandex.ru/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
