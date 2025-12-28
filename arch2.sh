@@ -99,11 +99,8 @@ Defaults env_reset, timestamp_timeout=30' > /etc/sudoers
 
 git clone https://github.com/DrDiablo87/ArchLinux.git /home/$username/ArchLinux
 
-systemctl enable --now dhcpcd
 systemctl enable --now systemd-networkd.service
 systemctl enable --now systemd-resolved.service
-systemctl enable --now NetworkManager.service
-ping -c 5 google.com
 
 pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
 pacman-key --lsign-key 3056513887B78AEB
@@ -188,7 +185,7 @@ pacman -S yay plasma-pa plasma-nm plasma-desktop dolphin kate konsole kde-gtk-co
 #pacman -S bettercap ettercap bully pixiewps hashcat tcpdump mdk4 reaver hcxtools john onionshare metasploit --noconfirm
 
 #systemctl enable sddm.service
-systemctl enable NetworkManager.service
+#systemctl enable NetworkManager.service
 
 pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent gwenview kompare kde-gtk-config plasma-sdk encfs cryfs kscreen sddm-kcm kinfocenter wireshark-qt spectacle ktouch kwave krita kdenlive kleopatra krfb krdc freerdp kdegraphics-thumbnailers kdesdk-thumbnailers ffmpegthumbs kdesdk-thumbnailers breeze-gtk kfind cmake extra-cmake-modules systemdgenie plasma-systemmonitor bluedevil bluez-utils --noconfirm
 pacman -S firefox-i18n-ru firefox-ublock-origin filelight ntfs-3g gufw mtr exfat-utils cronie gnome-disk-utility f2fs-tools udftools net-tools libvirt linux-headers qt5-translations kdeplasma-addons networkmanager-openvpn openresolv kcalc tree openssh bridge-utils partitionmanager --noconfirm
