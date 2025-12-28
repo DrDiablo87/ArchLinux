@@ -130,8 +130,8 @@ echo -e '
 echo -e '\033[32m'
 genfstab -pU /mnt >> /mnt/etc/fstab
 
-#arch-chroot /mnt sh -c "$(curl -fsSL git.io/2.sh)"
-arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/DrDiablo87/ArchLinux/refs/heads/master/arch2.sh)"
+arch-chroot /mnt sh -c "$(curl -fsSL git.io/2.sh)"
+#arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/DrDiablo87/ArchLinux/refs/heads/master/arch2.sh)"
 systemctl reboot
 
 elif [[ $OS == 2 ]]; then
@@ -182,8 +182,8 @@ echo -e '
 '
 echo -e '\033[32m'
 genfstab -pU /mnt >> /mnt/etc/fstab
-#arch-chroot /mnt sh -c "$(curl -fsSL git.io/2.sh)"
-arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/DrDiablo87/ArchLinux/refs/heads/master/arch2.sh)"
+arch-chroot /mnt sh -c "$(curl -fsSL git.io/2.sh)"
+#arch-chroot /mnt sh -c "$(curl -fsSL https://raw.githubusercontent.com/DrDiablo87/ArchLinux/refs/heads/master/arch2.sh)"
 systemctl reboot --firmware-setup
   
 fi 
