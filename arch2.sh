@@ -30,7 +30,6 @@ bootctl install
 echo 'default Arch
 timeout 1
 editor 0' > /boot/loader/loader.conf
-sleep 20
 
 if [ -e /dev/nvme0n1p5 ]; then
 echo 'title Arch Linux
