@@ -24,8 +24,6 @@ ALL_kver="/boot/vmlinuz-linux-zen"
 PRESETS=default
 default_image="/boot/initramfs-linux-zen.img"' > /etc/mkinitcpio.d/linux-zen.preset
 pacman -S efibootmgr git wget reflector amd-ucode --noconfirm  
-reflector --country Russia --verbose -l 5 -p https --sort rate --save /etc/pacman.d/mirrorlist
-pacman -Syu --noconfirm
 bootctl install
 echo 'default Arch
 timeout 1
