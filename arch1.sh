@@ -107,7 +107,7 @@ mount /dev/nvme0n1p1 /mnt/boot
 reflector --country Russia --verbose -l 10 --sort rate --save /etc/pacman.d/mirrorlist
 
 mount --rbind /proc /mnt/proc
-mount --rbind /sys /mnt/chroot/sys
+mount --rbind /sys /mnt/sys
 mount --rbind /dev /mnt/dev
 
 echo -e '
