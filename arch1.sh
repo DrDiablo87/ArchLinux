@@ -104,11 +104,11 @@ mkdir /mnt/home /mnt/boot
 mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@home /dev/nvme0n1p2 /mnt/home
 mount /dev/nvme0n1p1 /mnt/boot
 
-#Выбор зеркал для загрузки
-#echo "Server = https://archlinux.gay/archlinux/$repo/os/$arch
-#Server = https://ru.mirrors.cicku.me/archlinux/$repo/os/$arch
-#Server = https://mirror.yandex.ru/archlinux/$repo/os/$arch" > /etc/pacman.d/mirrorlist
-pacman -Sy --noconfirm
+reflector --country Russia --verbose -l 10 --sort rate --save /etc/pacman.d/mirrorlist
+
+mount --rbind /proc /mnt/proc
+mount --rbind /sys /mnt/chroot/sys
+mount --rbind /dev /mnt/dev
 
 echo -e '
 
