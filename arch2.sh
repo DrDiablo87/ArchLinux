@@ -14,7 +14,7 @@ echo 'MODULES=""
 BINARIES="" 
 FILES="" 
 HOOKS="base udev autodetect modconf block filesystems keyboard keymap"' > /etc/mkinitcpio.conf
-rm /boot/initramfs-linux-zen-fallback.img /boot/initramfs-linux-fallback.img
+#rm /boot/initramfs-linux-zen-fallback.img /boot/initramfs-linux-fallback.img
 echo 'ALL_config="/etc/mkinitcpio.conf"
 ALL_kver="/boot/vmlinuz-linux"
 PRESETS=default
