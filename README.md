@@ -18,12 +18,13 @@ PROTON_USE_WINED3D11=1 %command%
 
 # NVME 
 Добавить новый контроллер "Последовательное VirtIO" и отредактировать        <br>
-```javascript {
+```javascript
+"
 <controller type="nvme" index="0">
   <serial>4</serial>
   <alias name="nvme0"/>
   <address type="pci" domain="0x0000" bus="0x10" slot="0x02" function="0x0"/>
-</controller> }
+</controller> ```
 
 Добавить диск VirtIO       <br>
 установить в качестве целевого устройства NVMe:       <br>
