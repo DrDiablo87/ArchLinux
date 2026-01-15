@@ -28,7 +28,7 @@ PROTON_USE_WINED3D11=1 %command%
 
 Добавить диск VirtIO 
 установить в качестве целевого устройства NVMe: 
-````
+````bash
  <target dev='nvme0n1' bus='nvme'/>
 ````
 
