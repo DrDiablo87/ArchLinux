@@ -23,10 +23,12 @@ PROTON_USE_WINED3D11=1 %command%
   <serial>4</serial>
   <alias name="nvme0"/>
   <address type="pci" domain="0x0000" bus="0x10" slot="0x02" function="0x0"/>
-</controller> ```
-
-Добавить диск VirtIO       <br>
-установить в качестве целевого устройства NVMe:       <br>
+</controller>
 ```
- <target dev='nvme0n1' bus='nvme'/>```
+
+Добавить диск VirtIO 
+установить в качестве целевого устройства NVMe: 
+````
+ <target dev='nvme0n1' bus='nvme'/>
+````
 
