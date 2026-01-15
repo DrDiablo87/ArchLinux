@@ -17,13 +17,14 @@ PROTON_USE_WINED3D11=1 %command%
 Запуск от root       <br>
 # NVME 
 Добавить новый контроллер "Последовательное VirtIO" и отредактировать        <br>
-<controller type="nvme" index="0">       <br>
-  <serial>4</serial>       <br>
-  <alias name="nvme0"/>       <br>
-  <address type="pci" domain="0x0000" bus="0x10" slot="0x02" function="0x0"/>       <br>
-</controller>       <br>
+<controller type="nvme" index="0">
+  <serial>4</serial>
+  <alias name="nvme0"/>
+  <address type="pci" domain="0x0000" bus="0x10" slot="0x02" function="0x0"/>
+</controller>
 
 Добавить диск VirtIO       <br>
-установить в качестве целевого устройства NVMe: <target dev='nvme0n1' bus='nvme'/>       <br>
+установить в качестве целевого устройства NVMe:       <br>
+ <target dev='nvme0n1' bus='nvme'/>
 
 
