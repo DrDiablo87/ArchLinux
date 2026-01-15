@@ -18,7 +18,7 @@ PROTON_USE_WINED3D11=1 %command%
 
 # NVME 
 Добавить новый контроллер "Последовательное VirtIO" и отредактировать        <br>
-```
+```bash
 <controller type="nvme" index="0">
   <serial>4</serial>
   <alias name="nvme0"/>
