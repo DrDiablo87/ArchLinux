@@ -15,6 +15,13 @@ PROTON_USE_WINED3D11=1 %command%
 Программа qvkbd       <br>
 Аргументы GDK_BACKEND=x11       <br>
 Запуск от root       <br>
+
+
+
+```javascript
+function test() {
+  console.log("This code will have a copy button to the right of it");
+}
 # NVME 
 Добавить новый контроллер "Последовательное VirtIO" и отредактировать        <br>
 <controller type="nvme" index="0">
@@ -28,6 +35,3 @@ PROTON_USE_WINED3D11=1 %command%
  <target dev='nvme0n1' bus='nvme'/>
 
 
-<p align="left"><controller type="nvme" index="0"><br>  <serial>4</serial><br>  <alias name="nvme0"/><br>  <address type="pci" domain="0x0000" bus="0x10" slot="0x02" function="0x0"/><br></controller></p>
-
-###
