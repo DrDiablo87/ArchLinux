@@ -46,13 +46,13 @@ sudo ln /usr/lib/systemd/user/psd.service /usr/lib/systemd/user/Firefox.service
 yay -Rns --mflags --skipinteg --noconfirm extra-cmake-modules
 yay -S --mflags --skipinteg --noconfirm discover flatpak amneziavpn-bin
 yay -S --mflags --skipinteg --noconfirm loudmouth hddtemp ki18n plasma6-applets-resources-monitor netdiscover fail2ban plasma6-applets-netspeed steghide cpu-x hardinfo2 kf6-servicemenus-rootactions arc-kde-git onlyoffice-bin plasma6-applets-thermal-monitor qvkbd
-yay -S --mflags --skipinteg --noconfirm lact phonon-qt6-mpv plasma6-wallpapers-wallpaper-engine-git opencl-amd easyeffects calf pavucontrol-qt netactiview libxml2-legacy
+yay -S --mflags --skipinteg --noconfirm lact phonon-qt6-mpv plasma6-wallpapers-wallpaper-engine-git opencl-amd easyeffects calf pavucontrol-qt libxml2-legacy
 #yay -Rns --noconfirm phonon-qt6-vlc
 yay -S --mflags --skipinteg --noconfirm mkvtoolnix-gui ventoy-bin timeshift fritzing qtcreator
 #yay -U --mflags --skipinteg --noconfirm ~/ArchLinux/Package/mystiq-20.03.23-1-x86_64.pkg.tar.zst
 
 
-yay -S --mflags --skipinteg --noconfirm airgeddon metasploit dhcp hashcat hashcat-utils tcpdump ipscan crunch mdk4 reaver beef hostapd lighttpd bettercap ettercap sslstrip dsniff bully pixiewps usbutils xorg-xdpyinfo ccze asleap john hostapd-wpe nftables mdk3 hcxtools hcxdumptool onionshare
+yay -S --mflags --skipinteg --noconfirm airgeddon metasploit dhcp hashcat hashcat-utils tcpdump ipscan crunch mdk4 reaver beef hostapd lighttpd bettercap ettercap sslstrip dsniff bully pixiewps usbutils xorg-xdpyinfo ccze asleap john hostapd-wpe nftables mdk3 hcxtools hcxdumptool onionshare netactiview
 #создать пункты
 #программа     sudo
 #Аргументы     msfconsole     или      airgeddon             plasma5-applets-systemd
