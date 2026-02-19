@@ -27,7 +27,8 @@ pacman -S efibootmgr git wget reflector amd-ucode --noconfirm
 bootctl install
 echo 'default Arch
 timeout 1
-editor 0' > /boot/loader/loader.conf
+editor 0
+console-mode max' > /boot/loader/loader.conf
 
 if [ -e /dev/nvme0n1p5 ]; then
 echo 'title Arch Linux
