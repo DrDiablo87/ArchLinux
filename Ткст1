@@ -1,0 +1,249 @@
+#!/bin/bash
+
+# Скрипт автоматической установки Arch Linux
+# Запускать от root в live-среде
+
+set -e  # Прерывать выполнение при ошибке
+
+# Цвета для вывода
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+echo -e "${GREEN}=== Начало установки Arch Linux ===${NC}"
+
+# Проверка, что скрипт запущен от root
+if [ "$EUID" -ne 0 ]; then 
+    echo -e "${RED}Пожалуйста, запустите скрипт от root${NC}"
+    exit 1
+fi
+
+# Проверка наличия интернета
+echo -e "${YELLOW}Проверка подключения к интернету...${NC}"
+if ! ping -c 3 archlinux.org &> /dev/null; then
+    echo -e "${RED}Нет подключения к интернету. Подключитесь и попробуйте снова.${NC}"
+    exit 1
+fi
+echo -e "${GREEN}Интернет подключен${NC}"
+
+# Обновление системных часов
+timedatectl set-ntp true
+
+# Определение диска (первый NVMe диск)
+DISK="/dev/$(lsblk -l -o NAME,TYPE | grep -m1 disk | grep nvme | cut -d' ' -f1)"
+if [ -z "$DISK" ]; then
+    echo -e "${RED}NVMe диск не найден!${NC}"
+    exit 1
+fi
+echo -e "${GREEN}Найден диск: $DISK${NC}"
+
+# Предупреждение о форматировании диска
+echo -e "${RED}ВНИМАНИЕ: Весь диск $DISK будет отформатирован!${NC}"
+echo -e "${YELLOW}Нажмите Enter для продолжения или Ctrl+C для отмены...${NC}"
+read
+
+# Очистка диска и создание раздела
+echo -e "${YELLOW}Создание разделов на диске...${NC}"
+parted -s "$DISK" mklabel gpt
+parted -s "$DISK" mkpart primary fat32 1MiB 512MiB
+parted -s "$DISK" set 1 esp on
+parted -s "$DISK" mkpart primary btrfs 512MiB 100%
+
+# Определение разделов
+if [[ "$DISK" == *"nvme"* ]]; then
+    EFI_PART="${DISK}p1"
+    ROOT_PART="${DISK}p2"
+else
+    EFI_PART="${DISK}1"
+    ROOT_PART="${DISK}2"
+fi
+
+# Форматирование разделов
+echo -e "${YELLOW}Форматирование разделов...${NC}"
+mkfs.fat -F32 "$EFI_PART"
+mkfs.btrfs -f "$ROOT_PART"
+
+# Монтирование корневого раздела и создание BTRFS без сабволюмов
+echo -e "${YELLOW}Монтирование разделов...${NC}"
+mount "$ROOT_PART" /mnt
+
+# Создание директории для EFI и монтирование
+mkdir -p /mnt/boot
+mount "$EFI_PART" /mnt/boot
+
+# Выбор лучших зеркал (русские + топ-10)
+echo -e "${YELLOW}Настройка лучших российских зеркал...${NC}"
+cat > /etc/pacman.d/mirrorlist << EOF
+## Russian mirrors
+Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.truenetwork.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.mephi.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.kpfu.ru/archlinux/\$repo/os/\$arch
+Server = https://mirrors.urfu.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.hostkey.ru/archlinux/\$repo/os/\$arch
+Server = http://mirror.rol.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.nw-sys.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.cedalo.ru/archlinux/\$repo/os/\$arch
+Server = http://archlinux.ntcu.net/archlinux/\$repo/os/\$arch
+Server = https://mirror.archlinux.tw/ArchLinux/\$repo/os/\$arch
+Server = https://mirror.rackspace.com/archlinux/\$repo/os/\$arch
+Server = https://mirror.leaseweb.com/archlinux/\$repo/os/\$arch
+Server = https://mirrors.kernel.org/archlinux/\$repo/os/\$arch
+Server = https://mirror.23media.com/archlinux/\$repo/os/\$arch
+EOF
+
+# Установка основных пакетов
+echo -e "${YELLOW}Установка базовой системы...${NC}"
+pacstrap /mnt base base-devel linux linux-firmware btrfs-progs efibootmgr systemd nano sudo networkmanager plasma-meta konsole dolphin sddm kate firewalld packagekit-qt5
+
+# Генерация fstab
+echo -e "${YELLOW}Генерация fstab...${NC}"
+genfstab -U /mnt >> /mnt/etc/fstab
+
+# Создание скрипта для настройки внутри chroot
+cat > /mnt/setup.sh << 'EOF'
+#!/bin/bash
+
+# Настройка часового пояса (Москва)
+ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+hwclock --systohc
+
+# Локализация
+echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+locale-gen
+echo "LANG=ru_RU.UTF-8" > /etc/locale.conf
+echo "KEYMAP=ru" > /etc/vconsole.conf
+
+# Настройка хоста
+echo "ArchLinux" > /etc/hostname
+cat > /etc/hosts << HOSTS
+127.0.0.1   localhost
+::1         localhost
+127.0.1.1   ArchLinux.localdomain ArchLinux
+HOSTS
+
+# Создание пользователя
+useradd -m -G wheel,power,storage,audio,video -s /bin/bash DrDiablo
+echo "DrDiablo:w" | chpasswd
+echo "root:w" | chpasswd
+
+# Настройка sudo для группы wheel
+echo "%wheel ALL=(ALL:ALL) ALL" >> /etc/sudoers
+
+# Настройка автологина SDDM
+mkdir -p /etc/sddm.conf.d
+cat > /etc/sddm.conf.d/autologin.conf << SDDM
+[Autologin]
+User=DrDiablo
+Session=plasma
+[Theme]
+Current=breeze
+SDDM
+
+# Включение необходимых сервисов
+systemctl enable NetworkManager
+systemctl enable sddm
+systemctl enable firewalld
+
+# Установка systemd-boot
+bootctl --esp-path=/boot install
+
+# Настройка загрузчика
+cat > /boot/loader/loader.conf << LOADER
+default arch
+timeout 3
+console-mode keep
+editor yes
+LOADER
+
+# Определение параметров загрузчика
+ROOT_PART=$(mount | grep "on / " | cut -d' ' -f1)
+UUID=$(blkid -s UUID -o value $ROOT_PART)
+
+# Создание записи для загрузки
+cat > /boot/loader/entries/arch.conf << ENTRY
+title Arch Linux
+linux /vmlinuz-linux
+initrd /initramfs-linux.img
+options root=UUID=$UUID rw quiet
+ENTRY
+
+# Добавление репозиториев
+cat >> /etc/pacman.conf << REPOS
+
+[archlinuxcn]
+Server = https://repo.archlinuxcn.org/\$arch
+SigLevel = Optional TrustAll
+
+[chaotic-aur]
+Include = /etc/pacman.d/chaotic-mirrorlist
+
+[blackarch]
+Server = https://mirrors.tuna.tsinghua.edu.cn/blackarch/\$repo/\$arch
+SigLevel = Optional TrustAll
+REPOS
+
+# Установка ключей Chaotic-AUR
+pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+pacman-key --lsign-key 3056513887B78AEB
+wget -O /etc/pacman.d/chaotic-mirrorlist 'https://raw.githubusercontent.com/chaotic-aur/mirrorlist/main/country-mirrorlist.txt'
+
+# Установка archlinuxcn-keyring
+pacman -Sy --noconfirm archlinuxcn-keyring
+
+# Настройка AUR (установка yay)
+cd /tmp
+sudo -u DrDiablo git clone https://aur.archlinux.org/yay.git
+cd yay
+sudo -u DrDiablo makepkg -si --noconfirm
+
+# Настройка Firewalld для KDE
+sudo -u DrDiablo bash -c "cat > /home/DrDiablo/.config/firewall/firewalld.conf << FIREWALL
+FirewallBackend=nftables
+DefaultZone=public
+FIREWALL"
+
+# Создание пустого скрипта в автозагрузку
+sudo -u DrDiablo mkdir -p /home/DrDiablo/.config/autostart
+sudo -u DrDiablo cat > /home/DrDiablo/.config/autostart/myscript.desktop << AUTOSTART
+[Desktop Entry]
+Type=Application
+Name=My Script
+Exec=/home/DrDiablo/.local/bin/myscript.sh
+X-GNOME-Autostart-enabled=true
+AUTOSTART
+
+sudo -u DrDiablo mkdir -p /home/DrDiablo/.local/bin
+sudo -u DrDiablo touch /home/DrDiablo/.local/bin/myscript.sh
+sudo -u DrDiablo chmod +x /home/DrDiablo/.local/bin/myscript.sh
+
+# Создание .bashrc с предпочтениями
+sudo -u DrDiablo cat > /home/DrDiablo/.bashrc << BASHRC
+alias vim='nano'
+alias vi='nano'
+export EDITOR=nano
+BASHRC
+
+# Установка прав для пользователя
+chown -R DrDiablo:DrDiablo /home/DrDiablo
+
+EOF
+
+# Делаем скрипт исполняемым и выполняем в chroot
+chmod +x /mnt/setup.sh
+arch-chroot /mnt /setup.sh
+
+# Очистка
+rm /mnt/setup.sh
+
+# Размонтирование
+umount -R /mnt
+
+echo -e "${GREEN}Установка завершена!${NC}"
+echo -e "${YELLOW}Система будет перезагружена через 10 секунд...${NC}"
+sleep 10
+
+# Перезагрузка
+reboot
