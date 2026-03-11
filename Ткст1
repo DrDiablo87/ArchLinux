@@ -262,5 +262,5 @@ print_message "Установка завершена! Система будет 
 sleep 10
 
 # Перезагрузка
-print_message "Перезагрузка..."
-reboot
+#print_message "Перезагрузка..."
+#reboot
