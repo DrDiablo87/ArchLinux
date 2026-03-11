@@ -1,7 +1,9 @@
 #!/bin/bash
 
-# Скрипт установки Arch Linux в dual-boot с Windows
-# Запускать от root после загрузки с установочного носителя Arch
+# Скрипт автоматической установки Arch Linux (Dual Boot с Windows)
+# ВНИМАНИЕ! Скрипт требует прав root и работает без подтверждений
+
+set -e  # Прерывать выполнение при любой ошибке
 
 # Цвета для вывода
 RED='\033[0;31m'
@@ -9,231 +11,252 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Функция для вывода сообщений
-print_message() {
-    echo -e "${GREEN}[INFO]${NC} $1"
-}
+echo -e "${GREEN}Начинаем установку Arch Linux (Dual Boot с Windows)...${NC}"
 
-print_warning() {
-    echo -e "${YELLOW}[WARNING]${NC} $1"
-}
-
-print_error() {
-    echo -e "${RED}[ERROR]${NC} $1"
-}
-
-# Проверка, что скрипт запущен от root
-if [ "$EUID" -ne 0 ]; then
-    print_error "Пожалуйста, запустите скрипт от root"
+# Проверка root прав
+if [ "$EUID" -ne 0 ]; then 
+    echo -e "${RED}Пожалуйста, запустите скрипт с правами root${NC}"
     exit 1
 fi
 
-# Проверка наличия интернета
-print_message "Проверка подключения к интернету..."
-if ! ping -c 3 archlinux.org &> /dev/null; then
-    print_error "Нет подключения к интернету"
+# Проверка подключения к интернету
+echo -e "${YELLOW}Проверка интернет-соединения...${NC}"
+ping -c 3 archlinux.org || { echo -e "${RED}Нет интернет-соединения${NC}"; exit 1; }
+
+# Поиск NVMe диска
+echo -e "${YELLOW}Поиск NVMe диска...${NC}"
+TARGET_DISK=$(lsblk -o NAME,TYPE -l | grep -E "nvme[0-9]n[0-9]" | grep "disk" | head -n1 | awk '{print $1}')
+if [ -z "$TARGET_DISK" ]; then
+    echo -e "${RED}NVMe диск не найден${NC}"
+    echo -e "${YELLOW}Доступные диски:${NC}"
+    lsblk -o NAME,SIZE,TYPE,MODEL
+    exit 1
+fi
+TARGET_DISK="/dev/$TARGET_DISK"
+echo -e "${GREEN}Найден диск: $TARGET_DISK${NC}"
+
+# Показываем текущую разметку
+echo -e "${YELLOW}Текущая разметка диска:${NC}"
+parted $TARGET_DISK print
+lsblk $TARGET_DISK
+
+# Поиск EFI раздела Windows
+echo -e "${YELLOW}Поиск EFI раздела Windows...${NC}"
+EFI_PART=$(lsblk -o NAME,PARTTYPE,LABEL -l | grep -B1 -i "EFI" | grep -E "nvme[0-9]n[0-9]p[0-9]" | head -n1 | awk '{print $1}')
+if [ -z "$EFI_PART" ]; then
+    # Альтернативный поиск
+    EFI_PART=$(lsblk -o NAME,FSTYPE -l | grep -B1 "vfat" | grep -E "nvme[0-9]n[0-9]p[0-9]" | head -n1 | awk '{print $1}')
+fi
+
+if [ -z "$EFI_PART" ]; then
+    echo -e "${RED}EFI раздел не найден. Убедитесь, что Windows установлен в UEFI режиме${NC}"
     exit 1
 fi
 
-# Обновление системных часов
-print_message "Обновление системных часов..."
-timedatectl set-ntp true
+EFI_PART="/dev/$EFI_PART"
+echo -e "${GREEN}Найден EFI раздел: $EFI_PART${NC}"
 
-# Определение NVMe диска
-print_message "Поиск NVMe дисков..."
-NVME_DEVICES=$(lsblk -d -o NAME,TYPE | grep nvme | awk '{print $1}')
-if [ -z "$NVME_DEVICES" ]; then
-    print_error "NVMe диск не найден"
-    exit 1
-fi
+# Находим последний раздел и конец диска
+echo -e "${YELLOW}Анализ разделов для создания нового раздела Arch Linux...${NC}"
 
-# Выбор NVMe диска (обычно первый)
-NVME_DEVICE="/dev/$(echo $NVME_DEVICES | head -n1)"
-print_message "Найден NVMe диск: $NVME_DEVICE"
+# Получаем размер диска в секторах
+DISK_SIZE=$(blockdev --getsz $TARGET_DISK)
+DISK_SIZE_MB=$((DISK_SIZE * 512 / 1024 / 1024))
+echo -e "${GREEN}Размер диска: $DISK_SIZE_MB MB${NC}"
 
-# Показываем текущие разделы
-print_message "Текущие разделы на диске:"
-lsblk $NVME_DEVICE
-
-# Поиск Windows разделов
-print_message "Поиск Windows разделов..."
-WINDOWS_PART=$(lsblk -o NAME,FSTYPE,LABEL $NVME_DEVICE | grep -E "ntfs|vfat" | grep -i "system" | head -n1 | awk '{print $1}')
-if [ -z "$WINDOWS_PART" ]; then
-    print_warning "Не удалось автоматически найти системный раздел Windows"
-    print_message "Продолжаем с ручным определением..."
+# Получаем информацию о последнем разделе
+LAST_PART_INFO=$(parted $TARGET_DISK unit s print | grep -E "^ [0-9]" | tail -1)
+if [ -z "$LAST_PART_INFO" ]; then
+    # Если разделов нет, начинаем с 1MB
+    START_SECTOR="2048s"
 else
-    print_message "Найден системный раздел Windows: /dev/$WINDOWS_PART"
+    # Извлекаем конечный сектор последнего раздела
+    LAST_END=$(echo $LAST_PART_INFO | awk '{print $3}' | sed 's/s//')
+    START_SECTOR=$((LAST_END + 1))"s"
 fi
 
-# Создание разделов
-print_message "Создание разделов..."
-print_warning "Будет создан раздел для Arch Linux на свободном месте"
-print_warning "Убедитесь, что на диске есть свободное место!"
+echo -e "${GREEN}Будем создавать раздел начиная с сектора: $START_SECTOR${NC}"
 
-# Получаем информацию о диске
-DISK_SIZE=$(blockdev --getsize64 $NVME_DEVICE)
-DISK_SIZE_GB=$((DISK_SIZE / 1024 / 1024 / 1024))
-print_message "Размер диска: ${DISK_SIZE_GB}GB"
+# Получаем следующий номер раздела
+PART_NUM=$(parted $TARGET_DISK print | grep -E "^ [0-9]" | wc -l)
+NEW_PART_NUM=$((PART_NUM + 1))
 
-# Использование sgdisk для создания раздела на свободном месте
-print_message "Создание разделов на свободном месте..."
-sgdisk -E $NVME_DEVICE > /tmp/start_sector.txt
-START_SECTOR=$(cat /tmp/start_sector.txt)
-END_SECTOR=$(sgdisk -E $NVME_DEVICE)
+# Создание раздела
+echo -e "${YELLOW}Создание нового раздела номер $NEW_PART_NUM для Arch Linux...${NC}"
+parted -s $TARGET_DISK mkpart primary $START_SECTOR 100%
 
-# Создание нового раздела
-print_message "Создание раздела для Arch Linux..."
-sgdisk -n 0:$START_SECTOR:0 -t 0:8300 -c 0:"ArchLinux" $NVME_DEVICE
+# Определяем имя нового раздела
+if [[ $TARGET_DISK == *"nvme"* ]]; then
+    NEW_PART="${TARGET_DISK}p${NEW_PART_NUM}"
+else
+    NEW_PART="${TARGET_DISK}${NEW_PART_NUM}"
+fi
 
-# Обновление информации о разделах
-partprobe $NVME_DEVICE
+# Ожидание появления раздела и обновление таблицы разделов
+echo -e "${YELLOW}Ожидание создания раздела...${NC}"
+sleep 3
+partprobe $TARGET_DISK
 sleep 2
+udevadm settle
 
-# Определение нового раздела
-ARCH_PART="${NVME_DEVICE}p$(lsblk -o NAME $NVME_DEVICE | grep -c "p[0-9]" | tail -n1)"
-
-print_message "Создан раздел для Arch Linux: $ARCH_PART"
-
-# Форматирование раздела в btrfs
-print_message "Форматирование раздела $ARCH_PART в btrfs..."
-mkfs.btrfs -f -L ArchLinux $ARCH_PART
-
-# Монтирование разделов
-print_message "Монтирование разделов..."
-mount $ARCH_PART /mnt
-
-# Создание директории для EFI
-mkdir -p /mnt/boot
-
-# Поиск и монтирование EFI раздела
-EFI_PART=$(lsblk -o NAME,FSTYPE,PARTTYPE $NVME_DEVICE | grep -B1 -E "vfat|fat32" | grep "c12a7328-f81f-11d2-ba4b-00a0c93ec93b" | awk '{print $1}')
-if [ -n "$EFI_PART" ]; then
-    EFI_DEVICE="/dev/$(echo $EFI_PART | head -n1 | sed 's/├─//g' | sed 's/└─//g')"
-    print_message "Найден EFI раздел: $EFI_DEVICE"
-    mount $EFI_DEVICE /mnt/boot
-else
-    print_error "EFI раздел не найден"
+# Проверка создания раздела
+if [ ! -e $NEW_PART ]; then
+    echo -e "${RED}Раздел $NEW_PART не создался${NC}"
+    echo -e "${YELLOW}Доступные разделы:${NC}"
+    lsblk $TARGET_DISK
     exit 1
 fi
 
-# Выбор лучших зеркал (Россия)
-print_message "Настройка лучших российских зеркал..."
+echo -e "${GREEN}Раздел $NEW_PART успешно создан${NC}"
+
+# Форматирование в btrfs
+echo -e "${YELLOW}Форматирование раздела в btrfs с меткой ArchLinux...${NC}"
+mkfs.btrfs -f -L ArchLinux $NEW_PART
+
+# Монтирование
+echo -e "${YELLOW}Монтирование разделов...${NC}"
+mount $NEW_PART /mnt
+
+# Монтирование EFI раздела
+mkdir -p /mnt/boot
+mount $EFI_PART /mnt/boot
+
+# Настройка зеркал (10 лучших русских)
+echo -e "${YELLOW}Настройка зеркал...${NC}"
 cat > /etc/pacman.d/mirrorlist << EOF
 ## Russia
 Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
-Server = https://mirror.truenetwork.ru/archlinux/\$repo/os/\$arch
-Server = https://mirrors.krasinfo.ru/archlinux/\$repo/os/\$arch
-Server = https://mirror.nw-sys.ru/archlinux/\$repo/os/\$arch
-Server = https://mirror.cedalan.ru/archlinux/\$repo/os/\$arch
-Server = https://mirror.katya.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.kamt.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.da39a.ru/archlinux/\$repo/os/\$arch
+Server = https://mirrors.kernel.org/archlinux/\$repo/os/\$arch
 Server = https://mirror.surf/archlinux/\$repo/os/\$arch
-Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/\$repo/os/\$arch
-Server = https://mirrors.aliyun.com/archlinux/\$repo/os/\$arch
-Server = https://mirror.0xem.ma/arch/\$repo/os/\$arch
+Server = https://mirror.truenetwork.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.rol.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.archlinux.site/\$repo/os/\$arch
+Server = https://mirror.archlinux.ikoula.com/\$repo/os/\$arch
+Server = https://mirrors.mit.edu/archlinux/\$repo/os/\$arch
 EOF
 
-# Установка основных пакетов
-print_message "Установка базовой системы..."
-pacstrap /mnt base base-devel linux linux-firmware btrfs-progs nano sudo networkmanager plasma-meta konsole dolphin sddm firefox ark kate gwenview okular spectacle kcalc ktorrent kdenlive k3b neofetch htop git wget curl
+# Установка базовой системы
+echo -e "${YELLOW}Установка базовой системы...${NC}"
+pacstrap -K /mnt base base-devel linux linux-zen linux-firmware btrfs-progs efibootmgr dosfstools
 
 # Генерация fstab
-print_message "Генерация fstab..."
+echo -e "${YELLOW}Генерация fstab...${NC}"
 genfstab -U /mnt >> /mnt/etc/fstab
 
-# Chroot и настройка системы
-print_message "Настройка системы в chroot..."
-arch-chroot /mnt /bin/bash << EOF
+# Подготовка chroot окружения
+echo -e "${YELLOW}Настройка системы в chroot...${NC}"
 
-# Установка часового пояса (Москва)
+cat > /mnt/install-chroot.sh << 'EOF'
+#!/bin/bash
+
+# Установка часового пояса
 ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
 hwclock --systohc
 
 # Локализация
-echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen
-echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+sed -i 's/^#\(ru_RU.UTF-8\)/\1/' /etc/locale.gen
+sed -i 's/^#\(en_US.UTF-8\)/\1/' /etc/locale.gen
 locale-gen
 echo "LANG=ru_RU.UTF-8" > /etc/locale.conf
 echo "KEYMAP=ru" > /etc/vconsole.conf
 echo "FONT=cyr-sun16" >> /etc/vconsole.conf
 
-# Настройка хоста
-echo "ArchLinux" > /etc/hostname
+# Настройка сети
+echo "archlinux" > /etc/hostname
 cat > /etc/hosts << HOSTS
 127.0.0.1   localhost
 ::1         localhost
-127.0.1.1   ArchLinux.localdomain ArchLinux
+127.0.1.1   archlinux.localdomain archlinux
 HOSTS
 
-# Создание пользователя
-useradd -m -G wheel,audio,video,storage,power -s /bin/bash DrDiablo
-echo "DrDiablo:w" | chpasswd
-echo "root:w" | chpasswd
+# Установка systemd-boot в существующий EFI раздел
+bootctl --path=/boot install
 
-# Настройка sudo
-echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-# Настройка systemd-boot
-bootctl install
-
-# Создание загрузочной записи
+# Создание загрузочной записи для Arch Linux
 cat > /boot/loader/entries/arch.conf << BOOT
-title Arch Linux
-linux /vmlinuz-linux
-initrd /initramfs-linux.img
+title   Arch Linux
+linux   /vmlinuz-linux
+initrd  /initramfs-linux.img
 options root=LABEL=ArchLinux rw quiet
 BOOT
+
+cat > /boot/loader/entries/arch-zen.conf << BOOT
+title   Arch Linux Zen
+linux   /vmlinuz-linux-zen
+initrd  /initramfs-linux-zen.img
+options root=LABEL=ArchLinux rw quiet
+BOOT
+
+# Создание загрузочной записи для Windows
+if [ -f /boot/EFI/Microsoft/Boot/bootmgfw.efi ]; then
+    cat > /boot/loader/entries/windows.conf << WINDOWS
+title   Windows 11
+efi     /EFI/Microsoft/Boot/bootmgfw.efi
+WINDOWS
+    echo -e "${GREEN}Добавлена загрузочная запись для Windows${NC}"
+fi
 
 # Настройка загрузчика
 cat > /boot/loader/loader.conf << LOADER
 default arch.conf
 timeout 4
 console-mode max
-editor yes
+editor no
 LOADER
 
-# Добавление Windows в загрузчик
-if [ -f "/boot/EFI/Microsoft/Boot/bootmgfw.efi" ]; then
-    cat > /boot/loader/entries/windows.conf << WIN
-title Windows
-efi /EFI/Microsoft/Boot/bootmgfw.efi
-WIN
-fi
+# Установка KDE minimal (без kde-network-meta)
+pacman -S --noconfirm plasma-desktop sddm konsole dolphin kate \
+    plasma-nm plasma-pa powerdevil kdeplasma-addons \
+    kdegraphics-thumbnailers kio-extras ffmpegthumbs \
+    ark gwenview spectacle
 
-# Добавление репозиториев
-# archlinuxcn
-echo "[archlinuxcn]" >> /etc/pacman.conf
-echo "Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/\$arch" >> /etc/pacman.conf
+# Включение SDDM
+systemctl enable sddm
 
-# chaotic-aur
-pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
-pacman-key --lsign-key 3056513887B78AEB
-pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' --noconfirm
-pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm
-echo "[chaotic-aur]" >> /etc/pacman.conf
-echo "Include = /etc/pacman.d/chaotic-mirrorlist" >> /etc/pacman.conf
+# Создание пользователя
+useradd -m -G wheel,audio,video,storage,power -s /bin/bash DrDiablo
+echo "DrDiablo:w" | chpasswd
 
-# blackarch
-curl -O https://blackarch.org/strap.sh
-chmod +x strap.sh
-./strap.sh
-rm strap.sh
-
-# Обновление и установка AUR помощника
-pacman -Syyu --noconfirm
-pacman -S --noconfirm yay paru
-
-# Настройка автологина SDDM
+# Автологин в SDDM
 mkdir -p /etc/sddm.conf.d
 cat > /etc/sddm.conf.d/autologin.conf << SDDM
 [Autologin]
 User=DrDiablo
-Session=plasma
+Session=plasma.desktop
 SDDM
 
-# Включение сервисов
-systemctl enable NetworkManager
-systemctl enable sddm
-systemctl enable fstrim.timer
+# Настройка sudo для группы wheel
+sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+
+# Установка nano вместо vim
+pacman -S --noconfirm nano
+echo "EDITOR=nano" >> /etc/environment
+
+# Добавление репозиториев
+# archlinuxcn
+cat >> /etc/pacman.conf << CN
+[archlinuxcn]
+Server = https://repo.archlinuxcn.org/\$arch
+CN
+
+# chaotic-aur
+pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+pacman-key --lsign-key 3056513887B78AEB
+pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
+pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+
+cat >> /etc/pacman.conf << CHAOTIC
+[chaotic-aur]
+Include = /etc/pacman.d/chaotic-mirrorlist
+CHAOTIC
+
+# Обновление баз данных
+pacman -Syy --noconfirm
+
+# Установка AUR helper (yay)
+pacman -S --noconfirm yay
 
 # Создание пустого скрипта в автозагрузку
 mkdir -p /home/DrDiablo/.config/autostart
@@ -242,25 +265,34 @@ cat > /home/DrDiablo/.config/autostart/myscript.desktop << DESKTOP
 Type=Application
 Name=MyScript
 Exec=/home/DrDiablo/myscript.sh
-Hidden=false
-NoDisplay=false
 X-GNOME-Autostart-enabled=true
 DESKTOP
 
 touch /home/DrDiablo/myscript.sh
 chmod +x /home/DrDiablo/myscript.sh
-chown DrDiablo:DrDiablo /home/DrDiablo/myscript.sh
-chown -R DrDiablo:DrDiablo /home/DrDiablo/.config
+chown -R DrDiablo:DrDiablo /home/DrDiablo
+
+
+# Обновление initramfs
+mkinitcpio -P
+
+pacman -S  gtkmm-4.0 gtkmm3 open-vm-tools --noconfirm
+systemctl enable vmtoolsd.service
 
 EOF
 
+chmod +x /mnt/install-chroot.sh
+arch-chroot /mnt /install-chroot.sh
+
+# Очистка
+rm /mnt/install-chroot.sh
+
 # Размонтирование
-print_message "Размонтирование разделов..."
+echo -e "${YELLOW}Завершение установки...${NC}"
 umount -R /mnt
 
-print_message "Установка завершена! Система будет перезагружена через 10 секунд..."
-sleep 10
-
-# Перезагрузка
-#print_message "Перезагрузка..."
-#reboot
+echo -e "${GREEN}Установка завершена! Система настроена для dual boot с Windows.${NC}"
+echo -e "${YELLOW}Логин: DrDiablo, Пароль: w${NC}"
+echo -e "${YELLOW}Создан раздел: $NEW_PART${NC}"
+echo -e "${YELLOW}Используется существующий EFI раздел: $EFI_PART${NC}"
+echo -e "${YELLOW}При загрузке вы сможете выбрать между Arch Linux и Windows${NC}"
