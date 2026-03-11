@@ -296,3 +296,5 @@ echo -e "${YELLOW}Логин: DrDiablo, Пароль: w${NC}"
 echo -e "${YELLOW}Создан раздел: $NEW_PART${NC}"
 echo -e "${YELLOW}Используется существующий EFI раздел: $EFI_PART${NC}"
 echo -e "${YELLOW}При загрузке вы сможете выбрать между Arch Linux и Windows${NC}"
+
+systemctl reboot
