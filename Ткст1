@@ -4,6 +4,7 @@
 RED='\033[31m'
 GREEN='\033[32m'
 BLUE='\033[34m'
+YELLOW='\033[33m'
 NC='\033[0m'
 
 # Функция для цветного вывода
@@ -15,6 +16,10 @@ print_error() {
     echo -e "${RED}$1${NC}"
 }
 
+print_info() {
+    echo -e "${YELLOW}$1${NC}"
+}
+
 # Начальная настройка
 sed -i 's/#ParallelDownloads = 5/ParallelDownloads = 10/g' /etc/pacman.conf
 loadkeys ru
@@ -24,7 +29,7 @@ setfont cyr-sun16
 timedatectl set-ntp true
 
 clear
-# ASCII арт (сокращен для читаемости, можно вернуть полный)
+# Вывод ASCII арта (сокращен для читаемости)
 print_message "================================================================================"
 print_message "                   Arch Linux Installation Script"
 print_message "================================================================================"
@@ -90,32 +95,42 @@ if [[ $OS == 1 ]]; then
     EFI_PART="${DISK}p1"
     
 elif [[ $OS == 2 ]]; then
-    # Установка рядом с Windows - создаем только root раздел
+    # Установка рядом с Windows
     print_message "Создание раздела для Arch Linux рядом с Windows..."
     
-    # Находим последний раздел и добавляем после него
-    LAST_SECTOR=$(fdisk -l "$DISK" | tail -n 1 | awk '{print $3}')
-    if [ -z "$LAST_SECTOR" ]; then
-        LAST_SECTOR=""
-    fi
+    # Показываем текущие разделы
+    print_info "Текущие разделы на диске:"
+    fdisk -l "$DISK"
+    echo ""
     
+    # Создаем новый раздел
     (
         echo n                      # новый раздел
-        echo                        # номер по умолчанию (следующий доступный)
-        echo $LAST_SECTOR            # начинаем с последнего сектора + 1 (или пусто для авто)
+        echo                        # номер по умолчанию
+        echo                        # первый сектор по умолчанию (последний +1)
         echo                        # используем все доступное пространство
         echo w                      # запись изменений
     ) | fdisk --color=never "$DISK" > /dev/null 2>&1
     
     # Определяем номер созданного раздела
-    PART_NUM=$(fdisk -l "$DISK" | grep -c "^${DISK}p" | tail -n1)
+    PART_NUM=$(fdisk -l "$DISK" | grep "^${DISK}p" | tail -n1 | sed 's/.*p\([0-9]*\).*/\1/')
     ROOT_PART="${DISK}p${PART_NUM}"
-    EFI_PART=$(ls "${DISK}"p* | grep -E "p1$" | head -1)
+    
+    # Ищем EFI раздел
+    for part in "${DISK}"p*; do
+        if blkid "$part" | grep -qi "vfat"; then
+            EFI_PART="$part"
+            break
+        fi
+    done
     
     if [ ! -e "$EFI_PART" ]; then
         print_error "Не найден EFI раздел! Убедитесь, что Windows установлена в режиме UEFI."
         exit 1
     fi
+    
+    print_message "Найден EFI раздел: $EFI_PART"
+    print_message "Root раздел: $ROOT_PART"
 else
     print_error "Неверный выбор"
     exit 1
@@ -124,14 +139,15 @@ fi
 # Показываем созданную разметку
 print_message "Созданная разметка диска:"
 lsblk -f "$DISK"
+sleep 3
 
 # Форматирование разделов
 print_message "================================================================================"
 print_message "                     Форматирование разделов"
 print_message "================================================================================"
 
-# Форматирование EFI раздела (только если это чистая установка или раздел не от Windows)
-if [[ $OS == 1 ]] || [[ ! $(blkid -o value -s TYPE "$EFI_PART" 2>/dev/null) == "vfat" ]]; then
+# Форматирование EFI раздела (только если это чистая установка)
+if [[ $OS == 1 ]]; then
     print_message "Форматирование EFI раздела..."
     mkfs.fat -F32 "$EFI_PART"
 else
@@ -153,171 +169,152 @@ mount -t btrfs "$ROOT_PART" /mnt
 # Создаем подтома
 btrfs subvolume create /mnt/@
 btrfs subvolume create /mnt/@home
-btrfs subvolume create /mnt/@snapshots
-btrfs subvolume create /mnt/@var_log
-btrfs subvolume create /mnt/@var_cache
-
-# Отмонтируем
 umount /mnt
 
-# Монтируем подтома с оптимальными параметрами
+# Монтируем подтома
 print_message "Монтирование подтомов..."
-mount -t btrfs -o noatime,compress=zstd:3,ssd,space_cache=v2,subvol=@ "$ROOT_PART" /mnt
-
-# Создаем директории
-mkdir -p /mnt/{home,boot,.snapshots,var/log,var/cache}
-
-# Монтируем остальные подтома
-mount -t btrfs -o noatime,compress=zstd:3,ssd,space_cache=v2,subvol=@home "$ROOT_PART" /mnt/home
-mount -t btrfs -o noatime,compress=zstd:3,ssd,space_cache=v2,subvol=@snapshots "$ROOT_PART" /mnt/.snapshots
-mount -t btrfs -o noatime,compress=zstd:3,ssd,space_cache=v2,subvol=@var_log "$ROOT_PART" /mnt/var/log
-mount -t btrfs -o noatime,compress=zstd:3,ssd,space_cache=v2,subvol=@var_cache "$ROOT_PART" /mnt/var/cache
-
-# Монтируем EFI раздел
+mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@ "$ROOT_PART" /mnt
+mkdir -p /mnt/{home,boot}
+mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@home "$ROOT_PART" /mnt/home
 mount "$EFI_PART" /mnt/boot
 
-# Установка базовой системы
-print_message "================================================================================"
-print_message "                     Установка базовой системы"
-print_message "================================================================================"
-
-# Обновление зеркал
-reflector --country Russia --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
-pacman -Sy --noconfirm
-
 # Установка основных пакетов
-pacstrap /mnt base base-devel linux linux-zen linux-firmware \
-    linux-headers linux-zen-headers btrfs-progs \
-    nano vim amd-ucode intel-ucode \
-    iwd networkmanager dhcpcd \
-    git wget curl reflector \
-    efibootmgr grub os-prober
+print_message "================================================================================"
+print_message "                     Установка основных пакетов"
+print_message "================================================================================"
+
+pacman -Sy --noconfirm
+pacstrap /mnt base base-devel nano linux linux-zen linux-firmware btrfs-progs iwd linux-zen-headers
 
 # Генерация fstab
 print_message "================================================================================"
 print_message "                     Генерация fstab"
 print_message "================================================================================"
-genfstab -U /mnt >> /mnt/etc/fstab
+genfstab -pU /mnt >> /mnt/etc/fstab
 
-# Исправляем fstab для подтомов BTRFS
-sed -i 's/subvolid=[0-9]*,//g' /mnt/etc/fstab
-
-# Настройка системы внутри chroot
+# Создаем скрипт для настройки внутри chroot
 print_message "================================================================================"
-print_message "                     Настройка системы"
+print_message "                     Настройка системы в chroot"
 print_message "================================================================================"
 
 cat > /mnt/arch-chroot-setup.sh << 'INNEREOF'
 #!/bin/bash
 
-# Цвета
-GREEN='\033[32m'
-NC='\033[0m'
+echo -e '\033[32m'
 
-echo -e "${GREEN}Настройка базовых параметров системы...${NC}"
-
-# Имя компьютера
-echo "$hostname" > /etc/hostname
-
-# Временная зона
-ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+# Прописываем имя компьютера
+echo '$hostname' > /etc/hostname
+ln -svf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
 hwclock --systohc
 
-# Локализация
-echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
-echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen
+setfont cyr-sun16
+# Добавляем русскую локаль системы
+echo "en_US.UTF-8 UTF-8
+ru_RU.UTF-8 UTF-8" > /etc/locale.gen 
+
+# Обновим текущую локаль системы
 locale-gen
 
+# Указываем язык системы
 echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 echo "KEYMAP=ru" > /etc/vconsole.conf
 echo "FONT=cyr-sun16" >> /etc/vconsole.conf
 
-# Настройка mkinitcpio
-echo 'MODULES=() 
-BINARIES=() 
-FILES=() 
+echo 'MODULES="" 
+BINARIES="" 
+FILES="" 
 HOOKS="base udev autodetect modconf block filesystems keyboard keymap"' > /etc/mkinitcpio.conf
 
-# Обновление initramfs
-mkinitcpio -P
+rm -f /boot/initramfs-linux-zen-fallback.img /boot/initramfs-linux-fallback.img 2>/dev/null
+echo 'ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux"
+PRESETS=default
+default_image="/boot/initramfs-linux.img"' > /etc/mkinitcpio.d/linux.preset
+echo 'ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux-zen"
+PRESETS=default
+default_image="/boot/initramfs-linux-zen.img"' > /etc/mkinitcpio.d/linux-zen.preset
 
-# Пользователи и пароли
-echo -e "${GREEN}Установка паролей...${NC}"
-echo -e "$rootpass\n$rootpass" | passwd
+echo -e '\033[32m'
+echo -e '\e[31m==================================================================================== Устанавливаем загрузчик =====================================\e[0m'
+echo -e '\033[32m'
 
-useradd -m -G wheel,storage,power,audio,video -s /bin/bash "$username"
-echo -e "$userpass\n$userpass" | passwd "$username"
+pacman -S efibootmgr git wget reflector amd-ucode --noconfirm  
+reflector --country Russia --verbose -l 5 -p https --sort rate --save /etc/pacman.d/mirrorlist
+pacman -Syu --noconfirm
 
-# Sudo настройки
-echo "%wheel ALL=(ALL:ALL) ALL" > /etc/sudoers.d/wheel
-echo "$username ALL=(ALL) NOPASSWD: /usr/bin/systemctl" >> /etc/sudoers.d/wheel
-chmod 440 /etc/sudoers.d/wheel
+# Установка загрузчика
+bootctl install
+echo 'default Arch
+timeout 1
+editor 0' > /boot/loader/loader.conf
+sleep 3
 
-# Загрузчик
-echo -e "${GREEN}Установка загрузчика...${NC}"
-
-if [ -d /sys/firmware/efi ]; then
-    # UEFI установка
-    bootctl install
-    
-    # Определяем root раздел
-    ROOT_UUID=$(blkid -s UUID -o value /dev/disk/by-label/ArchLinux)
-    
-    # Создание загрузочных записей
-    cat > /boot/loader/entries/arch.conf << EOF
-title   Arch Linux
-linux   /vmlinuz-linux
-initrd  /amd-ucode.img
-initrd  /initramfs-linux.img
-options root=UUID=$ROOT_UUID rw rootflags=subvol=@ quiet splash
-EOF
-
-    cat > /boot/loader/entries/arch-zen.conf << EOF
-title   Arch Linux Zen
-linux   /vmlinuz-linux-zen
-initrd  /amd-ucode.img
-initrd  /initramfs-linux-zen.img
-options root=UUID=$ROOT_UUID rw rootflags=subvol=@ quiet splash
-EOF
-
-    # Настройка loader.conf
-    cat > /boot/loader/loader.conf << EOF
-default arch.conf
-timeout 3
-console-mode max
-editor no
-EOF
-
+# Определяем корневой раздел для загрузчика
+if [ -e /dev/nvme0n1p5 ]; then
+    ROOT_DEV="/dev/nvme0n1p5"
 else
-    # BIOS установка
-    pacman -S grub --noconfirm
-    grub-install --target=i386-pc "$DISK"
-    grub-mkconfig -o /boot/grub/grub.cfg
+    ROOT_DEV="/dev/nvme0n1p2"
 fi
 
-# Сеть
-echo -e "${GREEN}Настройка сети...${NC}"
-systemctl enable NetworkManager
-systemctl enable systemd-resolved
+echo 'title Arch Linux
+linux /vmlinuz-linux
+initrd /amd-ucode.img
+initrd /initramfs-linux.img
+options '"$ROOT_DEV"' rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinux.conf
 
-# Hosts файл
-cat > /etc/hosts << EOF
-127.0.0.1   localhost
-::1         localhost
-127.0.1.1   $hostname.localdomain $hostname
-EOF
+echo 'title Arch Linux Zen
+linux /vmlinuz-linux-zen
+initrd /amd-ucode.img
+initrd /initramfs-linux-zen.img
+options '"$ROOT_DEV"' rw rootflags=subvol=@ #quiet' > /boot/loader/entries/ArchLinuxZen.conf
 
-# Дополнительные репозитории
-echo -e "${GREEN}Добавление дополнительных репозиториев...${NC}"
+# Добавляем пользователя
+useradd -m -g users -G audio,games,video,storage,wheel -s /bin/bash $username
 
-# Chaotic AUR
+echo -e '\e[31m==================================================================================== Создаем root пароль =========================================\e[0m'
+echo -e '\033[32m'
+
+echo -e "$rootpass\n$rootpass" | passwd
+echo -e "$userpass\n$userpass" | passwd $username
+
+echo -e '\033[32m'
+# Устанавливаем SUDO
+echo 'root ALL=(ALL) ALL
+'$username' ALL=(ALL) ALL
+%wheel ALL=(ALL) ALL
+'$username' ALL = NOPASSWD: /bin/systemctl
+Defaults env_reset, timestamp_timeout=30' > /etc/sudoers
+
+# Клонируем репозиторий с конфигами
+git clone https://github.com/DrDiablo87/ArchLinux.git /home/$username/ArchLinux
+systemctl enable --now systemd-networkd.service
+systemctl enable --now systemd-resolved.service
+
+# Добавление Chaotic AUR
 pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
 pacman-key --lsign-key 3056513887B78AEB
 pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' --noconfirm
 pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm
 
-# Arch Linux CN
-cat >> /etc/pacman.conf << EOF
+# Настройка Pacman.conf
+cat > /etc/pacman.conf << PACMANEOF
+[options]
+CacheDir = /home/$username/Package/
+HoldPkg = pacman glibc
+Architecture = auto
+Color
+CheckSpace
+ParallelDownloads = 10
+
+[core]
+Include = /etc/pacman.d/mirrorlist
+
+[extra]
+Include = /etc/pacman.d/mirrorlist
+
+[multilib]
+Include = /etc/pacman.d/mirrorlist
 
 [archlinuxcn]
 Server = https://repo.archlinuxcn.org/\$arch
@@ -326,71 +323,253 @@ SigLevel = Never
 [chaotic-aur]
 Include = /etc/pacman.d/chaotic-mirrorlist
 SigLevel = Never
-EOF
+PACMANEOF
 
-# Обновление системы
-pacman -Syu --noconfirm
+# Настройка makepkg
+sed -i 's!#PKGDEST=/home/packages!PKGDEST=~/Package!' /etc/makepkg.conf
+echo 'MAKEFLAGS="-j'$(nproc)'"
+BUILDDIR=/tmp/makepkg' >> /etc/makepkg.conf
 
-# Установка графической среды (опционально)
-echo -e "${GREEN}Установка KDE Plasma...${NC}"
-pacman -S --noconfirm xorg sddm plasma plasma-wayland-session \
-    kde-applications firefox firefox-i18n-ru \
-    ark p7zip unrar unzip zip \
-    telegram-desktop vlc mpv \
-    noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-dejavu ttf-liberation \
-    pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber \
-    ntfs-3g exfat-utils dosfstools \
-    git python python-pip nodejs npm \
-    htop btop neofetch
+# Hosts файл
+cat >> /etc/hosts << HOSTSEOF
+127.0.1.1   $hostname.localdomain   $hostname
+127.0.0.1 admulti.com
+127.0.0.1 pt.upzona.net
+127.0.0.1 gag.admulti.com
+127.0.0.1 go.video.admulti.com
+HOSTSEOF
 
-# Видеодрайверы (определяем автоматически)
-GPU=$(lspci | grep -E "VGA|3D")
-if echo "$GPU" | grep -qi "nvidia"; then
-    pacman -S --noconfirm nvidia nvidia-utils nvidia-settings
-elif echo "$GPU" | grep -qi "amd"; then
-    pacman -S --noconfirm mesa xf86-video-amdgpu vulkan-radeon libva-mesa-driver
-elif echo "$GPU" | grep -qi "intel"; then
-    pacman -S --noconfirm mesa xf86-video-intel vulkan-intel
+# Настройка nano
+echo 'include "/usr/share/nano/*.nanorc"' > /etc/nanorc
+
+echo -e '\e[31m==================================================================================== Ставим KDE ==================================================\e[0m'
+echo -e '\033[32m'
+
+# AMD драйверы
+pacman -S --needed lib32-mesa mesa xf86-video-amdgpu vulkan-radeon lib32-vulkan-radeon vulkan-icd-loader lib32-vulkan-icd-loader libva-mesa-driver lib32-libva-mesa-driver xorg-drivers xorg-xinit --noconfirm
+
+# KDE и основные приложения
+pacman -S yay plasma-pa plasma-nm plasma-desktop dolphin kate konsole kde-gtk-config --noconfirm
+
+# Дополнительные приложения KDE
+pacman -S ark p7zip unzip unrar zip unarchiver qbittorrent gwenview kompare plasma-sdk encfs cryfs kscreen sddm-kcm kinfocenter wireshark-qt spectacle ktouch kwave krita kdenlive kleopatra krfb krdc freerdp kdegraphics-thumbnailers kdesdk-thumbnailers ffmpegthumbs breeze-gtk kfind cmake extra-cmake-modules systemdgenie plasma-systemmonitor bluedevil bluez-utils --noconfirm
+
+# Приложения
+pacman -S firefox-i18n-ru firefox-ublock-origin filelight ntfs-3g gufw mtr exfat-utils cronie gnome-disk-utility f2fs-tools udftools net-tools libvirt linux-headers qt5-translations kdeplasma-addons networkmanager-openvpn openresolv kcalc tree openssh bridge-utils partitionmanager --noconfirm
+
+# Игры и шрифты
+pacman -S steam ttf-liberation ttf-dejavu --noconfirm
+
+echo -e '\e[31m==================================================================================== Ставим и настраиваем ZSH ====================================\e[0m'
+echo -e '\033[32m'
+
+# ZSH и темы
+mkdir -p /home/$username/.config /home/$username/.local/share/konsole
+pacman -S zsh-theme-powerlevel10k awesome-terminal-fonts zsh-syntax-highlighting zsh-autosuggestions neofetch lsd bat fd --noconfirm
+
+# Смена оболочки
+usermod -s /usr/bin/zsh $username
+usermod -s /usr/bin/zsh root
+
+# Копирование конфигов из репозитория
+if [ -d /home/$username/ArchLinux/Package ]; then
+    cp /home/$username/ArchLinux/Package/.zshrc /home/$username/.zshrc 2>/dev/null || true
+    cp /home/$username/ArchLinux/Package/zshrc /etc/zsh/zshrc 2>/dev/null || true
+    mkdir -p /home/$username/.config/neofetch
+    cp /home/$username/ArchLinux/Package/config.conf /home/$username/.config/neofetch/config.conf 2>/dev/null || true
+    cp /home/$username/ArchLinux/Package/konsolerc /home/$username/.config/konsolerc 2>/dev/null || true
+    mkdir -p /root/.config
+    cp /home/$username/ArchLinux/Package/konsolerc /root/.config/konsolerc 2>/dev/null || true
 fi
 
-# Включение сервисов
-systemctl enable sddm
-systemctl enable NetworkManager
-systemctl enable bluetooth
-systemctl enable fstrim.timer
+if [ -d /home/$username/ArchLinux/KDE/.config ]; then
+    cp -r /home/$username/ArchLinux/KDE/.config/yt-dlp /home/$username/.config/ 2>/dev/null || true
+fi
 
-# Настройка SDDM для автологина
-cat > /etc/sddm.conf.d/autologin.conf << EOF
-[Autologin]
-User=$username
+echo -e '\e[31m==================================================================================== Настройка SDDM и тем ========================================\e[0m'
+echo -e '\033[32m'
+
+# Настраиваем тему и автологин
+mkdir -p /etc/sddm.conf.d
+echo '[Theme]
+CursorTheme=breeze_cursors' > /etc/sddm.conf
+
+echo '[Autologin]
+User='$username'
+Session=plasma.desktop
+Numlock=on' > /etc/sddm.conf.d/autologin.conf
+
+echo '[Autologin]
+Relogin=false
 Session=plasma
-EOF
+User='$username'
 
-# Права для пользователя
-usermod -aG wheel,storage,power,audio,video,lp,network,wireshark "$username"
+[General]
+HaltCommand=/usr/bin/systemctl poweroff
+RebootCommand=/usr/bin/systemctl reboot
 
-# Оптимизация BTRFS
+[Theme]
+Current=breeze
+CursorTheme=breeze_cursors
+
+[Users]
+MaximumUid=60000
+MinimumUid=1000' > /etc/sddm.conf.d/kde_settings.conf
+
+# Включение сервисов
+systemctl enable systemd-timesyncd.service
+systemctl enable sddm.service NetworkManager.service
 systemctl enable fstrim.timer
+systemctl enable bluetooth.service
 
-# Настройка zram (опционально)
-pacman -S --noconfirm zram-generator
-cat > /etc/systemd/zram-generator.conf << EOF
-[zram0]
-zram-size = min(ram / 2, 4096)
-compression-algorithm = zstd
-EOF
+# Маскировка ненужных сервисов
+systemctl mask man-db.service man-db.timer 2>/dev/null
+systemctl mask ModemManager.service 2>/dev/null
+systemctl mask lvm2-monitor.socket lvm2-monitor.service 2>/dev/null
+systemctl mask lvm2-lvmpolld.socket lvm2-lvmpolld.service 2>/dev/null
+systemctl mask lvm2-lvmetad.socket lvm2-lvmetad.service 2>/dev/null
+systemctl mask lvm2-activation.service lvm2-activation-early.service 2>/dev/null
+systemctl mask systemd-journald-audit.socket systemd-journald-dev-log.socket 2>/dev/null
+systemctl mask systemd-tmpfiles-setup.service 2>/dev/null
+
+# Удаление проблемного снапшота
+btrfs subvolume delete /var/lib/machines 2>/dev/null || true
+
+# Добавление в группы
+usermod -a -G wireshark $username
+
+echo -e '\e[31m==================================================================================== Установка MPV ===============================================\e[0m'
+echo -e '\033[32m'
+
+# Мультимедиа
+pacman -S amarok taglib1 gst-libav gst-plugins-bad gst-plugins-good gst-plugins-ugly --noconfirm
+pacman -S mpv --noconfirm
+
+# Настройка MPV из репозитория
+mkdir -p /etc/mpv
+if [ -f /home/$username/ArchLinux/Package/mpv.desktop ]; then
+    cp /home/$username/ArchLinux/Package/mpv.desktop /usr/share/applications/mpv.desktop
+fi
+if [ -f /home/$username/ArchLinux/Package/mpv_single ]; then
+    cp /home/$username/ArchLinux/Package/mpv_single /usr/bin/mpv_single
+    chmod +x /usr/bin/mpv_single
+fi
+if [ -f /home/$username/ArchLinux/Package/mpv.conf ]; then
+    cp /home/$username/ArchLinux/Package/mpv.conf /etc/mpv/mpv.conf
+fi
+if [ -f /home/$username/ArchLinux/Package/input.conf ]; then
+    cp /home/$username/ArchLinux/Package/input.conf /etc/mpv/input.conf
+fi
+
+echo -e '\e[31m==================================================================================== Установка VirtualBox и иконок ================================\e[0m'
+echo -e '\033[32m'
+
+# VirtualBox
+pacman -S virtualbox virtualbox-guest-utils --noconfirm
+
+# Копирование иконок из репозитория
+if [ -f /home/$username/ArchLinux/LiveWallpaper/Box.svg ]; then
+    cp /home/$username/ArchLinux/LiveWallpaper/Box.svg /usr/share/icons/breeze-dark/apps/48/Box.svg
+    sed -i 's/Icon=virtualbox/Icon=Box/g' /usr/share/applications/virtualbox.desktop
+fi
+
+# Копирование дополнительных файлов
+if [ -f /home/$username/ArchLinux/Package/com.github.configurable-button.tar.xz ]; then
+    cp /home/$username/ArchLinux/Package/com.github.configurable-button.tar.xz /home/$username/
+fi
+
+# Иконки для приложений
+if [ -f /usr/share/icons/breeze/apps/48/plasmavault.svg ]; then
+    cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze/apps/48/kleopatra.svg 2>/dev/null || true
+    cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze-dark/apps/48/kleopatra.svg 2>/dev/null || true
+fi
+
+if [ -f /usr/share/icons/breeze/preferences/32/preferences-desktop-keyboard.svg ]; then
+    cp /usr/share/icons/breeze/preferences/32/preferences-desktop-keyboard.svg /usr/share/icons/breeze/preferences/32/qvkbd.svg 2>/dev/null || true
+    cp /usr/share/icons/breeze-dark/preferences/32/preferences-desktop-keyboard.svg /usr/share/icons/breeze-dark/preferences/32/qvkbd.svg 2>/dev/null || true
+fi
+
+# Замена иконок в сервисных меню
+for file in /usr/share/kio/servicemenus/kleopatra_decryptverifyfiles.desktop /usr/share/kio/servicemenus/kleopatra_signencryptfiles.desktop /usr/share/kio/servicemenus/kleopatra_signencryptfolders.desktop; do
+    if [ -f "$file" ]; then
+        sed -i 's/Icon=kleopatra/Icon=plasmavault/g' "$file"
+    fi
+done
+
+# Настройка Avahi
+if [ -f /etc/avahi/avahi-daemon.conf ]; then
+    sed -i 's/use-ipv4=yes/use-ipv4=no/g' /etc/avahi/avahi-daemon.conf
+    sed -i 's/use-ipv6=yes/use-ipv6=no/g' /etc/avahi/avahi-daemon.conf
+fi
+
+# Локализация systemdgenie
+if [ -f /home/$username/ArchLinux/Package/systemdgenie.mo ]; then
+    mkdir -p /usr/share/locale/ru/LC_MESSAGES/
+    cp /home/$username/ArchLinux/Package/systemdgenie.mo /usr/share/locale/ru/LC_MESSAGES/systemdgenie.mo
+fi
+
+# Копирование иконок безопасности
+if [ -f /home/$username/ArchLinux/LiveWallpaper/Airgeddon.svg ]; then
+    cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.svg /usr/share/icons/breeze-dark/apps/48/Airgeddon.svg
+    cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.svg /usr/share/icons/breeze/apps/48/Airgeddon.svg
+fi
+
+if [ -f /home/$username/ArchLinux/LiveWallpaper/Metasploit.svg ]; then
+    cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.svg /usr/share/icons/breeze-dark/apps/48/Metasploit.svg
+    cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.svg /usr/share/icons/breeze/apps/48/Metasploit.svg
+fi
+
+# Аватар пользователя
+if [ -f /home/$username/ArchLinux/KDE/.face.icon ]; then
+    mkdir -p /usr/share/plasma/avatars
+    cp /home/$username/ArchLinux/KDE/.face.icon /usr/share/plasma/avatars/Kurchatov.png
+fi
+
+# Иконка Arch
+if [ -f /home/$username/ArchLinux/KDE/.local/share/applications/Archlinux-icon-crystal-64.png ]; then
+    cp /home/$username/ArchLinux/KDE/.local/share/applications/Archlinux-icon-crystal-64.png /usr/share/icons/breeze-dark/apps/48/Archlinux-icon-crystal-64.png
+fi
+
+# Автозапуск arch3.sh если существует
+if [ -f /home/$username/ArchLinux/arch3.sh ]; then
+    mkdir -p /home/$username/.config/autostart
+    echo '[Desktop Entry]
+Exec=konsole -e sh /home/'$username'/ArchLinux/arch3.sh
+Icon=application-x-shellscript
+Name=arch3.sh
+Type=Application
+X-KDE-AutostartScript=true' > /home/$username/.config/autostart/arch3.sh.desktop
+    chmod +x /home/$username/ArchLinux/arch3.sh
+    chmod +x /home/$username/.config/autostart/arch3.sh.desktop
+fi
+
+# Добавление tmpfs в fstab
+echo "
+tmpfs /home/$username/.cache tmpfs rw,noatime 0 0
+tmpfs /var/log tmpfs defaults,noatime 0 0
+tmpfs /var/run tmpfs defaults,noatime 0 0
+tmpfs /var/lock tmpfs defaults,noatime 0 0" >> /etc/fstab
 
 # Очистка
-rm /arch-chroot-setup.sh
+rm -rf /home/$username/.bash_logout /home/$username/.bash_profile /home/$username/.bashrc 2>/dev/null
+rm -rf /var/cache/pacman/pkg/* 2>/dev/null
 
-echo -e "${GREEN}Базовая настройка завершена!${NC}"
+# Права на домашнюю директорию
+chown -R $username:users /home/$username
+
+echo -e '\033[32m'
+echo -e '\e[31m==================================================================================== Настройка завершена =========================================\e[0m'
 INNEREOF
 
 # Делаем скрипт исполняемым
 chmod +x /mnt/arch-chroot-setup.sh
 
-# Передаем переменные и выполняем в chroot
-arch-chroot /mnt /bin/bash -c "hostname='$hostname' username='$username' rootpass='$rootpass' userpass='$userpass' DISK='$DISK' /arch-chroot-setup.sh"
+# Выполняем настройку в chroot
+print_message "================================================================================"
+print_message "                     Запуск настройки в chroot"
+print_message "================================================================================"
+
+arch-chroot /mnt /bin/bash -c "hostname='$hostname' username='$username' rootpass='$rootpass' userpass='$userpass' /arch-chroot-setup.sh"
 
 # Проверка на ошибки
 if [ $? -ne 0 ]; then
@@ -399,7 +578,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Очистка
-rm /mnt/arch-chroot-setup.sh
+rm -f /mnt/arch-chroot-setup.sh
 
 print_message "================================================================================"
 print_message "        Установка завершена! Система будет перезагружена через 5 секунд"
