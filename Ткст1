@@ -98,19 +98,30 @@ elif [[ $OS == 2 ]]; then
     fdisk -l "$DISK"
     echo ""
     
+    # Находим последний раздел
+    LAST_PART=$(fdisk -l "$DISK" | grep "^${DISK}p" | tail -n1 | awk '{print $1}')
+    LAST_PART_NUM=$(echo $LAST_PART | sed 's/.*p\([0-9]*\).*/\1/')
+    
+    # Создаем новый раздел
     (
         echo n
-        echo
+        echo $((LAST_PART_NUM + 1))
         echo
         echo
         echo w
     ) | fdisk --color=never "$DISK" > /dev/null 2>&1
     
+    # Обновляем таблицу разделов
+    partprobe "$DISK" 2>/dev/null || true
+    sleep 2
+    
+    # Определяем номер созданного раздела
     PART_NUM=$(fdisk -l "$DISK" | grep "^${DISK}p" | tail -n1 | sed 's/.*p\([0-9]*\).*/\1/')
     ROOT_PART="${DISK}p${PART_NUM}"
     
+    # Ищем EFI раздел
     for part in "${DISK}"p*; do
-        if blkid "$part" | grep -qi "vfat"; then
+        if blkid "$part" 2>/dev/null | grep -qi "vfat"; then
             EFI_PART="$part"
             break
         fi
@@ -155,12 +166,14 @@ print_message "=================================================================
 mount -t btrfs "$ROOT_PART" /mnt
 btrfs subvolume create /mnt/@
 btrfs subvolume create /mnt/@home
+btrfs subvolume create /mnt/@snapshots
 umount /mnt
 
 print_message "Монтирование подтомов..."
 mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@ "$ROOT_PART" /mnt
-mkdir -p /mnt/{home,boot}
+mkdir -p /mnt/{home,boot,.snapshots}
 mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@home "$ROOT_PART" /mnt/home
+mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@snapshots "$ROOT_PART" /mnt/.snapshots
 mount "$EFI_PART" /mnt/boot
 
 # Установка основных пакетов
@@ -169,13 +182,31 @@ print_message "                     Установка основных паке
 print_message "================================================================================"
 
 pacman -Sy --noconfirm
-pacstrap /mnt base base-devel nano linux linux-zen linux-firmware btrfs-progs iwd linux-zen-headers
+
+# Явно устанавливаем ядра и необходимые пакеты
+pacstrap -K /mnt \
+    base \
+    base-devel \
+    linux \
+    linux-headers \
+    linux-zen \
+    linux-zen-headers \
+    linux-firmware \
+    btrfs-progs \
+    iwd \
+    nano \
+    amd-ucode \
+    intel-ucode
 
 # Генерация fstab
 print_message "================================================================================"
 print_message "                     Генерация fstab"
 print_message "================================================================================"
 genfstab -pU /mnt >> /mnt/etc/fstab
+
+# Проверяем, что ядра установлены
+print_message "Проверка установленных ядер..."
+arch-chroot /mnt ls -la /boot/vmlinuz* 2>/dev/null || print_error "Ядра не найдены!"
 
 # Создаем скрипт для настройки внутри chroot
 print_message "================================================================================"
@@ -209,33 +240,49 @@ echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 echo "KEYMAP=ru" > /etc/vconsole.conf
 echo "FONT=cyr-sun16" >> /etc/vconsole.conf
 
+# Проверяем наличие ядер
+echo -e "${GREEN}Проверка наличия ядер...${NC}"
+ls -la /boot/vmlinuz* || echo -e "${RED}Ядра не найдены!${NC}"
+
 # Настройка mkinitcpio
-echo 'MODULES="" 
+echo 'MODULES="btrfs" 
 BINARIES="" 
 FILES="" 
-HOOKS="base udev autodetect modconf block filesystems keyboard keymap"' > /etc/mkinitcpio.conf
+HOOKS="base udev autodetect modconf block filesystems keyboard keymap fsck"' > /etc/mkinitcpio.conf
 
+# Удаляем старые fallback образы
 rm -f /boot/initramfs-linux-zen-fallback.img /boot/initramfs-linux-fallback.img 2>/dev/null
 
-# Настройка presets для ядер
-echo 'ALL_config="/etc/mkinitcpio.conf"
+# Настройка presets для ядер - УПРОЩЕННАЯ ВЕРСИЯ
+cat > /etc/mkinitcpio.d/linux.preset << EOF
+ALL_config="/etc/mkinitcpio.conf"
 ALL_kver="/boot/vmlinuz-linux"
-PRESETS=default
-default_image="/boot/initramfs-linux.img"' > /etc/mkinitcpio.d/linux.preset
+PRESETS=('default')
+default_image="/boot/initramfs-linux.img"
+EOF
 
-echo 'ALL_config="/etc/mkinitcpio.conf"
+cat > /etc/mkinitcpio.d/linux-zen.preset << EOF
+ALL_config="/etc/mkinitcpio.conf"
 ALL_kver="/boot/vmlinuz-linux-zen"
-PRESETS=default
-default_image="/boot/initramfs-linux-zen.img"' > /etc/mkinitcpio.d/linux-zen.preset
+PRESETS=('default')
+default_image="/boot/initramfs-linux-zen.img"
+EOF
 
-# Создаем initramfs
-mkinitcpio -p linux
-mkinitcpio -p linux-zen
+# Создаем initramfs с подробным выводом
+echo -e "${GREEN}Создание initramfs для linux...${NC}"
+mkinitcpio -p linux -v
+
+echo -e "${GREEN}Создание initramfs для linux-zen...${NC}"
+mkinitcpio -p linux-zen -v
+
+# Проверяем созданные образы
+echo -e "${GREEN}Проверка созданных образов initramfs:${NC}"
+ls -la /boot/initramfs-*.img
 
 echo -e "${GREEN}Устанавливаем загрузчик...${NC}"
 
 # Установка необходимых пакетов
-pacman -S --noconfirm efibootmgr git wget reflector amd-ucode intel-ucode
+pacman -S --noconfirm efibootmgr git wget reflector
 
 # === 10 ЛУЧШИХ РУССКИХ ЗЕРКАЛ ===
 echo -e "${GREEN}Настройка лучших российских зеркал...${NC}"
@@ -247,12 +294,10 @@ Server = https://mirror.nforce.com/pub/linux/archlinux/\$repo/os/\$arch
 Server = https://mirror.rol.ru/archlinux/\$repo/os/\$arch
 Server = https://archlinux.gay/arch/\$repo/os/\$arch
 Server = https://mirror.corbina.net/pub/archlinux/\$repo/os/\$arch
-Server = https://mirror.truenetwork.ru/archlinux/\$repo/os/\$arch
 Server = http://mirror.yandex.ru/archlinux/\$repo/os/\$arch
 Server = http://mirror.truenetwork.ru/archlinux/\$repo/os/\$arch
 Server = http://mirror.nforce.com/pub/linux/archlinux/\$repo/os/\$arch
 Server = http://mirror.rol.ru/archlinux/\$repo/os/\$arch
-Server = http://archlinux.gay/arch/\$repo/os/\$arch
 MIRROREOF
 
 # Обновление зеркал
@@ -267,6 +312,14 @@ editor 0' > /boot/loader/loader.conf
 # Определяем корневой раздел по UUID
 ROOT_UUID=$(blkid -s UUID -o value $ROOT_PART)
 
+# Проверяем наличие Windows для os-prober
+if [[ $OS == 2 ]]; then
+    echo -e "${YELLOW}Добавление Windows в загрузчик...${NC}"
+    pacman -S --noconfirm os-prober
+    os-prober
+fi
+
+# Создаем записи загрузчика с явным указанием initrd
 cat > /boot/loader/entries/arch.conf << EOF
 title   Arch Linux
 linux   /vmlinuz-linux
@@ -312,18 +365,20 @@ echo -e "${GREEN}Настройка репозиториев и PGP подпис
 pacman-key --init
 pacman-key --populate archlinux
 
-# Добавление Chaotic AUR с правильными подписями
+# Добавление Chaotic AUR
 echo -e "${GREEN}Добавление Chaotic AUR...${NC}"
-pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
+pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com || \
+pacman-key --recv-key 3056513887B78AEB --keyserver hkp://keyserver.ubuntu.com:80
 pacman-key --lsign-key 3056513887B78AEB
 pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' --noconfirm
 pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm
 
 # Arch Linux CN репозиторий
-pacman-key --recv-key 851034EA56B2F69D --keyserver keyserver.ubuntu.com
+pacman-key --recv-key 851034EA56B2F69D --keyserver keyserver.ubuntu.com || \
+pacman-key --recv-key 851034EA56B2F69D --keyserver hkp://keyserver.ubuntu.com:80
 pacman-key --lsign-key 851034EA56B2F69D
 
-# Настройка Pacman.conf с правильными SigLevel
+# Настройка Pacman.conf
 cat > /etc/pacman.conf << PACMANEOF
 [options]
 CacheDir = /home/$username/Package/
@@ -396,7 +451,7 @@ pacman -S --needed --noconfirm \
     xorg-drivers \
     xorg-xinit
 
-# Установка yay из AUR (альтернативный способ)
+# Установка yay из AUR
 echo -e "${GREEN}Установка yay...${NC}"
 cd /tmp
 git clone https://aur.archlinux.org/yay.git
@@ -404,6 +459,16 @@ cd yay
 chown -R $username:users .
 sudo -u $username makepkg -si --noconfirm
 cd /
+
+# === ДОБАВЛЕННЫЕ ПАКЕТЫ ПО ЗАПРОСУ ===
+echo -e "${GREEN}Установка дополнительных пакетов (gtkmm, open-vm-tools)...${NC}"
+pacman -S --noconfirm \
+    gtkmm-4.0 \
+    gtkmm3 \
+    open-vm-tools
+
+# Включение службы vmtoolsd в автозапуск
+systemctl enable vmtoolsd.service
 
 # KDE и основные приложения
 echo -e "${GREEN}Установка KDE Plasma...${NC}"
@@ -504,20 +569,10 @@ pacman-key --recv-key F9F9FA97A403F63E --keyserver pgp.mit.edu
 
 pacman-key --lsign-key F9F9FA97A403F63E
 
-# Способ 2: Если не получилось, устанавливаем без проверки подписи
-if ! pacman -S zsh-theme-powerlevel10k --noconfirm; then
-    echo -e "${YELLOW}Не удалось установить с проверкой подписи. Пробуем без проверки...${NC}"
-    # Временно отключаем проверку подписи для этого пакета
-    echo "SigLevel = Never" >> /etc/pacman.conf
-    pacman -Syy
-    pacman -S zsh-theme-powerlevel10k --noconfirm
-    # Возвращаем обратно
-    sed -i '$ d' /etc/pacman.conf
-fi
-
-# Установка остальных пакетов ZSH
+# Установка пакетов ZSH
 pacman -S --noconfirm \
     zsh \
+    zsh-theme-powerlevel10k \
     awesome-terminal-fonts \
     zsh-syntax-highlighting \
     zsh-autosuggestions \
@@ -751,11 +806,15 @@ rm -rf /var/cache/pacman/pkg/* 2>/dev/null
 # Права на домашнюю директорию
 chown -R $username:users /home/$username
 
+# Финальное обновление initramfs с подробным выводом
+echo -e "${GREEN}Финальное обновление initramfs...${NC}"
+mkinitcpio -P -v
+
+echo -e "${GREEN}Проверка наличия всех файлов загрузки:${NC}"
+ls -la /boot/
+
 echo -e "${GREEN}"
 echo -e "${RED}==================================================================================== Настройка завершена =========================================${NC}"
-
-# Обновление initramfs после всех изменений
-mkinitcpio -P
 INNEREOF
 
 # Делаем скрипт исполняемым
@@ -766,7 +825,7 @@ print_message "=================================================================
 print_message "                     Запуск настройки в chroot"
 print_message "================================================================================"
 
-arch-chroot /mnt /bin/bash -c "hostname='$hostname' username='$username' rootpass='$rootpass' userpass='$userpass' ROOT_PART='$ROOT_PART' /arch-chroot-setup.sh"
+arch-chroot /mnt /bin/bash -c "hostname='$hostname' username='$username' rootpass='$rootpass' userpass='$userpass' ROOT_PART='$ROOT_PART' OS='$OS' /arch-chroot-setup.sh"
 
 # Проверка на ошибки
 if [ $? -ne 0 ]; then
