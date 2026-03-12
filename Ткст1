@@ -176,18 +176,48 @@ mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@home 
 mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@snapshots "$ROOT_PART" /mnt/.snapshots
 mount "$EFI_PART" /mnt/boot
 
+# === 10 ЛУЧШИХ РОССИЙСКИХ ЗЕРКАЛ ===
+print_message "================================================================================"
+print_message "                     Настройка российских зеркал"
+print_message "================================================================================"
+
+# Создаем необходимые каталоги
+mkdir -p /mnt/etc/pacman.d/
+
+cat > /mnt/etc/pacman.d/mirrorlist << MIRROREOF
+## Russian mirrors - ranked by speed
+Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.truenetwork.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.nforce.com/pub/linux/archlinux/\$repo/os/\$arch
+Server = https://mirror.rol.ru/archlinux/\$repo/os/\$arch
+Server = https://archlinux.gay/arch/\$repo/os/\$arch
+Server = https://mirror.corbina.net/pub/archlinux/\$repo/os/\$arch
+Server = https://mirror.docker.ru/archlinux/\$repo/os/\$arch
+Server = https://mirrors.krasinfo.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.cedalan.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.surf/archlinux/\$repo/os/\$arch
+MIRROREOF
+
+print_message "Российские зеркала добавлены в /mnt/etc/pacman.d/mirrorlist"
+
+# Копируем зеркала также в текущую систему для ускорения установки пакетов
+mkdir -p /etc/pacman.d/
+cp /mnt/etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist
+
+# Обновляем базу данных пакетов с новыми зеркалами
+pacman -Syy --noconfirm
+
 # Установка основных пакетов
 print_message "================================================================================"
 print_message "                     Установка основных пакетов"
 print_message "================================================================================"
-
-pacman -Sy --noconfirm
 
 # Явно устанавливаем ядра и необходимые пакеты
 pacstrap -K /mnt \
     base \
     base-devel \
     linux \
+    linux-firmware \
     linux-headers \
     linux-zen \
     linux-zen-headers \
@@ -195,22 +225,23 @@ pacstrap -K /mnt \
     btrfs-progs \
     iwd \
     nano \
-    amd-ucode \
-    intel-ucode \
     git \
     wget \
     curl \
-    reflector
+    reflector \
+    amd-ucode \
+    intel-ucode
+
+# Проверяем, что ядра установились
+print_message "Проверка установленных ядер..."
+ls /mnt/boot/vmlinuz* || print_error "Ядра не найдены в /mnt/boot!"
+sleep 3
 
 # Генерация fstab
 print_message "================================================================================"
 print_message "                     Генерация fstab"
 print_message "================================================================================"
 genfstab -pU /mnt >> /mnt/etc/fstab
-
-# Проверяем, что ядра установлены
-print_message "Проверка установленных ядер..."
-arch-chroot /mnt ls -la /boot/vmlinuz* 2>/dev/null || print_error "Ядра не найдены!"
 
 # Создаем скрипт для настройки внутри chroot
 print_message "================================================================================"
@@ -258,10 +289,6 @@ Section "InputClass"
 EndSection
 X11CONF
 
-# Проверяем наличие ядер
-echo -e "${GREEN}Проверка наличия ядер...${NC}"
-ls -la /boot/vmlinuz* || echo -e "${RED}Ядра не найдены!${NC}"
-
 # Настройка mkinitcpio
 echo 'MODULES="btrfs" 
 BINARIES="" 
@@ -271,7 +298,7 @@ HOOKS="base udev autodetect modconf block filesystems keyboard keymap fsck"' > /
 # Удаляем старые fallback образы
 rm -f /boot/initramfs-linux-zen-fallback.img /boot/initramfs-linux-fallback.img 2>/dev/null
 
-# Настройка presets для ядер - УПРОЩЕННАЯ ВЕРСИЯ
+# Настройка presets для ядер
 cat > /etc/mkinitcpio.d/linux.preset << EOF
 ALL_config="/etc/mkinitcpio.conf"
 ALL_kver="/boot/vmlinuz-linux"
@@ -286,7 +313,7 @@ PRESETS=('default')
 default_image="/boot/initramfs-linux-zen.img"
 EOF
 
-# Создаем initramfs с подробным выводом
+# Создаем initramfs
 echo -e "${GREEN}Создание initramfs для linux...${NC}"
 mkinitcpio -p linux -v
 
@@ -297,28 +324,17 @@ mkinitcpio -p linux-zen -v
 echo -e "${GREEN}Проверка созданных образов initramfs:${NC}"
 ls -la /boot/initramfs-*.img
 
+# Проверяем наличие ядер
+echo -e "${GREEN}Проверка наличия ядер в /boot:${NC}"
+ls -la /boot/vmlinuz* || echo -e "${YELLOW}ВНИМАНИЕ: Ядра не найдены в /boot!"
+sleep 3
+
 echo -e "${GREEN}Устанавливаем загрузчик...${NC}"
 
 # Установка необходимых пакетов
 pacman -S --noconfirm efibootmgr
 
-# === 10 ЛУЧШИХ РУССКИХ ЗЕРКАЛ ===
-echo -e "${GREEN}Настройка лучших российских зеркал...${NC}"
-cat > /etc/pacman.d/mirrorlist << MIRROREOF
-## Russian mirrors - ranked by speed
-Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
-Server = https://mirror.truenetwork.ru/archlinux/\$repo/os/\$arch
-Server = https://mirror.nforce.com/pub/linux/archlinux/\$repo/os/\$arch
-Server = https://mirror.rol.ru/archlinux/\$repo/os/\$arch
-Server = https://archlinux.gay/arch/\$repo/os/\$arch
-Server = https://mirror.corbina.net/pub/archlinux/\$repo/os/\$arch
-Server = http://mirror.yandex.ru/archlinux/\$repo/os/\$arch
-Server = http://mirror.truenetwork.ru/archlinux/\$repo/os/\$arch
-Server = http://mirror.nforce.com/pub/linux/archlinux/\$repo/os/\$arch
-Server = http://mirror.rol.ru/archlinux/\$repo/os/\$arch
-MIRROREOF
-
-# Обновление зеркал
+# Обновление зеркал (они уже должны быть настроены)
 pacman -Syu --noconfirm
 
 # Установка загрузчика
@@ -337,11 +353,14 @@ if [[ $OS == 2 ]]; then
     os-prober
 fi
 
-# Создаем записи загрузчика с явным указанием initrd
+# Проверяем наличие файлов ядра и микрокода
+echo -e "${GREEN}Проверка файлов в /boot:${NC}"
+ls -la /boot/
+
+# Создаем простую запись загрузчика без микрокода сначала для теста
 cat > /boot/loader/entries/arch.conf << EOF
 title   Arch Linux
 linux   /vmlinuz-linux
-initrd  /amd-ucode.img
 initrd  /initramfs-linux.img
 options root=UUID=$ROOT_UUID rw rootflags=subvol=@ quiet
 EOF
@@ -349,10 +368,11 @@ EOF
 cat > /boot/loader/entries/arch-zen.conf << EOF
 title   Arch Linux Zen
 linux   /vmlinuz-linux-zen
-initrd  /amd-ucode.img
 initrd  /initramfs-linux-zen.img
 options root=UUID=$ROOT_UUID rw rootflags=subvol=@ quiet
 EOF
+
+echo -e "${GREEN}Записи загрузчика созданы${NC}"
 
 # Добавляем пользователя
 useradd -m -g users -G audio,games,video,storage,wheel,power -s /bin/bash $username
@@ -379,7 +399,7 @@ systemctl enable systemd-resolved.service
 # === НАСТРОЙКА SIGLEVEL = NEVER ДЛЯ ВСЕХ РЕПОЗИТОРИЕВ ===
 echo -e "${GREEN}Настройка репозиториев с SigLevel = Never...${NC}"
 
-# Инициализация ключей pacman (все равно нужна для базовых операций)
+# Инициализация ключей pacman
 pacman-key --init
 pacman-key --populate archlinux
 
@@ -804,14 +824,6 @@ rm -rf /var/cache/pacman/pkg/* 2>/dev/null
 
 # Права на домашнюю директорию
 chown -R $username:users /home/$username
-
-# === УСТАНОВКА YAY В КОНЦЕ ===
-echo -e "${GREEN}Установка yay из AUR...${NC}"
-cd /tmp
-sudo -u $username git clone https://aur.archlinux.org/yay.git
-cd yay
-sudo -u $username makepkg -si --noconfirm
-cd /
 
 # Финальное обновление initramfs с подробным выводом
 echo -e "${GREEN}Финальное обновление initramfs...${NC}"
