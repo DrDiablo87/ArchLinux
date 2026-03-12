@@ -196,7 +196,11 @@ pacstrap -K /mnt \
     iwd \
     nano \
     amd-ucode \
-    intel-ucode
+    intel-ucode \
+    git \
+    wget \
+    curl \
+    reflector
 
 # Генерация fstab
 print_message "================================================================================"
@@ -240,6 +244,20 @@ echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
 echo "KEYMAP=ru" > /etc/vconsole.conf
 echo "FONT=cyr-sun16" >> /etc/vconsole.conf
 
+# === ДОБАВЛЯЕМ РУССКУЮ РАСКЛАДКУ В X11 ===
+echo -e "${GREEN}Настройка русской раскладки для X11...${NC}"
+mkdir -p /etc/X11/xorg.conf.d
+cat > /etc/X11/xorg.conf.d/00-keyboard.conf << X11CONF
+Section "InputClass"
+    Identifier "system-keyboard"
+    MatchIsKeyboard "on"
+    Option "XkbLayout" "us,ru"
+    Option "XkbModel" "pc105"
+    Option "XkbVariant" ","
+    Option "XkbOptions" "grp:alt_shift_toggle,grp_led:scroll"
+EndSection
+X11CONF
+
 # Проверяем наличие ядер
 echo -e "${GREEN}Проверка наличия ядер...${NC}"
 ls -la /boot/vmlinuz* || echo -e "${RED}Ядра не найдены!${NC}"
@@ -282,7 +300,7 @@ ls -la /boot/initramfs-*.img
 echo -e "${GREEN}Устанавливаем загрузчик...${NC}"
 
 # Установка необходимых пакетов
-pacman -S --noconfirm efibootmgr git wget reflector
+pacman -S --noconfirm efibootmgr
 
 # === 10 ЛУЧШИХ РУССКИХ ЗЕРКАЛ ===
 echo -e "${GREEN}Настройка лучших российских зеркал...${NC}"
@@ -358,10 +376,10 @@ git clone https://github.com/DrDiablo87/ArchLinux.git /home/$username/ArchLinux 
 systemctl enable systemd-networkd.service
 systemctl enable systemd-resolved.service
 
-# === ИСПРАВЛЕНИЕ: Правильная настройка PGP подписей ===
-echo -e "${GREEN}Настройка репозиториев и PGP подписей...${NC}"
+# === НАСТРОЙКА SIGLEVEL = NEVER ДЛЯ ВСЕХ РЕПОЗИТОРИЕВ ===
+echo -e "${GREEN}Настройка репозиториев с SigLevel = Never...${NC}"
 
-# Инициализация ключей pacman
+# Инициализация ключей pacman (все равно нужна для базовых операций)
 pacman-key --init
 pacman-key --populate archlinux
 
@@ -378,7 +396,7 @@ pacman-key --recv-key 851034EA56B2F69D --keyserver keyserver.ubuntu.com || \
 pacman-key --recv-key 851034EA56B2F69D --keyserver hkp://keyserver.ubuntu.com:80
 pacman-key --lsign-key 851034EA56B2F69D
 
-# Настройка Pacman.conf
+# Настройка Pacman.conf с SigLevel = Never для всех репозиториев
 cat > /etc/pacman.conf << PACMANEOF
 [options]
 CacheDir = /home/$username/Package/
@@ -387,27 +405,27 @@ Architecture = auto
 Color
 CheckSpace
 ParallelDownloads = 10
-SigLevel = Required DatabaseOptional
+SigLevel = Never
 
 [core]
 Include = /etc/pacman.d/mirrorlist
-SigLevel = PackageRequired
+SigLevel = Never
 
 [extra]
 Include = /etc/pacman.d/mirrorlist
-SigLevel = PackageRequired
+SigLevel = Never
 
 [multilib]
 Include = /etc/pacman.d/mirrorlist
-SigLevel = PackageRequired
+SigLevel = Never
 
 [archlinuxcn]
 Server = https://repo.archlinuxcn.org/\$arch
-SigLevel = PackageOptional
+SigLevel = Never
 
 [chaotic-aur]
 Include = /etc/pacman.d/chaotic-mirrorlist
-SigLevel = PackageOptional
+SigLevel = Never
 PACMANEOF
 
 # Создание директории для кэша пакетов
@@ -450,25 +468,6 @@ pacman -S --needed --noconfirm \
     lib32-libva-mesa-driver \
     xorg-drivers \
     xorg-xinit
-
-# Установка yay из AUR
-echo -e "${GREEN}Установка yay...${NC}"
-cd /tmp
-git clone https://aur.archlinux.org/yay.git
-cd yay
-chown -R $username:users .
-sudo -u $username makepkg -si --noconfirm
-cd /
-
-# === ДОБАВЛЕННЫЕ ПАКЕТЫ ПО ЗАПРОСУ ===
-echo -e "${GREEN}Установка дополнительных пакетов (gtkmm, open-vm-tools)...${NC}"
-pacman -S --noconfirm \
-    gtkmm-4.0 \
-    gtkmm3 \
-    open-vm-tools
-
-# Включение службы vmtoolsd в автозапуск
-systemctl enable vmtoolsd.service
 
 # KDE и основные приложения
 echo -e "${GREEN}Установка KDE Plasma...${NC}"
@@ -557,17 +556,17 @@ pacman -S --noconfirm \
     ttf-liberation \
     ttf-dejavu
 
+# === ДОБАВЛЕННЫЕ ПАКЕТЫ ПО ЗАПРОСУ ===
+echo -e "${GREEN}Установка дополнительных пакетов (gtkmm, open-vm-tools)...${NC}"
+pacman -S --noconfirm \
+    gtkmm-4.0 \
+    gtkmm3 \
+    open-vm-tools
+
+# Включение службы vmtoolsd в автозапуск
+systemctl enable vmtoolsd.service
+
 echo -e "${RED}==================================================================================== Ставим и настраиваем ZSH ====================================${NC}"
-
-# === ИСПРАВЛЕНИЕ: Проблема с PGP ключом powerlevel10k ===
-echo -e "${GREEN}Импорт PGP ключа для zsh-theme-powerlevel10k...${NC}"
-
-# Способ 1: Импорт через pacman-key
-pacman-key --recv-key F9F9FA97A403F63E --keyserver keyserver.ubuntu.com || \
-pacman-key --recv-key F9F9FA97A403F63E --keyserver hkp://keyserver.ubuntu.com:80 || \
-pacman-key --recv-key F9F9FA97A403F63E --keyserver pgp.mit.edu
-
-pacman-key --lsign-key F9F9FA97A403F63E
 
 # Установка пакетов ZSH
 pacman -S --noconfirm \
@@ -805,6 +804,14 @@ rm -rf /var/cache/pacman/pkg/* 2>/dev/null
 
 # Права на домашнюю директорию
 chown -R $username:users /home/$username
+
+# === УСТАНОВКА YAY В КОНЦЕ ===
+echo -e "${GREEN}Установка yay из AUR...${NC}"
+cd /tmp
+sudo -u $username git clone https://aur.archlinux.org/yay.git
+cd yay
+sudo -u $username makepkg -si --noconfirm
+cd /
 
 # Финальное обновление initramfs с подробным выводом
 echo -e "${GREEN}Финальное обновление initramfs...${NC}"
