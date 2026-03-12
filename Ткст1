@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 # Цвета для вывода
@@ -416,6 +417,18 @@ pacman-key --recv-key 851034EA56B2F69D --keyserver keyserver.ubuntu.com || \
 pacman-key --recv-key 851034EA56B2F69D --keyserver hkp://keyserver.ubuntu.com:80
 pacman-key --lsign-key 851034EA56B2F69D
 
+# === ДОБАВЛЕНИЕ BLACKARCH РЕПОЗИТОРИЯ УКАЗАННЫМ МЕТОДОМ ===
+echo -e "${GREEN}Добавление Blackarch репозитория...${NC}"
+
+# Добавляем Blackarch в pacman.conf
+echo -e "\n[blackarch]\nServer = https://mirrors.tuna.tsinghua.edu.cn/blackarch/\$repo/os/\$arch" | tee -a /etc/pacman.conf
+
+# Обновляем базу данных и устанавливаем ключи
+pacman -Syy --noconfirm
+pacman -S --noconfirm blackarch-keyring
+
+echo -e "${GREEN}Blackarch репозиторий успешно добавлен${NC}"
+
 # Настройка Pacman.conf с SigLevel = Never для всех репозиториев
 cat > /etc/pacman.conf << PACMANEOF
 [options]
@@ -445,6 +458,10 @@ SigLevel = Never
 
 [chaotic-aur]
 Include = /etc/pacman.d/chaotic-mirrorlist
+SigLevel = Never
+
+[blackarch]
+Server = https://mirrors.tuna.tsinghua.edu.cn/blackarch/\$repo/os/\$arch
 SigLevel = Never
 PACMANEOF
 
@@ -581,6 +598,9 @@ echo -e "${GREEN}Установка дополнительных пакетов 
 pacman -S --noconfirm \
     gtkmm-4.0 \
     gtkmm3 \
+    blackarch-keyring \
+    blackarch-mirrorlist \
+    yay \
     open-vm-tools
 
 # Включение службы vmtoolsd в автозапуск
