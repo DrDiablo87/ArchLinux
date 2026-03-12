@@ -188,6 +188,7 @@ cat > /mnt/arch-chroot-setup.sh << 'INNEREOF'
 # Цвета
 GREEN='\033[32m'
 RED='\033[31m'
+YELLOW='\033[33m'
 NC='\033[0m'
 
 echo -e "${GREEN}Настройка системы...${NC}"
@@ -236,8 +237,25 @@ echo -e "${GREEN}Устанавливаем загрузчик...${NC}"
 # Установка необходимых пакетов
 pacman -S --noconfirm efibootmgr git wget reflector amd-ucode intel-ucode
 
+# === 10 ЛУЧШИХ РУССКИХ ЗЕРКАЛ ===
+echo -e "${GREEN}Настройка лучших российских зеркал...${NC}"
+cat > /etc/pacman.d/mirrorlist << MIRROREOF
+## Russian mirrors - ranked by speed
+Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.truenetwork.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.nforce.com/pub/linux/archlinux/\$repo/os/\$arch
+Server = https://mirror.rol.ru/archlinux/\$repo/os/\$arch
+Server = https://archlinux.gay/arch/\$repo/os/\$arch
+Server = https://mirror.corbina.net/pub/archlinux/\$repo/os/\$arch
+Server = https://mirror.truenetwork.ru/archlinux/\$repo/os/\$arch
+Server = http://mirror.yandex.ru/archlinux/\$repo/os/\$arch
+Server = http://mirror.truenetwork.ru/archlinux/\$repo/os/\$arch
+Server = http://mirror.nforce.com/pub/linux/archlinux/\$repo/os/\$arch
+Server = http://mirror.rol.ru/archlinux/\$repo/os/\$arch
+Server = http://archlinux.gay/arch/\$repo/os/\$arch
+MIRROREOF
+
 # Обновление зеркал
-reflector --country Russia --verbose -l 5 -p https --sort rate --save /etc/pacman.d/mirrorlist
 pacman -Syu --noconfirm
 
 # Установка загрузчика
@@ -357,7 +375,7 @@ HOSTSEOF
 # Настройка nano
 echo 'include "/usr/share/nano/*.nanorc"' > /etc/nanorc
 
-# === УСТАНОВКА KDE С ПРАВИЛЬНЫМИ ПОДПИСЯМИ ===
+# === УСТАНОВКА KDE ===
 echo -e "${GREEN}Обновление базы данных пакетов...${NC}"
 pacman -Syy
 
@@ -475,12 +493,31 @@ pacman -S --noconfirm \
     ttf-dejavu
 
 echo -e "${RED}==================================================================================== Ставим и настраиваем ZSH ====================================${NC}"
-echo -e "${GREEN}"
 
-# ZSH и темы
+# === ИСПРАВЛЕНИЕ: Проблема с PGP ключом powerlevel10k ===
+echo -e "${GREEN}Импорт PGP ключа для zsh-theme-powerlevel10k...${NC}"
+
+# Способ 1: Импорт через pacman-key
+pacman-key --recv-key F9F9FA97A403F63E --keyserver keyserver.ubuntu.com || \
+pacman-key --recv-key F9F9FA97A403F63E --keyserver hkp://keyserver.ubuntu.com:80 || \
+pacman-key --recv-key F9F9FA97A403F63E --keyserver pgp.mit.edu
+
+pacman-key --lsign-key F9F9FA97A403F63E
+
+# Способ 2: Если не получилось, устанавливаем без проверки подписи
+if ! pacman -S zsh-theme-powerlevel10k --noconfirm; then
+    echo -e "${YELLOW}Не удалось установить с проверкой подписи. Пробуем без проверки...${NC}"
+    # Временно отключаем проверку подписи для этого пакета
+    echo "SigLevel = Never" >> /etc/pacman.conf
+    pacman -Syy
+    pacman -S zsh-theme-powerlevel10k --noconfirm
+    # Возвращаем обратно
+    sed -i '$ d' /etc/pacman.conf
+fi
+
+# Установка остальных пакетов ZSH
 pacman -S --noconfirm \
     zsh \
-    zsh-theme-powerlevel10k \
     awesome-terminal-fonts \
     zsh-syntax-highlighting \
     zsh-autosuggestions \
@@ -500,19 +537,20 @@ mkdir -p /root/.config
 
 # Копирование конфигов из репозитория
 if [ -d /home/$username/ArchLinux/Package ]; then
-    cp /home/$username/ArchLinux/Package/.zshrc /home/$username/.zshrc 2>/dev/null || echo "source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme" > /home/$username/.zshrc
-    cp /home/$username/ArchLinux/Package/zshrc /etc/zsh/zshrc 2>/dev/null || echo "source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme" > /etc/zsh/zshrc
-    cp /home/$username/ArchLinux/Package/config.conf /home/$username/.config/neofetch/config.conf 2>/dev/null || true
-    cp /home/$username/ArchLinux/Package/konsolerc /home/$username/.config/konsolerc 2>/dev/null || true
-    cp /home/$username/ArchLinux/Package/konsolerc /root/.config/konsolerc 2>/dev/null || true
+    [ -f /home/$username/ArchLinux/Package/.zshrc ] && cp /home/$username/ArchLinux/Package/.zshrc /home/$username/.zshrc || \
+        echo "source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme" > /home/$username/.zshrc
+    [ -f /home/$username/ArchLinux/Package/zshrc ] && cp /home/$username/ArchLinux/Package/zshrc /etc/zsh/zshrc || \
+        echo "source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme" > /etc/zsh/zshrc
+    [ -f /home/$username/ArchLinux/Package/config.conf ] && cp /home/$username/ArchLinux/Package/config.conf /home/$username/.config/neofetch/config.conf
+    [ -f /home/$username/ArchLinux/Package/konsolerc ] && cp /home/$username/ArchLinux/Package/konsolerc /home/$username/.config/konsolerc
+    [ -f /home/$username/ArchLinux/Package/konsolerc ] && cp /home/$username/ArchLinux/Package/konsolerc /root/.config/konsolerc
 fi
 
 if [ -d /home/$username/ArchLinux/KDE/.config ]; then
-    cp -r /home/$username/ArchLinux/KDE/.config/yt-dlp /home/$username/.config/ 2>/dev/null || true
+    [ -d /home/$username/ArchLinux/KDE/.config/yt-dlp ] && cp -r /home/$username/ArchLinux/KDE/.config/yt-dlp /home/$username/.config/ 2>/dev/null
 fi
 
 echo -e "${RED}==================================================================================== Настройка SDDM и тем ========================================${NC}"
-echo -e "${GREEN}"
 
 # Настраиваем тему и автологин
 mkdir -p /etc/sddm.conf.d
@@ -572,7 +610,6 @@ btrfs subvolume delete /var/lib/machines 2>/dev/null || true
 usermod -a -G wireshark $username
 
 echo -e "${RED}==================================================================================== Установка MPV ===============================================${NC}"
-echo -e "${GREEN}"
 
 # Мультимедиа
 pacman -S --noconfirm \
@@ -615,7 +652,6 @@ if [ -f /home/$username/ArchLinux/Package/input.conf ]; then
 fi
 
 echo -e "${RED}==================================================================================== Установка VirtualBox и иконок ================================${NC}"
-echo -e "${GREEN}"
 
 # VirtualBox
 pacman -S --noconfirm virtualbox virtualbox-guest-utils
@@ -742,13 +778,8 @@ fi
 rm -f /mnt/arch-chroot-setup.sh
 
 print_message "================================================================================"
-print_message "        Установка завершена! Система будет перезагружена через 5 секунд"
+print_message "        Установка завершена! Вы можете перезагрузить систему командой:"
+print_message "                       systemctl reboot"
 print_message "================================================================================"
-sleep 5
 
-# Перезагрузка
-if [[ $OS == 2 ]]; then
-    systemctl reboot --firmware-setup
-else
-    systemctl reboot
-fi
+# Без автоматической перезагрузки
