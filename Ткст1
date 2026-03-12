@@ -597,10 +597,10 @@ echo -e "${GREEN}Установка дополнительных пакетов 
 pacman -S --noconfirm \
     gtkmm-4.0 \
     gtkmm3 \
+    open-vm-tools \
     blackarch-keyring \
     blackarch-mirrorlist \
-    yay \
-    open-vm-tools
+    yay
 
 # Включение службы vmtoolsd в автозапуск
 systemctl enable vmtoolsd.service
