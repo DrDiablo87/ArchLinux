@@ -1,270 +1,213 @@
 #!/usr/bin/env bash
-#
-# Скрипт установки Arch Linux в dual boot с Windows.
-# Автоматически создаёт раздел в самом большом свободном блоке на /dev/nvme0n1,
-# форматирует в Btrfs, настраивает systemd-boot, minimal KDE, автологин,
-# AUR, репозитории archlinuxcn / chaotic-aur / blackarch, русские зеркала.
-#
-
+# =============================================================================
+# Arch Linux dual-boot installer (root) with systemd-boot, minimal KDE,
+# Btrfs (no subvolumes), auto-login, AUR, Russian mirrors, extra repos.
+# =============================================================================
 set -euo pipefail
 
-# ============ 1. Запрос данных пользователя ============
-echo "=== Настройка пользователя ==="
+# ---------- 1. Запрос учётных данных -----------------------------------------
 read -rp "Введите имя нового пользователя: " USERNAME
-read -rsp "Введите пароль для пользователя ${USERNAME}: " USER_PASSWORD
+while [[ -z "$USERNAME" ]]; do
+    read -rp "Имя пользователя не может быть пустым. Повторите: " USERNAME
+done
+
+read -rsp "Введите пароль для $USERNAME: " USER_PASSWORD
 echo
 read -rsp "Повторите пароль: " USER_PASSWORD_CONFIRM
 echo
-
 if [[ "$USER_PASSWORD" != "$USER_PASSWORD_CONFIRM" ]]; then
-    echo "Ошибка: пароли не совпадают." >&2
-    exit 1
-fi
-if [[ -z "$USERNAME" || -z "$USER_PASSWORD" ]]; then
-    echo "Ошибка: имя пользователя и пароль не могут быть пустыми." >&2
+    echo "Пароли не совпадают." >&2
     exit 1
 fi
 
-# ============ 2. Проверки окружения ============
-if [[ $EUID -ne 0 ]]; then
-    echo "Этот скрипт должен быть запущен с правами root." >&2
+read -rsp "Введите пароль для root: " ROOT_PASSWORD
+echo
+read -rsp "Повторите пароль root: " ROOT_PASSWORD_CONFIRM
+echo
+if [[ "$ROOT_PASSWORD" != "$ROOT_PASSWORD_CONFIRM" ]]; then
+    echo "Пароли root не совпадают." >&2
     exit 1
 fi
 
-if [[ ! -d /sys/firmware/efi ]]; then
-    echo "Ошибка: система загружена не в режиме UEFI." >&2
-    echo "systemd-boot требует UEFI. Перезагрузитесь с UEFI." >&2
-    exit 1
-fi
-
+# ---------- 2. Определение диска и ESP ---------------------------------------
 DISK="/dev/nvme0n1"
 if [[ ! -b "$DISK" ]]; then
-    echo "Ошибка: диск $DISK не найден." >&2
+    echo "Диск $DISK не найден. Укажите правильное устройство в переменной DISK." >&2
     exit 1
 fi
 
-# Поиск существующего EFI System Partition (общий с Windows)
-ESP_PART=$(lsblk -ln -o NAME,PARTTYPE "$DISK" | \
-    awk '$2=="c12a7328-f81f-11d2-ba4b-00a0c93ec93b" {print "/dev/"$1}' | head -1)
-if [[ -z "$ESP_PART" ]]; then
-    echo "Ошибка: EFI System Partition не найден на $DISK." >&2
+# Поиск EFI System Partition (тип EF00 / ef00)
+ESP=""
+while read -r part; do
+    if [[ -n "$part" ]]; then
+        ESP="$part"
+        break
+    fi
+done < <(lsblk -lnpo NAME,PARTTYPE "$DISK" | awk '$2=="ef00" || $2=="EF00" {print $1}')
+
+if [[ -z "$ESP" ]]; then
+    echo "Не удалось автоматически найти EFI System Partition на $DISK." >&2
+    echo "Найдите её вручную (lsblk -f) и задайте переменную ESP." >&2
     exit 1
 fi
-echo "Найден EFI-раздел: $ESP_PART"
+echo "Используется ESP: $ESP"
 
-# ============ 3. Настройка зеркал (Россия) ============
-echo "=== Настройка зеркал pacman ==="
-if command -v reflector &>/dev/null; then
-    reflector --country Russia --protocol https --latest 10 --sort rate \
-              --save /etc/pacman.d/mirrorlist
-else
-    cat > /etc/pacman.d/mirrorlist <<'EOF'
-Server = https://mirror.yandex.ru/archlinux/$repo/os/$arch
-Server = https://mirror.kpfu.ru/archlinux/$repo/os/$arch
-Server = https://mirror.timeweb.ru/archlinux/$repo/os/$arch
-Server = https://mirror.kamtv.ru/archlinux/$repo/os/$arch
-Server = https://ru.mirrors.cicku.me/archlinux/$repo/os/$arch
-Server = https://mirror.lebedinets.ru/archlinux/$repo/os/$arch
-Server = https://mirror.nw-sys.ru/archlinux/$repo/os/$arch
-Server = https://mirror.ps.kz/archlinux/$repo/os/$arch
-Server = https://mirrors.kernel.org/archlinux/$repo/os/$arch
-Server = https://mirror.rackspace.com/archlinux/$repo/os/$arch
-EOF
-fi
-echo "Зеркала настроены."
+# ---------- 3. Разметка свободного места -------------------------------------
+# Создаём новый раздел, занимающий всё свободное пространство после последнего.
+# Предполагается, что свободное место находится в конце диска.
+LAST_PART_NUM=$(lsblk -lnpo NAME "$DISK" | grep -E "${DISK}p?[0-9]+$" | sed -E 's/.*p?([0-9]+)$/\1/' | sort -n | tail -1)
+NEW_PART_NUM=$((LAST_PART_NUM + 1))
+NEW_PART="${DISK}p${NEW_PART_NUM}"
 
-# ============ 4. Автоматическая разметка свободного места ============
-echo "=== Таблица разделов ДО ==="
-sgdisk -p "$DISK"
+echo "Создаётся новый раздел $NEW_PART (займёт всё свободное место)..."
+parted -s "$DISK" mkpart primary btrfs "$(parted -s "$DISK" unit s print free | awk '/Free Space/ {print $3}' | tail -1 | sed 's/s//')" 100%
 
-# Проверка наличия свободного места (минимум ~20 GiB)
-FREE_SECTORS=$(sgdisk -F "$DISK" 2>/dev/null || true)
-if [[ -z "$FREE_SECTORS" ]]; then
-    echo "Ошибка: на диске нет свободного (неразмеченного) места." >&2
-    exit 1
-fi
-FREE_BYTES=$(( FREE_SECTORS * 512 ))
-FREE_GIB=$(( FREE_BYTES / 1024 / 1024 / 1024 ))
-echo "Свободно неразмеченного места: примерно ${FREE_GIB} GiB"
-if (( FREE_GIB < 20 )); then
-    echo "Ошибка: недостаточно свободного места (нужно минимум 20 GiB)." >&2
-    exit 1
-fi
-
-# Следующий номер раздела
-LAST_NUM=$(lsblk -ln -o NAME "$DISK" | grep -oP "^${DISK##*/}p\K[0-9]+" | sort -n | tail -1)
-NEW_NUM=$(( LAST_NUM + 1 ))
-TARGET_PART="${DISK}p${NEW_NUM}"
-
-echo "Будет создан раздел ${TARGET_PART} (тип Linux filesystem) во всём свободном месте."
-read -rp "Продолжить разметку и установку? (y/N): " CONFIRM
-if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
-    echo "Установка отменена."
-    exit 1
-fi
-
-# Создаём новый раздел в самом большом свободном блоке
-sgdisk --largest-new=${NEW_NUM} --typecode=${NEW_NUM}:8300 "$DISK"
+# Даём ядру перечитать таблицу разделов
 partprobe "$DISK"
-sleep 1
+sleep 2
 
-if [[ ! -b "$TARGET_PART" ]]; then
-    echo "Ошибка: не удалось создать раздел $TARGET_PART." >&2
-    exit 1
-fi
-echo "Создан раздел: $TARGET_PART"
+# ---------- 4. Форматирование и монтирование ---------------------------------
+echo "Форматирование $NEW_PART в Btrfs (без сабволюмов)..."
+mkfs.btrfs -L ArchLinux -f "$NEW_PART"
 
-echo "=== Таблица разделов ПОСЛЕ ==="
-sgdisk -p "$DISK"
+echo "Монтирование корня в /mnt..."
+mount "$NEW_PART" /mnt
 
-# ============ 5. Форматирование и монтирование ============
-echo "=== Форматирование $TARGET_PART в Btrfs ==="
-mkfs.btrfs -f -L ArchLinux "$TARGET_PART"
+echo "Монтирование ESP в /mnt/efi..."
+mkdir -p /mnt/efi
+mount "$ESP" /mnt/efi
 
-echo "=== Монтирование корня ==="
-mount "$TARGET_PART" /mnt
+# ---------- 5. Установка базовой системы -------------------------------------
+echo "Установка базовых пакетов..."
+pacstrap /mnt base base-devel linux linux-firmware btrfs-progs nano \
+    networkmanager sddm plasma-desktop \
+    sudo git reflector
 
-echo "=== Монтирование EFI-раздела в /boot ==="
-mkdir -p /mnt/boot
-# Если Windows оставил ESP в «грязном» состоянии из-за гибернации —
-# монтирование read-write может не сработать, тогда будет ошибка.
-mount "$ESP_PART" /mnt/boot
-
-# ============ 6. Установка базовой системы ============
-echo "=== Установка базовых пакетов (pacstrap) ==="
-pacstrap /mnt \
-    base base-devel linux linux-firmware \
-    btrfs-progs nano sudo networkmanager \
-    plasma-desktop sddm konsole dolphin \
-    pipewire pipewire-pulse wireplumber \
-    firefox git
-
-# ============ 7. Генерация fstab ============
-echo "=== Генерация fstab ==="
+# ---------- 6. Генерация fstab ----------------------------------------------
 genfstab -U /mnt >> /mnt/etc/fstab
 
-# ============ 8. Настройка в chroot ============
-echo "=== Вход в chroot для настройки ==="
-arch-chroot /mnt /bin/bash <<CHROOT_EOF
+# ---------- 7. Настройка системы в chroot ------------------------------------
+arch-chroot /mnt /bin/bash <<CHROOT
 set -euo pipefail
 
-# Часовой пояс
+# Часовой пояс (измените при необходимости)
 ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
 hwclock --systohc
 
-# Локали
+# Локаль
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen
 locale-gen
-echo "LANG=ru_RU.UTF-8" > /etc/locale.conf
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
 # Имя хоста
-echo "ArchLinux" > /etc/hostname
+echo "archlinux" > /etc/hostname
 
 # Пароль root
-echo "root:${USER_PASSWORD}" | chpasswd
+echo "root:${ROOT_PASSWORD}" | chpasswd
 
-# Пользователь
+# Создание пользователя
 useradd -m -G wheel -s /bin/bash "${USERNAME}"
 echo "${USERNAME}:${USER_PASSWORD}" | chpasswd
 
-# sudo для wheel
-echo "%wheel ALL=(ALL:ALL) ALL" > /etc/sudoers.d/wheel
+# Разрешение sudo для группы wheel
+echo "%wheel ALL=(ALL:ALL) ALL" > /etc/sudoers.d/10-wheel
 
-# multilib (нужен для части пакетов BlackArch)
-sed -i '/^#\[multilib\]/,/^#Include/ s/^#//' /etc/pacman.conf
+# Редактор по умолчанию — nano
+echo 'EDITOR=nano' >> /etc/environment
+echo 'VISUAL=nano' >> /etc/environment
 
-# --- Сторонние репозитории ---
+# ---------- 8. Русские зеркала (10 лучших) -----------------------------------
+reflector --country Russia --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 
+# ---------- 9. Добавление репозиториев ---------------------------------------
 # archlinuxcn
-printf '\n[archlinuxcn]\nServer = https://repo.archlinuxcn.org/\\\$arch\n' >> /etc/pacman.conf
-pacman -Sy --noconfirm archlinuxcn-keyring
+cat >> /etc/pacman.conf <<'EOF'
 
-# Chaotic-AUR
+[archlinuxcn]
+Server = https://repo.archlinuxcn.org/\$arch
+EOF
+
+# chaotic-aur
 pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
 pacman-key --lsign-key 3056513887B78AEB
-pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'
-pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-printf '\n[chaotic-aur]\nInclude = /etc/pacman.d/chaotic-mirrorlist\n' >> /etc/pacman.conf
+pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
+                 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
+cat >> /etc/pacman.conf <<'EOF'
 
-# BlackArch
-pacman-key --recv-keys 7533BAFE69A25079
-pacman-key --lsign-key 7533BAFE69A25079
-printf '\n[blackarch]\nServer = https://mirrors.bfsu.edu.cn/blackarch/\\\$repo/os/\\\$arch\n' >> /etc/pacman.conf
-pacman -Sy --noconfirm blackarch-keyring
+[chaotic-aur]
+Include = /etc/pacman.d/chaotic-mirrorlist
+EOF
 
-# Обновление с учётом новых репозиториев
-pacman -Syu --noconfirm
+# blackarch
+cat >> /etc/pacman.conf <<'EOF'
 
-# --- systemd-boot ---
-echo "=== Установка systemd-boot ==="
-bootctl --esp-path=/boot install
+[blackarch]
+Server = https://www.blackarch.org/blackarch/\$arch
+EOF
 
-cat > /boot/loader/loader.conf <<'LOADER'
-default arch.conf
-timeout 4
-editor 0
-LOADER
+# Обновление баз и импорт ключей для сторонних репозиториев
+pacman -Sy --noconfirm
+pacman -S --noconfirm archlinuxcn-keyring
+pacman -S --noconfirm blackarch-keyring
 
-ROOT_PARTUUID=\$(blkid -s PARTUUID -o value "${TARGET_PART}")
-cat > /boot/loader/entries/arch.conf <<ENTRY
-title   Arch Linux
-linux   /vmlinuz-linux
-initrd  /initramfs-linux.img
-options root=PARTUUID=\${ROOT_PARTUUID} rw rootfstype=btrfs
-ENTRY
-
-# --- Автологин SDDM ---
+# ---------- 10. Автологин SDDM -----------------------------------------------
 mkdir -p /etc/sddm.conf.d
-cat > /etc/sddm.conf.d/autologin.conf <<SDDM
+cat > /etc/sddm.conf.d/autologin.conf <<EOF
 [Autologin]
 User=${USERNAME}
 Session=plasma
-SDDM
+EOF
 
-# --- Службы ---
-systemctl enable NetworkManager
+# Включение SDDM
 systemctl enable sddm
 
-# --- yay (AUR helper) ---
-echo "=== Установка yay (AUR helper) ==="
-sudo -u "${USERNAME}" bash -c '
-cd /tmp
-git clone https://aur.archlinux.org/yay.git
-cd yay
-makepkg -si --noconfirm
-cd ..
-rm -rf yay
-'
+# ---------- 11. Установка AUR-хелпера (yay) ----------------------------------
+# yay доступен в archlinuxcn, поэтому собирать из AUR не нужно.
+pacman -S --noconfirm yay
 
-# --- Пустой скрипт в автозагрузку ---
-touch /usr/local/bin/startup-empty-script.sh
-chmod +x /usr/local/bin/startup-empty-script.sh
+# ---------- 12. Пустой скрипт в автозагрузке ---------------------------------
+# Создаём пустой скрипт и systemd-сервис для его запуска при загрузке.
+touch /usr/local/bin/empty-autostart.sh
+chmod +x /usr/local/bin/empty-autostart.sh
 
-cat > /etc/systemd/system/startup-empty-script.service <<'SERVICE'
+cat > /etc/systemd/system/empty-autostart.service <<'EOF'
 [Unit]
-Description=Empty Startup Script
+Description=Empty autostart script
 After=network.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/startup-empty-script.sh
-RemainAfterExit=yes
+ExecStart=/usr/local/bin/empty-autostart.sh
 
 [Install]
 WantedBy=multi-user.target
-SERVICE
+EOF
 
-systemctl enable startup-empty-script.service
+systemctl enable empty-autostart.service
 
-CHROOT_EOF
+# ---------- 13. Установка systemd-boot ----------------------------------------
+# ESP уже смонтирован в /efi (в chroot это /efi)
+bootctl --esp-path=/efi install
 
-# ============ 9. Завершение ============
-echo "=== Установка завершена! ==="
-echo "Размонтирование разделов..."
-umount -R /mnt
+# Запись загрузки для Arch Linux
+ROOT_UUID=$(blkid -s UUID -o value "${NEW_PART}")
+cat > /efi/loader/entries/arch.conf <<EOF
+title   Arch Linux
+linux   /vmlinuz-linux
+initrd  /initramfs-linux.img
+options root=UUID=${ROOT_UUID} rw quiet
+EOF
 
-echo "Система будет перезагружена через 10 секунд."
-echo "Не забудьте извлечь установочный носитель."
+# Включение обнаружения Windows (если установлен пакет)
+# systemd-boot автоматически добавляет Windows Boot Manager, если он есть в ESP.
+# Дополнительная ручная запись не требуется.
+
+# ---------- 14. Завершение ---------------------------------------------------
+echo "Установка завершена. Перезагрузка через 10 секунд..."
 sleep 10
 reboot
+CHROOT
+
+# На случай, если reboot внутри chroot не сработает
+echo "Если перезагрузка не началась, выполните reboot вручную."
