@@ -1,252 +1,887 @@
 #!/bin/bash
-# Скрипт установки Arch Linux в dual boot с Windows (NVMe, btrfs, systemd-boot, linux-zen)
-# Запускать из Live-среды Arch Linux под root
 
-set -e  # Прерывать выполнение при любой ошибке
+# Цвета для вывода
+RED='\033[31m'
+GREEN='\033[32m'
+BLUE='\033[34m'
+YELLOW='\033[33m'
+NC='\033[0m'
 
-# --- Цветной вывод ---
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+# Функция для цветного вывода
+print_message() {
+    echo -e "${GREEN}$1${NC}"
+}
 
-info() { echo -e "${GREEN}[INFO]${NC} $*"; }
-warn() { echo -e "${YELLOW}[WARN]${NC} $*"; }
-error() { echo -e "${RED}[ERROR]${NC} $*" >&2; }
+print_error() {
+    echo -e "${RED}$1${NC}"
+}
 
-# --- 1. Запрос данных пользователя ---
-info "=== Настройка пользователя и паролей ==="
-read -r -p "Введите имя создаваемого пользователя: " USERNAME
-while [[ -z "$USERNAME" ]]; do
-    warn "Имя пользователя не может быть пустым."
-    read -r -p "Введите имя создаваемого пользователя: " USERNAME
-done
+print_info() {
+    echo -e "${YELLOW}$1${NC}"
+}
 
-read -r -s -p "Введите пароль для пользователя $USERNAME: " USER_PASS
-echo
-read -r -s -p "Повторите пароль: " USER_PASS_CONFIRM
-echo
-while [[ "$USER_PASS" != "$USER_PASS_CONFIRM" ]]; do
-    warn "Пароли не совпадают."
-    read -r -s -p "Введите пароль для пользователя $USERNAME: " USER_PASS
-    echo
-    read -r -s -p "Повторите пароль: " USER_PASS_CONFIRM
-    echo
-done
+# Начальная настройка
+sed -i 's/#ParallelDownloads = 5/ParallelDownloads = 10/g' /etc/pacman.conf
+loadkeys ru
+setfont cyr-sun16
 
-read -r -s -p "Введите пароль для суперпользователя (root): " ROOT_PASS
-echo
-read -r -s -p "Повторите пароль root: " ROOT_PASS_CONFIRM
-echo
-while [[ "$ROOT_PASS" != "$ROOT_PASS_CONFIRM" ]]; do
-    warn "Пароли не совпадают."
-    read -r -s -p "Введите пароль для root: " ROOT_PASS
-    echo
-    read -r -s -p "Повторите пароль root: " ROOT_PASS_CONFIRM
-    echo
-done
-info "Данные пользователя сохранены."
+# Синхронизация системных часов
+timedatectl set-ntp true
 
-# --- 2. Определение NVMe диска и EFI раздела ---
-info "=== Поиск NVMe диска и EFI раздела Windows ==="
-# Ищем NVMe диски (тип disk, имя содержит nvme)
-mapfile -t NVME_DISKS < <(lsblk -dno NAME,TYPE | awk '$2=="disk" && $1 ~ /^nvme/ {print $1}')
+clear
+print_message "================================================================================"
+print_message "                   Arch Linux Installation Script"
+print_message "================================================================================"
 
-if [[ ${#NVME_DISKS[@]} -eq 0 ]]; then
-    error "NVMe диски не найдены. Скрипт предназначен для NVMe."
-    exit 1
-elif [[ ${#NVME_DISKS[@]} -eq 1 ]]; then
-    NVME_DISK="/dev/${NVME_DISKS[0]}"
-    info "Найден NVMe диск: $NVME_DISK"
+# Ввод параметров
+print_message ""
+read -p "Введите имя компьютера: " hostname
+read -p "Введите имя пользователя: " username
+read -s -p "Введите пароль root: " rootpass
+echo ""
+read -s -p "Введите пароль пользователя: " userpass
+echo ""
+
+export hostname username rootpass userpass
+
+# Выбор типа установки
+print_message ""
+echo "Выберите тип установки:"
+echo "1 - Arch Linux (чистая установка)"
+echo "2 - Arch Linux рядом с Windows"
+read -p "Ваш выбор (1/2): " OS
+
+# Определение диска
+DISK="/dev/nvme0n1"
+if [ ! -e "$DISK" ]; then
+    for disk in /dev/nvme*n1; do
+        if [ -e "$disk" ]; then
+            DISK="$disk"
+            break
+        fi
+    done
+fi
+
+print_message "Используется диск: $DISK"
+
+# Создание разделов
+print_message "================================================================================"
+print_message "                     Создание разделов диска"
+print_message "================================================================================"
+
+if [[ $OS == 1 ]]; then
+    print_message "Очистка диска и создание разделов для чистой установки..."
+    wipefs -a "$DISK"
+    
+    (
+        echo g
+        echo n
+        echo 1
+        echo
+        echo +200M
+        echo t
+        echo 1
+        echo n
+        echo 2
+        echo
+        echo
+        echo w
+    ) | fdisk --color=never "$DISK" > /dev/null 2>&1
+    
+    ROOT_PART="${DISK}p2"
+    EFI_PART="${DISK}p1"
+    
+elif [[ $OS == 2 ]]; then
+    print_message "Создание раздела для Arch Linux рядом с Windows..."
+    
+    print_info "Текущие разделы на диске:"
+    fdisk -l "$DISK"
+    echo ""
+    
+    # Находим последний раздел
+    LAST_PART=$(fdisk -l "$DISK" | grep "^${DISK}p" | tail -n1 | awk '{print $1}')
+    LAST_PART_NUM=$(echo $LAST_PART | sed 's/.*p\([0-9]*\).*/\1/')
+    
+    # Создаем новый раздел
+    (
+        echo n
+        echo $((LAST_PART_NUM + 1))
+        echo
+        echo
+        echo w
+    ) | fdisk --color=never "$DISK" > /dev/null 2>&1
+    
+    # Обновляем таблицу разделов
+    partprobe "$DISK" 2>/dev/null || true
+    sleep 2
+    
+    # Определяем номер созданного раздела
+    PART_NUM=$(fdisk -l "$DISK" | grep "^${DISK}p" | tail -n1 | sed 's/.*p\([0-9]*\).*/\1/')
+    ROOT_PART="${DISK}p${PART_NUM}"
+    
+    # Ищем EFI раздел
+    for part in "${DISK}"p*; do
+        if blkid "$part" 2>/dev/null | grep -qi "vfat"; then
+            EFI_PART="$part"
+            break
+        fi
+    done
+    
+    if [ ! -e "$EFI_PART" ]; then
+        print_error "Не найден EFI раздел! Убедитесь, что Windows установлена в режиме UEFI."
+        exit 1
+    fi
+    
+    print_message "Найден EFI раздел: $EFI_PART"
+    print_message "Root раздел: $ROOT_PART"
 else
-    warn "Найдено несколько NVMe дисков:"
-    for d in "${NVME_DISKS[@]}"; do echo "  /dev/$d"; done
-    read -r -p "Введите имя NVMe диска для установки (например, nvme0n1): " NVME_DISK_INPUT
-    NVME_DISK="/dev/$NVME_DISK_INPUT"
-fi
-
-# Проверяем, что диск существует
-if [[ ! -b "$NVME_DISK" ]]; then
-    error "Устройство $NVME_DISK не существует."
+    print_error "Неверный выбор"
     exit 1
 fi
 
-# Ищем EFI System Partition (ESP) на этом диске
-ESP_PART=$(lsblk -no NAME,PARTTYPE "$NVME_DISK" | awk '$2=="c12a7328-f81f-11d2-ba4b-00a0c93ec93b" {print $1}' | head -n1)
-if [[ -z "$ESP_PART" ]]; then
-    error "EFI System Partition не найден на $NVME_DISK. Убедитесь, что Windows установлена в UEFI режиме."
-    exit 1
-fi
-ESP_DEV="/dev/$ESP_PART"
-info "Найден EFI раздел: $ESP_DEV"
+print_message "Созданная разметка диска:"
+lsblk -f "$DISK"
+sleep 3
 
-# Вывод информации о диске для подтверждения
-info "Текущая разметка диска $NVME_DISK:"
-lsblk -o NAME,SIZE,FSTYPE,MOUNTPOINT "$NVME_DISK"
+# Форматирование разделов
+print_message "================================================================================"
+print_message "                     Форматирование разделов"
+print_message "================================================================================"
 
-warn "Скрипт создаст новый раздел btrfs на всём оставшемся свободном месте диска $NVME_DISK."
-warn "Windows и существующие разделы затронуты НЕ будут."
-read -r -p "Продолжить? (y/N): " CONFIRM
-if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
-    info "Установка отменена."
-    exit 0
+if [[ $OS == 1 ]]; then
+    print_message "Форматирование EFI раздела..."
+    mkfs.fat -F32 "$EFI_PART"
+else
+    print_message "Используется существующий EFI раздел Windows"
 fi
 
-# --- 3. Создание нового раздела и форматирование в btrfs ---
-info "=== Создание нового раздела btrfs ==="
-# Создаём раздел, занимающий всё свободное место (sgdisk -n 0:0:0)
-sgdisk -n 0:0:0 "$NVME_DISK"
-partprobe "$NVME_DISK"
-sleep 2
+print_message "Форматирование root раздела в BTRFS..."
+mkfs.btrfs -f -L ArchLinux "$ROOT_PART"
 
-# Определяем имя нового раздела (последний раздел на диске)
-NEW_PART=$(lsblk -no NAME "$NVME_DISK" | tail -n1)
-ROOT_DEV="/dev/$NEW_PART"
-info "Создан раздел: $ROOT_DEV"
+# Монтирование и создание подтомов BTRFS
+print_message "================================================================================"
+print_message "                     Создание подтомов BTRFS"
+print_message "================================================================================"
 
-# Форматируем в btrfs (без subvolume)
-mkfs.btrfs -f "$ROOT_DEV"
+mount -t btrfs "$ROOT_PART" /mnt
+btrfs subvolume create /mnt/@
+btrfs subvolume create /mnt/@home
+btrfs subvolume create /mnt/@snapshots
+umount /mnt
 
-# --- 4. Монтирование ---
-info "=== Монтирование разделов ==="
-mount "$ROOT_DEV" /mnt
-mkdir -p /mnt/boot
-mount "$ESP_DEV" /mnt/boot
-info "Корень смонтирован в /mnt, EFI раздел — в /mnt/boot"
+print_message "Монтирование подтомов..."
+mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@ "$ROOT_PART" /mnt
+mkdir -p /mnt/{home,boot,.snapshots}
+mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@home "$ROOT_PART" /mnt/home
+mount -t btrfs -o noatime,nodatasum,compress=zstd,ssd,max_inline=0,subvol=@snapshots "$ROOT_PART" /mnt/.snapshots
+mount "$EFI_PART" /mnt/boot
 
-# --- 5. Установка базовых пакетов ---
-info "=== Установка базовых пакетов (base, linux-zen, KDE minimal, etc.) ==="
+# === 10 ЛУЧШИХ РОССИЙСКИХ ЗЕРКАЛ ===
+print_message "================================================================================"
+print_message "                     Настройка российских зеркал"
+print_message "================================================================================"
+
+# Создаем необходимые каталоги
+mkdir -p /mnt/etc/pacman.d/
+
+cat > /mnt/etc/pacman.d/mirrorlist << MIRROREOF
+## Russian mirrors - ranked by speed
+Server = https://mirror.yandex.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.truenetwork.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.nforce.com/pub/linux/archlinux/\$repo/os/\$arch
+Server = https://mirror.rol.ru/archlinux/\$repo/os/\$arch
+Server = https://archlinux.gay/arch/\$repo/os/\$arch
+Server = https://mirror.corbina.net/pub/archlinux/\$repo/os/\$arch
+Server = https://mirror.docker.ru/archlinux/\$repo/os/\$arch
+Server = https://mirrors.krasinfo.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.cedalan.ru/archlinux/\$repo/os/\$arch
+Server = https://mirror.surf/archlinux/\$repo/os/\$arch
+MIRROREOF
+
+print_message "Российские зеркала добавлены в /mnt/etc/pacman.d/mirrorlist"
+
+# Копируем зеркала также в текущую систему для ускорения установки пакетов
+mkdir -p /etc/pacman.d/
+cp /mnt/etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist
+
+# Обновляем базу данных пакетов с новыми зеркалами
+pacman -Syy --noconfirm
+
+# Установка основных пакетов
+print_message "================================================================================"
+print_message "                     Установка основных пакетов"
+print_message "================================================================================"
+
+# Явно устанавливаем ядра и необходимые пакеты
 pacstrap -K /mnt \
-    base base-devel linux-zen linux-zen-headers \
-    btrfs-progs nano networkmanager sudo \
-    plasma-desktop sddm konsole dolphin \
-    pipewire pipewire-pulse wireplumber \
-    reflector git
+    base \
+    base-devel \
+    linux \
+    linux-firmware \
+    linux-headers \
+    linux-zen \
+    linux-zen-headers \
+    linux-firmware \
+    btrfs-progs \
+    iwd \
+    nano \
+    git \
+    wget \
+    curl \
+    reflector \
+    amd-ucode \
+    intel-ucode
 
-# --- 6. Генерация fstab ---
-info "=== Генерация /etc/fstab ==="
-genfstab -U /mnt >> /mnt/etc/fstab
-cat /mnt/etc/fstab
+# Проверяем, что ядра установились
+print_message "Проверка установленных ядер..."
+ls /mnt/boot/vmlinuz* || print_error "Ядра не найдены в /mnt/boot!"
+sleep 3
 
-# --- 7. Настройка системы в chroot ---
-info "=== Настройка системы (chroot) ==="
-arch-chroot /mnt /bin/bash <<EOF
-set -e
+# Генерация fstab
+print_message "================================================================================"
+print_message "                     Генерация fstab"
+print_message "================================================================================"
+genfstab -pU /mnt >> /mnt/etc/fstab
 
-# Часовой пояс (Москва)
-ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+# Создаем скрипт для настройки внутри chroot
+print_message "================================================================================"
+print_message "                     Настройка системы в chroot"
+print_message "================================================================================"
+
+cat > /mnt/arch-chroot-setup.sh << 'INNEREOF'
+#!/bin/bash
+
+# Цвета
+GREEN='\033[32m'
+RED='\033[31m'
+YELLOW='\033[33m'
+NC='\033[0m'
+
+echo -e "${GREEN}Настройка системы...${NC}"
+
+# Прописываем имя компьютера
+echo '$hostname' > /etc/hostname
+ln -svf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
 hwclock --systohc
 
-# Локали
-echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
-echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen
+setfont cyr-sun16
+
+# Добавляем русскую локаль системы
+echo "en_US.UTF-8 UTF-8
+ru_RU.UTF-8 UTF-8" > /etc/locale.gen 
 locale-gen
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
 
-# Имя хоста
-echo "archlinux" > /etc/hostname
+echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
+echo "KEYMAP=ru" > /etc/vconsole.conf
+echo "FONT=cyr-sun16" >> /etc/vconsole.conf
 
-# Пароль root
-echo "root:${ROOT_PASS}" | chpasswd
+# === ДОБАВЛЯЕМ РУССКУЮ РАСКЛАДКУ В X11 ===
+echo -e "${GREEN}Настройка русской раскладки для X11...${NC}"
+mkdir -p /etc/X11/xorg.conf.d
+cat > /etc/X11/xorg.conf.d/00-keyboard.conf << X11CONF
+Section "InputClass"
+    Identifier "system-keyboard"
+    MatchIsKeyboard "on"
+    Option "XkbLayout" "us,ru"
+    Option "XkbModel" "pc105"
+    Option "XkbVariant" ","
+    Option "XkbOptions" "grp:alt_shift_toggle,grp_led:scroll"
+EndSection
+X11CONF
 
-# Создание пользователя и настройка sudo
-useradd -m -G wheel -s /bin/bash "${USERNAME}"
-echo "${USERNAME}:${USER_PASS}" | chpasswd
-sed -i 's/^# %wheel ALL=(ALL) ALL/%wheel ALL=(ALL) ALL/' /etc/sudoers
+# Настройка mkinitcpio
+echo 'MODULES="btrfs" 
+BINARIES="" 
+FILES="" 
+HOOKS="base udev autodetect modconf block filesystems keyboard keymap fsck"' > /etc/mkinitcpio.conf
 
-# Включение NetworkManager
-systemctl enable NetworkManager
+# Удаляем старые fallback образы
+rm -f /boot/initramfs-linux-zen-fallback.img /boot/initramfs-linux-fallback.img 2>/dev/null
 
-# --- Зеркала: 10 лучших российских ---
-reflector --country Russia --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+# Настройка presets для ядер
+cat > /etc/mkinitcpio.d/linux.preset << EOF
+ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux"
+PRESETS=('default')
+default_image="/boot/initramfs-linux.img"
+EOF
 
-# --- Добавление archlinuxcn ---
-cat >> /etc/pacman.conf <<'PACMAN_CN'
+cat > /etc/mkinitcpio.d/linux-zen.preset << EOF
+ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux-zen"
+PRESETS=('default')
+default_image="/boot/initramfs-linux-zen.img"
+EOF
+
+# Создаем initramfs
+echo -e "${GREEN}Создание initramfs для linux...${NC}"
+mkinitcpio -p linux -v
+
+echo -e "${GREEN}Создание initramfs для linux-zen...${NC}"
+mkinitcpio -p linux-zen -v
+
+# Проверяем созданные образы
+echo -e "${GREEN}Проверка созданных образов initramfs:${NC}"
+ls -la /boot/initramfs-*.img
+
+# Проверяем наличие ядер
+echo -e "${GREEN}Проверка наличия ядер в /boot:${NC}"
+ls -la /boot/vmlinuz* || echo -e "${YELLOW}ВНИМАНИЕ: Ядра не найдены в /boot!"
+sleep 3
+
+echo -e "${GREEN}Устанавливаем загрузчик...${NC}"
+
+# Установка необходимых пакетов
+pacman -S --noconfirm efibootmgr
+
+# Обновление зеркал (они уже должны быть настроены)
+pacman -Syu --noconfirm
+
+# Установка загрузчика
+bootctl install
+echo 'default arch.conf
+timeout 3
+editor 0' > /boot/loader/loader.conf
+
+# Определяем корневой раздел по UUID
+ROOT_UUID=$(blkid -s UUID -o value $ROOT_PART)
+
+# Проверяем наличие Windows для os-prober
+if [[ $OS == 2 ]]; then
+    echo -e "${YELLOW}Добавление Windows в загрузчик...${NC}"
+    pacman -S --noconfirm os-prober
+    os-prober
+fi
+
+# Проверяем наличие файлов ядра и микрокода
+echo -e "${GREEN}Проверка файлов в /boot:${NC}"
+ls -la /boot/
+
+# Создаем простую запись загрузчика без микрокода сначала для теста
+cat > /boot/loader/entries/arch.conf << EOF
+title   Arch Linux
+linux   /vmlinuz-linux
+initrd  /initramfs-linux.img
+options root=UUID=$ROOT_UUID rw rootflags=subvol=@ quiet
+EOF
+
+cat > /boot/loader/entries/arch-zen.conf << EOF
+title   Arch Linux Zen
+linux   /vmlinuz-linux-zen
+initrd  /initramfs-linux-zen.img
+options root=UUID=$ROOT_UUID rw rootflags=subvol=@ quiet
+EOF
+
+echo -e "${GREEN}Записи загрузчика созданы${NC}"
+
+# Добавляем пользователя
+useradd -m -g users -G audio,games,video,storage,wheel,power -s /bin/bash $username
+
+echo -e "${GREEN}Создаем пароли...${NC}"
+echo -e "$rootpass\n$rootpass" | passwd
+echo -e "$userpass\n$userpass" | passwd $username
+
+# Устанавливаем SUDO
+echo 'root ALL=(ALL) ALL
+'$username' ALL=(ALL) ALL
+%wheel ALL=(ALL) ALL
+'$username' ALL = NOPASSWD: /usr/bin/systemctl
+Defaults env_reset, timestamp_timeout=30' > /etc/sudoers
+
+# Клонируем репозиторий с конфигами
+echo -e "${GREEN}Клонирование репозитория с конфигурациями...${NC}"
+git clone https://github.com/DrDiablo87/ArchLinux.git /home/$username/ArchLinux || echo -e "${RED}Не удалось клонировать репозиторий${NC}"
+
+# Включение сетевых сервисов
+systemctl enable systemd-networkd.service
+systemctl enable systemd-resolved.service
+
+# === НАСТРОЙКА SIGLEVEL = NEVER ДЛЯ ВСЕХ РЕПОЗИТОРИЕВ ===
+echo -e "${GREEN}Настройка репозиториев с SigLevel = Never...${NC}"
+
+# Инициализация ключей pacman
+pacman-key --init
+pacman-key --populate archlinux
+
+# Добавление Chaotic AUR
+echo -e "${GREEN}Добавление Chaotic AUR...${NC}"
+pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com || \
+pacman-key --recv-key 3056513887B78AEB --keyserver hkp://keyserver.ubuntu.com:80
+pacman-key --lsign-key 3056513887B78AEB
+pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' --noconfirm
+pacman -U 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst' --noconfirm
+
+# Arch Linux CN репозиторий
+pacman-key --recv-key 851034EA56B2F69D --keyserver keyserver.ubuntu.com || \
+pacman-key --recv-key 851034EA56B2F69D --keyserver hkp://keyserver.ubuntu.com:80
+pacman-key --lsign-key 851034EA56B2F69D
+
+# === ДОБАВЛЕНИЕ BLACKARCH РЕПОЗИТОРИЯ ===
+echo -e "${GREEN}Добавление Blackarch репозитория...${NC}"
+
+# Добавляем Blackarch в pacman.conf
+echo -e "\n[blackarch]\nServer = https://mirrors.tuna.tsinghua.edu.cn/blackarch/\$repo/os/\$arch" | tee -a /etc/pacman.conf
+
+# Обновляем базу данных
+pacman -Syy --noconfirm
+
+echo -e "${GREEN}Blackarch репозиторий успешно добавлен${NC}"
+
+# Настройка Pacman.conf с SigLevel = Never для всех репозиториев
+cat > /etc/pacman.conf << PACMANEOF
+[options]
+CacheDir = /home/$username/Package/
+HoldPkg = pacman glibc
+Architecture = auto
+Color
+CheckSpace
+ParallelDownloads = 10
+SigLevel = Never
+
+[core]
+Include = /etc/pacman.d/mirrorlist
+SigLevel = Never
+
+[extra]
+Include = /etc/pacman.d/mirrorlist
+SigLevel = Never
+
+[multilib]
+Include = /etc/pacman.d/mirrorlist
+SigLevel = Never
 
 [archlinuxcn]
 Server = https://repo.archlinuxcn.org/\$arch
-PACMAN_CN
-
-# --- Добавление Chaotic-AUR ---
-pacman-key --recv-key 3056513887B78AEB --keyserver keyserver.ubuntu.com
-pacman-key --lsign-key 3056513887B78AEB
-pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst' \
-                'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'
-
-cat >> /etc/pacman.conf <<'PACMAN_CHAOTIC'
+SigLevel = Never
 
 [chaotic-aur]
 Include = /etc/pacman.d/chaotic-mirrorlist
-PACMAN_CHAOTIC
+SigLevel = Never
 
-# Обновление баз данных и установка keyring'ов
-pacman -Sy --noconfirm archlinuxcn-keyring
+[blackarch]
+Server = https://mirrors.tuna.tsinghua.edu.cn/blackarch/\$repo/os/\$arch
+SigLevel = Never
+PACMANEOF
 
-# --- Установка systemd-boot ---
-bootctl --path=/boot install
+# Создание директории для кэша пакетов
+mkdir -p /home/$username/Package
 
-# Настройка loader.conf
-cat > /boot/loader/loader.conf <<'LOADER'
-default arch-zen.conf
-timeout 3
-editor 0
-LOADER
+# Настройка makepkg
+sed -i 's!#PKGDEST=/home/packages!PKGDEST=/home/'$username'/Package!' /etc/makepkg.conf
+echo 'MAKEFLAGS="-j'$(nproc)'"
+BUILDDIR=/tmp/makepkg' >> /etc/makepkg.conf
 
-# Получение UUID корневого раздела
-ROOT_UUID=\$(blkid -s UUID -o value ${ROOT_DEV})
+# Hosts файл
+cat >> /etc/hosts << HOSTSEOF
+127.0.1.1   $hostname.localdomain   $hostname
+127.0.0.1 admulti.com
+127.0.0.1 pt.upzona.net
+127.0.0.1 gag.admulti.com
+127.0.0.1 go.video.admulti.com
+HOSTSEOF
 
-# Создание entry для linux-zen
-cat > /boot/loader/entries/arch-zen.conf <<ENTRY
-title   Arch Linux (linux-zen)
-linux   /vmlinuz-linux-zen
-initrd  /initramfs-linux-zen.img
-options root=UUID=\${ROOT_UUID} rw
-ENTRY
+# Настройка nano
+echo 'include "/usr/share/nano/*.nanorc"' > /etc/nanorc
 
-# --- Установка yay (AUR helper) от имени пользователя ---
-su - "${USERNAME}" -c "
-git clone https://aur.archlinux.org/yay.git /tmp/yay
-cd /tmp/yay
-makepkg -si --noconfirm
-"
+# === УСТАНОВКА KDE ===
+echo -e "${GREEN}Обновление базы данных пакетов...${NC}"
+pacman -Syy
 
-# --- Настройка autologin в SDDM ---
+echo -e "${RED}==================================================================================== Ставим KDE ==================================================${NC}"
+echo -e "${GREEN}Установка графических драйверов...${NC}"
+
+# AMD драйверы
+pacman -S --needed --noconfirm \
+    lib32-mesa \
+    mesa \
+    xf86-video-amdgpu \
+    vulkan-radeon \
+    lib32-vulkan-radeon \
+    vulkan-icd-loader \
+    lib32-vulkan-icd-loader \
+    libva-mesa-driver \
+    lib32-libva-mesa-driver \
+    xorg-drivers \
+    xorg-xinit
+
+# KDE и основные приложения
+echo -e "${GREEN}Установка KDE Plasma...${NC}"
+pacman -S --noconfirm \
+    plasma-meta \
+    plasma-pa \
+    plasma-nm \
+    dolphin \
+    kate \
+    konsole \
+    kde-gtk-config \
+    sddm \
+    sddm-kcm
+
+# Дополнительные приложения KDE
+echo -e "${GREEN}Установка дополнительных KDE приложений...${NC}"
+pacman -S --noconfirm \
+    ark \
+    p7zip \
+    unzip \
+    unrar \
+    zip \
+    unarchiver \
+    qbittorrent \
+    gwenview \
+    kompare \
+    plasma-sdk \
+    encfs \
+    cryfs \
+    kscreen \
+    kinfocenter \
+    wireshark-qt \
+    spectacle \
+    ktouch \
+    kwave \
+    krita \
+    kdenlive \
+    kleopatra \
+    krfb \
+    krdc \
+    freerdp \
+    kdegraphics-thumbnailers \
+    kdesdk-thumbnailers \
+    ffmpegthumbs \
+    breeze-gtk \
+    kfind \
+    cmake \
+    extra-cmake-modules \
+    systemdgenie \
+    plasma-systemmonitor \
+    bluedevil \
+    bluez-utils
+
+# Приложения
+echo -e "${GREEN}Установка дополнительных приложений...${NC}"
+pacman -S --noconfirm \
+    firefox \
+    firefox-i18n-ru \
+    firefox-ublock-origin \
+    filelight \
+    ntfs-3g \
+    gufw \
+    mtr \
+    exfat-utils \
+    cronie \
+    gnome-disk-utility \
+    f2fs-tools \
+    udftools \
+    net-tools \
+    libvirt \
+    linux-headers \
+    qt5-translations \
+    kdeplasma-addons \
+    networkmanager-openvpn \
+    openresolv \
+    kcalc \
+    tree \
+    openssh \
+    bridge-utils \
+    partitionmanager
+
+# Игры и шрифты
+echo -e "${GREEN}Установка игр и шрифтов...${NC}"
+pacman -S --noconfirm \
+    steam \
+    ttf-liberation \
+    ttf-dejavu
+
+# === ДОБАВЛЕННЫЕ ПАКЕТЫ ПО ЗАПРОСУ ===
+echo -e "${GREEN}Установка дополнительных пакетов...${NC}"
+pacman -S --noconfirm \
+    gtkmm-4.0 \
+    gtkmm3 \
+    open-vm-tools \
+    blackarch-keyring \
+    blackarch-mirrorlist \
+    yay
+
+# Включение службы vmtoolsd в автозапуск
+systemctl enable vmtoolsd.service
+
+echo -e "${RED}==================================================================================== Ставим и настраиваем ZSH ====================================${NC}"
+
+# Установка пакетов ZSH
+pacman -S --noconfirm \
+    zsh \
+    zsh-theme-powerlevel10k \
+    awesome-terminal-fonts \
+    zsh-syntax-highlighting \
+    zsh-autosuggestions \
+    neofetch \
+    lsd \
+    bat \
+    fd
+
+# Смена оболочки
+chsh -s /usr/bin/zsh $username
+chsh -s /usr/bin/zsh root
+
+# Создание директорий для конфигов
+mkdir -p /home/$username/.config /home/$username/.local/share/konsole
+mkdir -p /home/$username/.config/neofetch
+mkdir -p /root/.config
+
+# Копирование конфигов из репозитория
+if [ -d /home/$username/ArchLinux/Package ]; then
+    [ -f /home/$username/ArchLinux/Package/.zshrc ] && cp /home/$username/ArchLinux/Package/.zshrc /home/$username/.zshrc || \
+        echo "source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme" > /home/$username/.zshrc
+    [ -f /home/$username/ArchLinux/Package/zshrc ] && cp /home/$username/ArchLinux/Package/zshrc /etc/zsh/zshrc || \
+        echo "source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme" > /etc/zsh/zshrc
+    [ -f /home/$username/ArchLinux/Package/config.conf ] && cp /home/$username/ArchLinux/Package/config.conf /home/$username/.config/neofetch/config.conf
+    [ -f /home/$username/ArchLinux/Package/konsolerc ] && cp /home/$username/ArchLinux/Package/konsolerc /home/$username/.config/konsolerc
+    [ -f /home/$username/ArchLinux/Package/konsolerc ] && cp /home/$username/ArchLinux/Package/konsolerc /root/.config/konsolerc
+fi
+
+if [ -d /home/$username/ArchLinux/KDE/.config ]; then
+    [ -d /home/$username/ArchLinux/KDE/.config/yt-dlp ] && cp -r /home/$username/ArchLinux/KDE/.config/yt-dlp /home/$username/.config/ 2>/dev/null
+fi
+
+echo -e "${RED}==================================================================================== Настройка SDDM и тем ========================================${NC}"
+
+# Настраиваем тему и автологин
 mkdir -p /etc/sddm.conf.d
-cat > /etc/sddm.conf.d/autologin.conf <<SDDM
+
+cat > /etc/sddm.conf << SDDMCONF
+[Theme]
+Current=breeze
+CursorTheme=breeze_cursors
+SDDMCONF
+
+cat > /etc/sddm.conf.d/autologin.conf << AUTOEOF
 [Autologin]
-User=${USERNAME}
+User=$username
 Session=plasma
-SDDM
+AUTOEOF
 
-systemctl enable sddm
+cat > /etc/sddm.conf.d/kde_settings.conf << KDESETTINGS
+[Autologin]
+Relogin=false
+Session=plasma
+User=$username
 
-# --- Создание пустого bash-скрипта и сервиса автозагрузки ---
-cat > /usr/local/bin/empty_script.sh <<'EMPTY'
-#!/bin/bash
-exit 0
-EMPTY
-chmod +x /usr/local/bin/empty_script.sh
+[General]
+HaltCommand=/usr/bin/systemctl poweroff
+RebootCommand=/usr/bin/systemctl reboot
 
-cat > /etc/systemd/system/empty_script.service <<'SERVICE'
-[Unit]
-Description=Empty script autostart
+[Theme]
+Current=breeze
+CursorTheme=breeze_cursors
 
-[Service]
-Type=oneshot
-ExecStart=/usr/local/bin/empty_script.sh
+[Users]
+MaximumUid=60000
+MinimumUid=1000
+KDESETTINGS
 
-[Install]
-WantedBy=multi-user.target
-SERVICE
+# Включение сервисов
+systemctl enable systemd-timesyncd.service
+systemctl enable sddm.service
+systemctl enable NetworkManager.service
+systemctl enable fstrim.timer
+systemctl enable bluetooth.service
 
-systemctl enable empty_script.service
+# Маскировка ненужных сервисов
+systemctl mask man-db.service man-db.timer 2>/dev/null
+systemctl mask ModemManager.service 2>/dev/null
+systemctl mask lvm2-monitor.socket lvm2-monitor.service 2>/dev/null
+systemctl mask lvm2-lvmpolld.socket lvm2-lvmpolld.service 2>/dev/null
+systemctl mask lvm2-lvmetad.socket lvm2-lvmetad.service 2>/dev/null
+systemctl mask lvm2-activation.service lvm2-activation-early.service 2>/dev/null
+systemctl mask systemd-journald-audit.socket systemd-journald-dev-log.socket 2>/dev/null
+systemctl mask systemd-tmpfiles-setup.service 2>/dev/null
 
-# --- Завершение ---
-echo "Настройка завершена."
-EOF
+# Удаление проблемного снапшота
+btrfs subvolume delete /var/lib/machines 2>/dev/null || true
 
-# --- 8. Размонтирование и перезагрузка ---
-info "=== Размонтирование и перезагрузка ==="
-umount -R /mnt
-info "Установка завершена. Система будет перезагружена."
-reboot
+# Добавление в группы
+usermod -a -G wireshark $username
+
+echo -e "${RED}==================================================================================== Установка MPV ===============================================${NC}"
+
+# Мультимедиа
+pacman -S --noconfirm \
+    amarok \
+    taglib \
+    gst-libav \
+    gst-plugins-bad \
+    gst-plugins-good \
+    gst-plugins-ugly \
+    mpv
+
+# Настройка MPV из репозитория
+mkdir -p /etc/mpv
+if [ -f /home/$username/ArchLinux/Package/mpv.desktop ]; then
+    cp /home/$username/ArchLinux/Package/mpv.desktop /usr/share/applications/mpv.desktop
+fi
+if [ -f /home/$username/ArchLinux/Package/mpv_single ]; then
+    cp /home/$username/ArchLinux/Package/mpv_single /usr/bin/mpv_single
+    chmod +x /usr/bin/mpv_single
+fi
+if [ -f /home/$username/ArchLinux/Package/mpv.conf ]; then
+    cp /home/$username/ArchLinux/Package/mpv.conf /etc/mpv/mpv.conf
+else
+    cat > /etc/mpv/mpv.conf << MPVCONF
+profile=gpu-hq
+hwdec=auto
+vo=gpu
+audio-device=auto
+volume=70
+volume-max=200
+save-position-on-quit=yes
+watch-later-directory=~/.config/mpv/watch_later
+screenshot-directory=~/Pictures/Screenshots
+ytdl-format=bestvideo[height<=?1080]+bestaudio/best
+MPVCONF
+fi
+
+if [ -f /home/$username/ArchLinux/Package/input.conf ]; then
+    cp /home/$username/ArchLinux/Package/input.conf /etc/mpv/input.conf
+fi
+
+echo -e "${RED}==================================================================================== Установка VirtualBox и иконок ================================${NC}"
+
+# VirtualBox
+pacman -S --noconfirm virtualbox virtualbox-guest-utils
+
+# Копирование иконок из репозитория
+if [ -f /home/$username/ArchLinux/LiveWallpaper/Box.svg ]; then
+    mkdir -p /usr/share/icons/breeze-dark/apps/48/
+    cp /home/$username/ArchLinux/LiveWallpaper/Box.svg /usr/share/icons/breeze-dark/apps/48/Box.svg
+    sed -i 's/Icon=virtualbox/Icon=Box/g' /usr/share/applications/virtualbox.desktop
+fi
+
+if [ -f /home/$username/ArchLinux/Package/com.github.configurable-button.tar.xz ]; then
+    cp /home/$username/ArchLinux/Package/com.github.configurable-button.tar.xz /home/$username/
+fi
+
+# Иконки для приложений
+if [ -f /usr/share/icons/breeze/apps/48/plasmavault.svg ]; then
+    cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze/apps/48/kleopatra.svg 2>/dev/null || true
+    cp /usr/share/icons/breeze/apps/48/plasmavault.svg /usr/share/icons/breeze-dark/apps/48/kleopatra.svg 2>/dev/null || true
+fi
+
+if [ -f /usr/share/icons/breeze/preferences/32/preferences-desktop-keyboard.svg ]; then
+    cp /usr/share/icons/breeze/preferences/32/preferences-desktop-keyboard.svg /usr/share/icons/breeze/preferences/32/qvkbd.svg 2>/dev/null || true
+    cp /usr/share/icons/breeze-dark/preferences/32/preferences-desktop-keyboard.svg /usr/share/icons/breeze-dark/preferences/32/qvkbd.svg 2>/dev/null || true
+fi
+
+# Замена иконок в сервисных меню
+for file in /usr/share/kio/servicemenus/kleopatra_decryptverifyfiles.desktop /usr/share/kio/servicemenus/kleopatra_signencryptfiles.desktop /usr/share/kio/servicemenus/kleopatra_signencryptfolders.desktop; do
+    if [ -f "$file" ]; then
+        sed -i 's/Icon=kleopatra/Icon=plasmavault/g' "$file"
+    fi
+done
+
+# Настройка Avahi
+if [ -f /etc/avahi/avahi-daemon.conf ]; then
+    sed -i 's/use-ipv4=yes/use-ipv4=no/g' /etc/avahi/avahi-daemon.conf
+    sed -i 's/use-ipv6=yes/use-ipv6=no/g' /etc/avahi/avahi-daemon.conf
+fi
+
+# Локализация systemdgenie
+if [ -f /home/$username/ArchLinux/Package/systemdgenie.mo ]; then
+    mkdir -p /usr/share/locale/ru/LC_MESSAGES/
+    cp /home/$username/ArchLinux/Package/systemdgenie.mo /usr/share/locale/ru/LC_MESSAGES/systemdgenie.mo
+fi
+
+# Копирование иконок безопасности
+if [ -f /home/$username/ArchLinux/LiveWallpaper/Airgeddon.svg ]; then
+    mkdir -p /usr/share/icons/breeze-dark/apps/48/
+    mkdir -p /usr/share/icons/breeze/apps/48/
+    cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.svg /usr/share/icons/breeze-dark/apps/48/Airgeddon.svg
+    cp /home/$username/ArchLinux/LiveWallpaper/Airgeddon.svg /usr/share/icons/breeze/apps/48/Airgeddon.svg
+fi
+
+if [ -f /home/$username/ArchLinux/LiveWallpaper/Metasploit.svg ]; then
+    cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.svg /usr/share/icons/breeze-dark/apps/48/Metasploit.svg
+    cp /home/$username/ArchLinux/LiveWallpaper/Metasploit.svg /usr/share/icons/breeze/apps/48/Metasploit.svg
+fi
+
+# Аватар пользователя
+if [ -f /home/$username/ArchLinux/KDE/.face.icon ]; then
+    mkdir -p /usr/share/plasma/avatars
+    cp /home/$username/ArchLinux/KDE/.face.icon /usr/share/plasma/avatars/Kurchatov.png
+fi
+
+# Иконка Arch
+if [ -f /home/$username/ArchLinux/KDE/.local/share/applications/Archlinux-icon-crystal-64.png ]; then
+    cp /home/$username/ArchLinux/KDE/.local/share/applications/Archlinux-icon-crystal-64.png /usr/share/icons/breeze-dark/apps/48/Archlinux-icon-crystal-64.png
+fi
+
+# Автозапуск arch3.sh если существует
+if [ -f /home/$username/ArchLinux/arch3.sh ]; then
+    mkdir -p /home/$username/.config/autostart
+    echo '[Desktop Entry]
+Exec=konsole -e sh /home/'$username'/ArchLinux/arch3.sh
+Icon=application-x-shellscript
+Name=arch3.sh
+Type=Application
+X-KDE-AutostartScript=true' > /home/$username/.config/autostart/arch3.sh.desktop
+    chmod +x /home/$username/ArchLinux/arch3.sh
+    chmod +x /home/$username/.config/autostart/arch3.sh.desktop
+fi
+
+# Добавление tmpfs в fstab
+cat >> /etc/fstab << FSTABEOF
+
+# tmpfs mounts
+tmpfs /home/$username/.cache tmpfs rw,noatime,nodev,nosuid,size=2G 0 0
+tmpfs /var/log tmpfs defaults,noatime,nodev,nosuid,noexec,size=512M 0 0
+tmpfs /var/run tmpfs defaults,noatime,nodev,nosuid,noexec,size=512M 0 0
+tmpfs /var/lock tmpfs defaults,noatime,nodev,nosuid,noexec,size=256M 0 0
+FSTABEOF
+
+# Очистка
+rm -rf /home/$username/.bash_logout /home/$username/.bash_profile /home/$username/.bashrc 2>/dev/null
+rm -rf /var/cache/pacman/pkg/* 2>/dev/null
+
+# Права на домашнюю директорию
+chown -R $username:users /home/$username
+
+# Финальное обновление initramfs с подробным выводом
+echo -e "${GREEN}Финальное обновление initramfs...${NC}"
+mkinitcpio -P -v
+
+echo -e "${GREEN}Проверка наличия всех файлов загрузки:${NC}"
+ls -la /boot/
+
+echo -e "${GREEN}"
+echo -e "${RED}==================================================================================== Настройка завершена =========================================${NC}"
+INNEREOF
+
+# Делаем скрипт исполняемым
+chmod +x /mnt/arch-chroot-setup.sh
+
+# Выполняем настройку в chroot
+print_message "================================================================================"
+print_message "                     Запуск настройки в chroot"
+print_message "================================================================================"
+
+arch-chroot /mnt /bin/bash -c "hostname='$hostname' username='$username' rootpass='$rootpass' userpass='$userpass' ROOT_PART='$ROOT_PART' OS='$OS' /arch-chroot-setup.sh"
+
+# Проверка на ошибки
+if [ $? -ne 0 ]; then
+    print_error "Ошибка при настройке системы!"
+    exit 1
+fi
+
+# Очистка
+rm -f /mnt/arch-chroot-setup.sh
+
+print_message "================================================================================"
+print_message "        Установка завершена! Система будет перезагружена в UEFI через 5 секунд..."
+print_message "================================================================================"
+
+# Обратный отсчет 5 секунд
+for i in {5..1}; do
+    echo -e "${YELLOW}Перезагрузка в UEFI через $i...${NC}"
+    sleep 1
+done
+
+print_message "Перезагрузка в UEFI firmware..."
+systemctl reboot --firmware-setup
